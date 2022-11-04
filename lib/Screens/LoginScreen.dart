@@ -1,3 +1,5 @@
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
 import 'package:flutter/Material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,10 +120,17 @@ class LoginScreen extends StatelessWidget {
                       _setBool();
                       if (formKey.currentState!.validate()) {
                         if (EmailOrPhone.email) {
-                          //API CALL WITH EMAIL
+                          print("email");
+                          UserHttp.loginUserEmail(User(
+                              email: _numberOrEmail.text,
+                              password: _password.text));
+                          Navigator.pushNamed(context, "/ChooseAvatarScreen");
+                        } else {
+                          UserHttp.loginUserNumber(User(
+                              email: _numberOrEmail.text,
+                              password: _password.text));
                           Navigator.pushNamed(context, "/ChooseAvatarScreen");
                         }
-                        //API CALL WITH NUMBER
                       }
                     },
                   ),

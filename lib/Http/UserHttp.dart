@@ -17,14 +17,26 @@ class UserHttp {
           "mobile": user.mobile,
           "password": user.password
         }));
+    print(response.body);
   }
 
-  static Future loginUser(User user) async {
+  static Future loginUserEmail(User user) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/login"),
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/loginEmail"),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({"": user.email, "password": user.password}));
+        body: jsonEncode({"email": user.email, "password": user.password}));
+    print(response.body);
+  }
+
+  static Future loginUserNumber(User user) async {
+    final http.Response response = await http.post(
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/loginPhone"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({"mobile": user.email, "password": user.password}));
+    print(response.body);
   }
 }
