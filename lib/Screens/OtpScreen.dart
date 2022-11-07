@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,22 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class OtpPage extends StatefulWidget {
-  const OtpPage({Key? key}) : super(key: key);
+  TextEditingController mobile = TextEditingController();
+  OtpPage({Key? key, required this.mobile}) : super(key: key);
 
   @override
   State<OtpPage> createState() => _OtpPageState();
 }
 
 class _OtpPageState extends State<OtpPage> {
+  String? secret;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    UserHttp.getOtp();
+  }
+
   OtpFieldController _otpController = OtpFieldController();
   @override
   Widget build(BuildContext context) {
@@ -50,8 +60,8 @@ class _OtpPageState extends State<OtpPage> {
             SizedBox(
               height: 10,
             ),
-            const Text(
-              "9606818744",
+            Text(
+              widget.mobile.text,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xff777777),
@@ -74,7 +84,8 @@ class _OtpPageState extends State<OtpPage> {
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
-                  Navigator.pushNamed(context, "/ResetScreen");
+                  UserHttp.verifyOtp(pin: pin, mobile: widget.mobile);
+                  Navigator.pushNamed(context, "/ChooseAvatarScreen");
                 },
               ),
             ),

@@ -95,12 +95,7 @@ class RegisterScreen extends StatelessWidget {
                   text: 'REGISTER',
                   ontap: () {
                     if (formKey.currentState!.validate()) {
-                      UserHttp.createUser(User(
-                          name: _name.text,
-                          email: _email.text,
-                          password: _password.text,
-                          mobile: _phone.text));
-                      Navigator.pushNamed(context, "/LoginScreen");
+                      Navigator.pushNamed(context, "/OtpScreen");
                     }
                     ;
                   },

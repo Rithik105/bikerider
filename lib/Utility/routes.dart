@@ -19,29 +19,34 @@ class Routes {
       case "/Splash":
         return MaterialPageRoute(builder: (context) => SplashScreen());
       case "/Tutorial":
-        return MaterialPageRoute(builder: (context) => Tutorial());
+        return LeftTransitions(child: Tutorial());
       case "/OtpScreen":
-        return MaterialPageRoute(builder: (context) => OtpPage());
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return LeftTransitions(
+            child: OtpPage(
+          mobile: arguments["mobile"],
+        ));
       case "/ResetScreen":
         return MaterialPageRoute(builder: (context) => ResetPage());
       case "/SuccessScreen":
         Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-            builder: (context) => SuccessPage(
-                  title: arguments["title"],
-                ));
+        return LeftTransitions(
+            child: SuccessPage(
+          title: arguments["title"],
+        ));
 
       case "/LoginScreen":
-        return MaterialPageRoute(builder: (context) => LoginScreen());
+        return LeftTransitions(child: LoginScreen());
       case "/OwnBikeScreen":
-        return MaterialPageRoute(builder: (context) => OwnBikeScreen());
+        return LeftTransitions(child: OwnBikeScreen());
       case "/RegisterScreen":
-        return MaterialPageRoute(builder: (context) => RegisterScreen());
+        return LeftTransitions(child: RegisterScreen());
       case "/HomeScreen":
         return MaterialPageRoute(builder: (context) => HomeScreen());
       case "/ChooseAvatarScreen":
-        return MaterialPageRoute(builder: (context) => ChooseAvatarScreen());
+        return LeftTransitions(child: ChooseAvatarScreen());
       case "/GetStartedScreen":
         Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;

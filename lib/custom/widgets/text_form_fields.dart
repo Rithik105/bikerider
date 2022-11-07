@@ -53,6 +53,7 @@ emailPhoneValidator(value) {
       return null;
     }
   } else {
+    EmailOrPhone.email = true;
     return null;
   }
 }

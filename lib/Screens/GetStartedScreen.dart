@@ -1,3 +1,4 @@
+import 'package:bikerider/custom/widgets/button.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -25,7 +26,7 @@ class GetStartedScreen extends StatelessWidget {
             padding: EdgeInsets.only(right: 20, top: 10),
             child: GestureDetector(
               child: const Text(
-                'Skip',
+                '',
                 style: TextStyle(
                     color: Color(0xfff2944E),
                     fontSize: 18,
@@ -63,11 +64,11 @@ class GetStartedScreen extends StatelessWidget {
                     ),
                     Container(
                       color: Colors.white,
-                      height: 40,
+                      height: 0,
                     ),
                     Container(
                       width: 400,
-                      height: 600,
+                      height: 300,
                       color: Colors.white,
                       child: Column(children: [
                         const Text(
@@ -81,6 +82,14 @@ class GetStartedScreen extends StatelessWidget {
                         const Text(" crazy trips.",
                             style: TextStyle(
                                 fontSize: 18, color: Color(0xff4F504F))),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        LargeSubmitButton(
+                            text: "LETS GET STARTED",
+                            ontap: () {
+                              Navigator.pushNamed(context, "/HomePage");
+                            })
                       ]),
                     )
                   ],
