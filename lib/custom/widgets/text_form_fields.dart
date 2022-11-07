@@ -45,16 +45,20 @@ emailValidator(value) {
 emailPhoneValidator(value) {
   if (value == null || value.isEmpty) {
     return "E-Mail Required";
-  } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value)) {
-    if (!RegExp(r'^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$').hasMatch(value))
-      return "Invalid Email or Number";
-    else {
-      EmailOrPhone.email = false;
+  } else {
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value)) {
+      if (!RegExp(r'^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$').hasMatch(value))
+        return "Invalid Email or Number";
+      else {
+        EmailOrPhone.email = false;
+        print(EmailOrPhone.email);
+        return null;
+      }
+    } else {
+      EmailOrPhone.email = true;
+      print(EmailOrPhone.email);
       return null;
     }
-  } else {
-    EmailOrPhone.email = true;
-    return null;
   }
 }
 

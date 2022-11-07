@@ -2,9 +2,12 @@ import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/UserModel.dart';
 import 'package:bikerider/custom/widgets/text_form_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Utility/enums.dart';
+import '../bloc/BikeCubit.dart';
+import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -95,7 +98,24 @@ class RegisterScreen extends StatelessWidget {
                   text: 'REGISTER',
                   ontap: () {
                     if (formKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, "/OtpScreen");
+                      // UserHttp.registerUser(User(
+                      //         email: _email.text,
+                      //         name: _name.text,
+                      //         password: _password.text,
+                      //         mobile: _phone.text))
+                      //     .then((value) {
+                      //   if (value["message"] == "successfully registered..") {
+                      BlocProvider.of<BikeCubit>(context).timer(40);
+
+                      Navigator.pushNamed(context, "/OtpScreen", arguments: {
+                        "mobile": _phone,
+                        "nextScreen": "/ChooseAvatarScreen"
+                      });
+                      showToast(msg: "Registered succefully");
+                      //   } else {
+                      //     showToast(msg: value["message"]);
+                      //   }
+                      // });
                     }
                     ;
                   },

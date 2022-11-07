@@ -1,3 +1,5 @@
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/Material.dart';
 
@@ -5,15 +7,17 @@ import '../custom/widgets/button.dart';
 import '../custom/widgets/text_form_fields.dart';
 import 'SuccessPage.dart';
 
-class ResetPage extends StatefulWidget {
-  const ResetPage({Key? key}) : super(key: key);
+class ForgotScreen extends StatefulWidget {
+  ForgotScreen({Key? key, required this.mobile}) : super(key: key);
+  String mobile;
 
   @override
-  State<ResetPage> createState() => _ResetPageState();
+  State<ForgotScreen> createState() => _ForgotScreenState();
 }
 
-class _ResetPageState extends State<ResetPage> {
+class _ForgotScreenState extends State<ForgotScreen> {
   final formKey = GlobalKey<FormState>();
+
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -80,11 +84,19 @@ class _ResetPageState extends State<ResetPage> {
                           text: "Reset",
                           ontap: () {
                             if (formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, "/SuccessScreen",
-                                  arguments: {
-                                    "title":
-                                        "Your Password has been successfully changed."
-                                  });
+                              UserHttp.changePassword(widget.mobile,
+                                      _newPasswordController.text)
+                                  .then((value) {
+                                if (value["message"] ==
+                                    "password updated successfully!!") {
+                                  Navigator.pushNamed(context, "/SuccessScreen",
+                                      arguments: {
+                                        "title":
+                                            "Your Password has been successfully changed."
+                                      });
+                                  showToast(msg: value["message"]);
+                                }
+                              });
                             }
                           })).paddingAll(10, 10, 0, 0)
                 ],

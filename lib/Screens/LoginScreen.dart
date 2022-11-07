@@ -1,7 +1,9 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/Material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +42,7 @@ class LoginScreen extends StatelessWidget {
 // }
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> numberKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +78,12 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    CustomTextFormField(
-                      controller: _numberOrEmail,
-                      textFieldType: TextFieldType.numberOrEmail,
+                    Form(
+                      key: numberKey,
+                      child: CustomTextFormField(
+                        controller: _numberOrEmail,
+                        textFieldType: TextFieldType.numberOrEmail,
+                      ),
                     ),
                     const SizedBox(
                       height: 25,
@@ -98,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (formKey.currentState!.validate()) {
+                            if (numberKey.currentState!.validate()) {
                               if (EmailOrPhone.email) {
                                 print("enter number");
                                 Fluttertoast.showToast(
@@ -110,8 +116,15 @@ class LoginScreen extends StatelessWidget {
                                   textColor: Colors.white,
                                 );
                               } else {
+                                BlocProvider.of<BikeCubit>(context).timer(40);
                                 Navigator.pushNamed(context, "/OtpScreen",
-                                    arguments: {"mobile": _numberOrEmail});
+                                    arguments: {
+                                      "mobile": _numberOrEmail,
+                                      "nextScreen": "/ForgotScreen",
+                                      "arguments": {
+                                        "mobile": _numberOrEmail.text
+                                      }
+                                    });
                               }
                             }
                           },
@@ -135,19 +148,31 @@ class LoginScreen extends StatelessWidget {
                     LargeSubmitButton(
                       text: 'LOGIN',
                       ontap: () {
-                        _setBool();
-                        if (formKey.currentState!.validate()) {
+                        if (numberKey.currentState!.validate()) {
                           if (EmailOrPhone.email) {
-                            print("email");
                             UserHttp.loginUserEmail(User(
-                                email: _numberOrEmail.text,
-                                password: _password.text));
-                            Navigator.pushNamed(context, "/ChooseAvatarScreen");
+                                    email: _numberOrEmail.text,
+                                    password: _password.text))
+                                .then((value) {
+                              if (value["message"] == "Signin Success !!") {
+                                Navigator.pushNamed(context, "/HomeScreen");
+                                showToast(msg: "Login Successful");
+                              } else {
+                                showToast(msg: value["message"]);
+                              }
+                            });
                           } else {
                             UserHttp.loginUserNumber(User(
-                                email: _numberOrEmail.text,
-                                password: _password.text));
-                            Navigator.pushNamed(context, "/ChooseAvatarScreen");
+                                    email: _numberOrEmail.text,
+                                    password: _password.text))
+                                .then((value) {
+                              if (value["message"] == "Signin Success !!") {
+                                Navigator.pushNamed(context, "/HomeScreen");
+                                showToast(msg: "Login Successful");
+                              } else {
+                                showToast(msg: value["message"]);
+                              }
+                            });
                           }
                         }
                       },

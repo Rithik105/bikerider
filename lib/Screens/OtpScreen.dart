@@ -1,16 +1,29 @@
 import 'dart:async';
 
 import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class OtpPage extends StatefulWidget {
+  String nextScreen;
+  Map arguments;
+  String? secretKey;
+
   TextEditingController mobile = TextEditingController();
-  OtpPage({Key? key, required this.mobile}) : super(key: key);
+  OtpPage(
+      {Key? key,
+      required this.mobile,
+      required this.nextScreen,
+      required this.arguments})
+      : super(key: key);
 
   @override
   State<OtpPage> createState() => _OtpPageState();
@@ -22,7 +35,13 @@ class _OtpPageState extends State<OtpPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    UserHttp.getOtp();
+    UserHttp.getsecret().then((value) {
+      widget.secretKey = value;
+      UserHttp.sendOtp(value, widget.mobile.text).then((value) {
+        showToast(msg: value.toString());
+        print("Hi");
+      });
+    });
   }
 
   OtpFieldController _otpController = OtpFieldController();
@@ -37,15 +56,20 @@ class _OtpPageState extends State<OtpPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Color(0xff575656),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-                width: 300, child: Image.asset("assets/images/reset/otp.png")),
+            Center(
+              child: SizedBox(
+                  width: 300,
+                  child: Image.asset("assets/images/reset/otp.png")),
+            ),
             SizedBox(
               height: 40,
             ),
@@ -61,7 +85,7 @@ class _OtpPageState extends State<OtpPage> {
               height: 10,
             ),
             Text(
-              widget.mobile.text,
+              "+91-${widget.mobile.text}",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xff777777),
@@ -84,31 +108,69 @@ class _OtpPageState extends State<OtpPage> {
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
-                  UserHttp.verifyOtp(pin: pin, mobile: widget.mobile);
-                  Navigator.pushNamed(context, "/ChooseAvatarScreen");
+                  UserHttp.verifyOtp(widget.secretKey!, pin).then((value) {
+                    print(value);
+                  });
+                  Navigator.pushNamed(context, widget.nextScreen,
+                      arguments: widget.arguments);
                 },
               ),
             ),
-            SizedBox(height: 30),
-            Text(
-              "Re-send Again",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.roboto(
-                color: Color(0xffF7931E),
-                fontSize: 18,
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              "20 seconds left",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.roboto(
-                color: Color.fromRGBO(174, 168, 168, 0.87),
-                fontSize: 18,
-              ),
-            ),
+            const SizedBox(height: 30),
+            BlocBuilder<BikeCubit, BikeState>(
+              builder: (context, state) {
+                if (state is BikeTimerState) {
+                  return Column(children: [
+                    Text(
+                      "Re-send Again",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        color: Color(0xffF7931E),
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Text(
+                      "${state.time.toString()} seconds left",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        color: Color.fromRGBO(174, 168, 168, 0.87),
+                        fontSize: 18,
+                      ),
+                    ),
+                  ]);
+                } else {
+                  return Column(children: [
+                    GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<BikeCubit>(context).timer(40);
+                      },
+                      child: Text(
+                        "Re-send Again",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.roboto(
+                          color: Color(0xffF7931E),
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Text(
+                      "",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        color: Color.fromRGBO(174, 168, 168, 0.87),
+                        fontSize: 18,
+                      ),
+                    ),
+                  ]);
+                }
+              },
+            )
           ],
         ).paddingAll(30, 20, 20, 20),
       ),

@@ -18,6 +18,14 @@ class Routes {
     switch (settings.name) {
       case "/Splash":
         return MaterialPageRoute(builder: (context) => SplashScreen());
+      case "/ForgotScreen":
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+
+        return MaterialPageRoute(
+            builder: (context) => ForgotScreen(
+                  mobile: arguments["mobile"],
+                ));
       case "/Tutorial":
         return LeftTransitions(child: Tutorial());
       case "/OtpScreen":
@@ -26,9 +34,10 @@ class Routes {
         return LeftTransitions(
             child: OtpPage(
           mobile: arguments["mobile"],
+          nextScreen: arguments["nextScreen"],
+          arguments: arguments["arguments"],
         ));
-      case "/ResetScreen":
-        return MaterialPageRoute(builder: (context) => ResetPage());
+
       case "/SuccessScreen":
         Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
