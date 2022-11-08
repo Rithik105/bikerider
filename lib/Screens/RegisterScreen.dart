@@ -98,24 +98,26 @@ class RegisterScreen extends StatelessWidget {
                   text: 'REGISTER',
                   ontap: () {
                     if (formKey.currentState!.validate()) {
-                      // UserHttp.registerUser(User(
-                      //         email: _email.text,
-                      //         name: _name.text,
-                      //         password: _password.text,
-                      //         mobile: _phone.text))
-                      //     .then((value) {
-                      //   if (value["message"] == "successfully registered..") {
-                      BlocProvider.of<BikeCubit>(context).timer(40);
+                      UserHttp.registerUser(User(
+                              email: _email.text,
+                              name: _name.text,
+                              password: _password.text,
+                              mobile: _phone.text))
+                          .then((value) {
+                        if (value["message"] == "successfully registered..") {
+                          BlocProvider.of<BikeCubit>(context).timer(40);
 
-                      Navigator.pushNamed(context, "/OtpScreen", arguments: {
-                        "mobile": _phone,
-                        "nextScreen": "/ChooseAvatarScreen"
+                          Navigator.pushNamed(context, "/OtpScreen",
+                              arguments: {
+                                "mobile": _phone,
+                                "nextScreen": "/ChooseAvatarScreen",
+                                "arguments": {}
+                              });
+                          showToast(msg: "Registered succefully");
+                        } else {
+                          showToast(msg: value["message"]);
+                        }
                       });
-                      showToast(msg: "Registered succefully");
-                      //   } else {
-                      //     showToast(msg: value["message"]);
-                      //   }
-                      // });
                     }
                     ;
                   },

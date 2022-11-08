@@ -44,7 +44,7 @@ emailValidator(value) {
 
 emailPhoneValidator(value) {
   if (value == null || value.isEmpty) {
-    return "E-Mail Required";
+    return "E-Mail or Password Required";
   } else {
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value)) {
       if (!RegExp(r'^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$').hasMatch(value))

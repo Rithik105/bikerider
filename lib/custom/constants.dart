@@ -54,3 +54,26 @@ BoxDecoration kSplashScreenDecoration = const BoxDecoration(
     fit: BoxFit.fill,
   ),
 );
+
+BoxDecoration kBottomNavigationBar = const BoxDecoration(
+    gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xffED7F2C), Color(0xffF3A469)]),
+    boxShadow: [
+      BoxShadow(
+        offset: Offset(
+          1,
+          1,
+        ),
+        //  blurStyle: BlurStyle.inner,
+        color: Colors.black26,
+        blurRadius: 1,
+        spreadRadius: 1,
+      ),
+    ]);
+
+BoxDecoration kLargeSubmitButtonDecorationDisabled = BoxDecoration(
+    borderRadius: BorderRadius.circular(30),
+    color: const Color(0xffFFCAA1),
+    boxShadow: const []);

@@ -44,6 +44,7 @@ class Routes {
         return LeftTransitions(
             child: SuccessPage(
           title: arguments["title"],
+          nextScreen: arguments["arguments"],
         ));
 
       case "/LoginScreen":

@@ -6,8 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../custom/widgets/button.dart';
 
 class SuccessPage extends StatefulWidget {
-  SuccessPage({super.key, required this.title});
-  String title;
+  SuccessPage({super.key, required this.title, required this.nextScreen});
+  String title, nextScreen;
 
   @override
   State<SuccessPage> createState() => _SuccessPageState();
@@ -23,9 +23,11 @@ class _SuccessPageState extends State<SuccessPage> {
         elevation: 0,
         leadingWidth: 80,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Color(0xff575656),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -35,7 +37,7 @@ class _SuccessPageState extends State<SuccessPage> {
                 width: 300,
                 child: Center(
                     child: Image.asset("assets/images/reset/success.png"))),
-            Text(
+            const Text(
               "Success!!",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -62,7 +64,8 @@ class _SuccessPageState extends State<SuccessPage> {
                 child: LargeSubmitButton(
                     text: "Done",
                     ontap: () {
-                      Navigator.pushNamed(context, "/LoginScreen");
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, widget.nextScreen, (route) => false);
                     })).paddingAll(20, 20, 0, 0)
           ],
         ).paddingAll(20, 20, 50, 0),

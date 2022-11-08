@@ -32,7 +32,9 @@ class _ForgotScreenState extends State<ForgotScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Color(0xff575656),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -84,19 +86,20 @@ class _ForgotScreenState extends State<ForgotScreen> {
                           text: "Reset",
                           ontap: () {
                             if (formKey.currentState!.validate()) {
-                              UserHttp.changePassword(widget.mobile,
-                                      _newPasswordController.text)
-                                  .then((value) {
-                                if (value["message"] ==
-                                    "password updated successfully!!") {
-                                  Navigator.pushNamed(context, "/SuccessScreen",
-                                      arguments: {
-                                        "title":
-                                            "Your Password has been successfully changed."
-                                      });
-                                  showToast(msg: value["message"]);
-                                }
-                              });
+                              // UserHttp.changePassword(widget.mobile,
+                              //         _newPasswordController.text)
+                              //     .then((value) {
+                              // if (value["message"] ==
+                              //     "password updated successfully!!") {
+                              Navigator.pushNamed(context, "/SuccessScreen",
+                                  arguments: {
+                                    "title":
+                                        "Your Password has been successfully changed.",
+                                    "nextScreen": "/LoginScreen"
+                                  });
+                              showToast(msg: "message");
+                              // }
+                              //   });
                             }
                           })).paddingAll(10, 10, 0, 0)
                 ],
