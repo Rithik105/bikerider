@@ -1,8 +1,12 @@
+import 'package:bikerider/Screens/ActivitiesCard.dart';
 import 'package:bikerider/custom/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../bloc/BikeCubit.dart';
 import 'GarageCard.dart';
+import 'ProfileScreen.dart';
 import 'TripCard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,8 +21,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int bottomIndex = 0;
   final _pageOptions = [
-    TripCard(),
+    BlocProvider(
+      create: (context) => BikeCubit()..getTrips(),
+      child: TripCard(),
+    ),
     GarageCard(),
+    ActivitiesCard(),
+    ProfileHeader()
     // ActivityPage(),
     // MyProfilePage(),
     // More()
@@ -118,3 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+TextStyle kProfileNumberText = GoogleFonts.roboto(
+    color: Color(0xffEE8431), fontSize: 25, fontWeight: FontWeight.w600);
+
+TextStyle kProfileTitleTextStyle = GoogleFonts.roboto(
+    color: Color(0x79000000), fontSize: 16, fontWeight: FontWeight.w600);

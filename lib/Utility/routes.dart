@@ -1,7 +1,8 @@
+import 'package:bikerider/Screens/AccesoriesScreen.dart';
 import 'package:bikerider/Screens/ForgotScreen.dart';
 import 'package:bikerider/Screens/GetStartedScreen.dart';
 import 'package:bikerider/Screens/LoginScreen.dart';
-import 'package:bikerider/Screens/OtpScreen.dart';
+import 'package:bikerider/Screens/OtpRegisterScreen.dart';
 import 'package:bikerider/Screens/OwnBikeScreen.dart';
 import 'package:bikerider/Screens/RegisterScreen.dart';
 import 'package:bikerider/Screens/SuccessPage.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../Screens/ChooseAvatarScreen.dart';
 import '../Screens/HomePage.dart';
+import '../Screens/OtpForgotScreen.dart';
 import '../Screens/SplashScreen.dart';
 import '../Screens/Tutorial.dart';
 
@@ -28,14 +30,19 @@ class Routes {
                 ));
       case "/Tutorial":
         return LeftTransitions(child: Tutorial());
-      case "/OtpScreen":
+      case "/OtpRegisterScreen":
         Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
         return LeftTransitions(
-            child: OtpPage(
+            child: OtpRegisterScreen(
+          user: arguments["User"],
+        ));
+      case "/OtpForgotScreen":
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return LeftTransitions(
+            child: OtpForgotScreen(
           mobile: arguments["mobile"],
-          nextScreen: arguments["nextScreen"],
-          arguments: arguments["arguments"],
         ));
 
       case "/SuccessScreen":
@@ -44,11 +51,13 @@ class Routes {
         return LeftTransitions(
             child: SuccessPage(
           title: arguments["title"],
-          nextScreen: arguments["arguments"],
+          nextScreen: arguments["nextScreen"],
         ));
 
       case "/LoginScreen":
         return LeftTransitions(child: LoginScreen());
+      case "/AccessoriesScreen":
+        return LeftTransitions(child: AccessoriesScreen());
       case "/OwnBikeScreen":
         return LeftTransitions(child: OwnBikeScreen());
       case "/RegisterScreen":

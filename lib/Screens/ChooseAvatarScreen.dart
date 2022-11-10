@@ -1,21 +1,33 @@
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Providers/Data.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import "package:http/http.dart" as http;
+
+import '../Http/UserPic.dart';
+import '../Models/UserModel.dart';
 
 class ChooseAvatarScreen extends StatelessWidget {
   @override
   File? storeImage;
+  ChooseAvatarScreen({Key? key}) : super(key: key);
 
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
+      final image = await ImagePicker()
+          .pickImage(source: source, preferredCameraDevice: CameraDevice.front);
+      if (image == null)
+        return;
+      else {
+        final tempImage = File(image.path);
 
-      final tempImage = File(image.path);
-
-      this.storeImage = tempImage;
-      return tempImage;
+        this.storeImage = tempImage;
+        return tempImage;
+      }
     } on PlatformException catch (e) {
       print("failed to pick image : $e");
     }
@@ -86,64 +98,105 @@ class ChooseAvatarScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          GestureDetector(
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      "assets/images/chooseavatar/galary.png"),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  const Text(
-                                    "Gallery",
-                                    style: TextStyle(
-                                        color: const Color(0xfff2944E),
-                                        fontSize: 16),
-                                  )
-                                ],
+                          Consumer<UserData>(builder:
+                              (BuildContext context, value1, Widget? child) {
+                            return GestureDetector(
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        "assets/images/chooseavatar/galary.png"),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text(
+                                      "Gallery",
+                                      style: TextStyle(
+                                          color: const Color(0xfff2944E),
+                                          fontSize: 16),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            onTap: () {
-                              pickImage(ImageSource.gallery).then((storeImage) {
-                                print(storeImage.toString());
-                                Navigator.pushNamed(
-                                    context, "/GetStartedScreen",
-                                    arguments: {"storeImage": storeImage});
-                              });
-                            },
-                          ),
+                              onTap: () {
+                                pickImage(ImageSource.gallery)
+                                    .then((storeImage) {
+                                  print(storeImage.toString());
+                                  if (storeImage == null) {
+                                    print("null");
+                                    Navigator.pushNamed(
+                                        context, "/GetStartedScreen",
+                                        arguments: {"storeImage": storeImage});
+                                  } else {
+                                    UserSecureStorage.getToken().then((value) {
+                                      print(value);
+                                      UserImageHttp.submitSubscription(
+                                              file: storeImage)
+                                          .then((value) {
+                                        Navigator.pushNamed(
+                                            context, "/GetStartedScreen",
+                                            arguments: {
+                                              "storeImage": storeImage
+                                            });
+                                      });
+                                    });
+                                  }
+                                });
+                              },
+                            );
+                          }),
                           Container(
                             width: 1,
                             height: 174,
                             color: const Color.fromRGBO(0, 0, 0, 0.1),
                           ),
-                          GestureDetector(
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                      "assets/images/chooseavatar/camara.png"),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  const Text(
-                                    "Take photo",
-                                    style: TextStyle(
-                                        color: Color(0xfff2944E), fontSize: 16),
-                                  )
-                                ],
+                          Consumer<UserData>(builder:
+                              (BuildContext context, value, Widget? child) {
+                            return GestureDetector(
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        "assets/images/chooseavatar/camara.png"),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text(
+                                      "Take photo",
+                                      style: TextStyle(
+                                          color: Color(0xfff2944E),
+                                          fontSize: 16),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            onTap: () {
-                              pickImage(ImageSource.camera).then((storeImage) {
-                                print(storeImage.toString());
-                                Navigator.pushNamed(
-                                    context, "/GetStartedScreen",
-                                    arguments: {"storeImage": storeImage});
-                              });
-                            },
-                          )
+                              onTap: () {
+                                pickImage(ImageSource.camera)
+                                    .then((storeImage) {
+                                  print(storeImage.toString());
+                                  if (storeImage == null) {
+                                    print("null");
+                                    Navigator.pushNamed(
+                                        context, "/GetStartedScreen",
+                                        arguments: {"storeImage": storeImage});
+                                  } else {
+                                    UserSecureStorage.getToken().then((value) {
+                                      print(value);
+                                      UserImageHttp.submitSubscription(
+                                              file: storeImage)
+                                          .then((value) {
+                                        Navigator.pushNamed(
+                                            context, "/GetStartedScreen",
+                                            arguments: {
+                                              "storeImage": storeImage
+                                            });
+                                      });
+                                    });
+                                  }
+                                });
+                              },
+                            );
+                          })
                         ],
                       ),
                     ],

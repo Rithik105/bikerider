@@ -86,20 +86,16 @@ class _ForgotScreenState extends State<ForgotScreen> {
                           text: "Reset",
                           ontap: () {
                             if (formKey.currentState!.validate()) {
-                              // UserHttp.changePassword(widget.mobile,
-                              //         _newPasswordController.text)
-                              //     .then((value) {
-                              // if (value["message"] ==
-                              //     "password updated successfully!!") {
-                              Navigator.pushNamed(context, "/SuccessScreen",
-                                  arguments: {
-                                    "title":
-                                        "Your Password has been successfully changed.",
-                                    "nextScreen": "/LoginScreen"
-                                  });
-                              showToast(msg: "message");
-                              // }
-                              //   });
+                              UserHttp.changePassword(widget.mobile,
+                                      _confirmPasswordController.text)
+                                  .then((value) {
+                                Navigator.pushNamed(context, "/SuccessScreen",
+                                    arguments: {
+                                      "title":
+                                          "Your Password has been successfully changed.",
+                                      "nextScreen": "/LoginScreen"
+                                    });
+                              });
                             }
                           })).paddingAll(10, 10, 0, 0)
                 ],

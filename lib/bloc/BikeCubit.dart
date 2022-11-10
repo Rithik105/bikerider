@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BikeState {}
@@ -12,6 +14,12 @@ class BikeTimerState extends BikeState {
   int time;
   BikeTimerState(this.time);
 }
+
+class BikeTripFetchState extends BikeState {}
+
+class BikeEmptyTripState extends BikeState {}
+
+class BikeNonEmptyTripState extends BikeState {}
 
 class BikeTimerExpiredState extends BikeState {}
 
@@ -43,5 +51,17 @@ class BikeCubit extends Cubit<BikeState> {
         }
       },
     );
+  }
+
+  void getTrips() {
+    emit(BikeTripFetchState());
+    UserSecureStorage.getToken().then((value) {
+      print("cubit token :$value");
+      UserHttp.getTrips(value!);
+      if (value == []) {
+        emit(BikeEmptyTripState());
+      } else
+        emit(BikeNonEmptyTripState());
+    });
   }
 }

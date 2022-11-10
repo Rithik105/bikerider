@@ -72,7 +72,25 @@ BoxDecoration kBottomNavigationBar = const BoxDecoration(
         spreadRadius: 1,
       ),
     ]);
-
+BoxDecoration kLargeMapButtonDecoration = const BoxDecoration(
+  //borderRadius: BorderRadius.circular(30),
+  gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xffF4A264), Color(0xffED7E2B)]),
+  boxShadow: [
+    BoxShadow(
+      offset: Offset(
+        1,
+        1,
+      ),
+      //  blurStyle: BlurStyle.inner,
+      color: Colors.black26,
+      blurRadius: 1,
+      spreadRadius: 1,
+    ),
+  ],
+);
 BoxDecoration kLargeSubmitButtonDecorationDisabled = BoxDecoration(
     borderRadius: BorderRadius.circular(30),
     color: const Color(0xffFFCAA1),

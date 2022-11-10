@@ -19,26 +19,6 @@ class RegisterScreen extends StatelessWidget {
   TextEditingController _email = TextEditingController();
   TextEditingController _phone = TextEditingController();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: GestureDetector(
-//             onTap: () {
-  // createAlbum(User(
-  //     name: "vishwa",
-  //     mobile: "9856781231",
-  //     email: "vishwa69@gmail.com",
-  //     password: "common daddy"));
-  // Navigator.pushNamed(context, "/LoginScreen");
-//             },
-//             child: Container(
-//               child: Text("RegisterScreen"),
-//             )),
-//       ),
-//     );
-//   }
-// }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,26 +78,15 @@ class RegisterScreen extends StatelessWidget {
                   text: 'REGISTER',
                   ontap: () {
                     if (formKey.currentState!.validate()) {
-                      UserHttp.registerUser(User(
-                              email: _email.text,
-                              name: _name.text,
-                              password: _password.text,
-                              mobile: _phone.text))
-                          .then((value) {
-                        if (value["message"] == "successfully registered..") {
-                          BlocProvider.of<BikeCubit>(context).timer(40);
-
-                          Navigator.pushNamed(context, "/OtpScreen",
-                              arguments: {
-                                "mobile": _phone,
-                                "nextScreen": "/ChooseAvatarScreen",
-                                "arguments": {}
-                              });
-                          showToast(msg: "Registered succefully");
-                        } else {
-                          showToast(msg: value["message"]);
-                        }
-                      });
+                      BlocProvider.of<BikeCubit>(context).timer(40);
+                      Navigator.pushNamed(context, "/OtpRegisterScreen",
+                          arguments: {
+                            "User": User(
+                                email: _email.text,
+                                name: _name.text,
+                                password: _password.text,
+                                mobile: _phone.text),
+                          });
                     }
                     ;
                   },

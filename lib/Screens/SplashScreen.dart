@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:bikerider/Screens/AccesoriesScreen.dart';
 import 'package:bikerider/Screens/LoginScreen.dart';
 import 'package:bikerider/Screens/Tutorial.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';

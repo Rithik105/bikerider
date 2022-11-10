@@ -1,13 +1,16 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Providers/Data.dart';
 import '../Utility/enums.dart';
 import '../custom/widgets/button.dart';
 import '../custom/widgets/text_form_fields.dart';
@@ -22,24 +25,6 @@ class LoginScreen extends StatelessWidget {
     prefs.setBool("firstLogin", false);
     print(prefs.get("firstLogin"));
   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.grey,
-//       body: Center(
-//         child: GestureDetector(
-//             onTap: () {
-//               _setBool();
-//               Navigator.pushNamed(context, "/HomeScreen");
-//             },
-//             child: Container(
-//               child: Text("LoginScreen"),
-//             )),
-//       ),
-//     );
-//   }
-// }
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> numberKey = GlobalKey<FormState>();
@@ -106,24 +91,22 @@ class LoginScreen extends StatelessWidget {
                           onTap: () {
                             if (numberKey.currentState!.validate()) {
                               if (EmailOrPhone.email) {
-                                print("enter number");
-                                Fluttertoast.showToast(
-                                  msg: "Enter a mobile number",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  backgroundColor:
-                                      Colors.black.withOpacity(0.75),
-                                  textColor: Colors.white,
-                                );
+                                showToast(msg: "Enter a mobile number");
+                                // print("enter number");
+                                // Fluttertoast.showToast(
+                                //   msg: "Enter a mobile number",
+                                //   toastLength: Toast.LENGTH_SHORT,
+                                //   gravity: ToastGravity.BOTTOM,
+                                //   backgroundColor:
+                                //       Colors.black.withOpacity(0.75),
+                                //   textColor: Colors.white,
+                                // );
                               } else {
                                 BlocProvider.of<BikeCubit>(context).timer(40);
-                                Navigator.pushNamed(context, "/OtpScreen",
+
+                                Navigator.pushNamed(context, "/OtpForgotScreen",
                                     arguments: {
                                       "mobile": _numberOrEmail,
-                                      "nextScreen": "/ForgotScreen",
-                                      "arguments": {
-                                        "mobile": _numberOrEmail.text
-                                      }
                                     });
                               }
                             }
@@ -155,20 +138,29 @@ class LoginScreen extends StatelessWidget {
                                     password: _password.text))
                                 .then((value) {
                               if (value["message"] == "Signin Success !!") {
-                                Navigator.pushNamed(context, "/HomeScreen");
-                                showToast(msg: "Login Successful");
+                                print(value["token"]);
+                                UserSecureStorage.setToken(value["token"])
+                                    .then((value) {
+                                  Navigator.pushNamed(context, "/HomeScreen");
+                                  showToast(msg: "Login Successful");
+                                });
                               } else {
                                 showToast(msg: value["message"]);
                               }
                             });
                           } else {
+                            print(_numberOrEmail.text);
                             UserHttp.loginUserNumber(User(
-                                    email: _numberOrEmail.text,
+                                    mobile: _numberOrEmail.text,
                                     password: _password.text))
                                 .then((value) {
                               if (value["message"] == "Signin Success !!") {
-                                Navigator.pushNamed(context, "/HomeScreen");
-                                showToast(msg: "Login Successful");
+                                print(value["token"]);
+                                UserSecureStorage.setToken(value["token"])
+                                    .then((value) {
+                                  Navigator.pushNamed(context, "/HomeScreen");
+                                  showToast(msg: "Login Successful");
+                                });
                               } else {
                                 showToast(msg: value["message"]);
                               }

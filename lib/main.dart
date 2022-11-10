@@ -1,4 +1,7 @@
+import 'package:bikerider/Providers/Data.dart';
 import 'package:bikerider/Providers/VisibiltyProvider.dart';
+import 'package:bikerider/Screens/ChatScreen.dart';
+import 'package:bikerider/Utility/enums.dart';
 import 'package:bikerider/Utility/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,12 +26,16 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => VisibilityProvider(),
           ),
-          ChangeNotifierProvider(create: (context) => OwnBike())
+          ChangeNotifierProvider(create: (context) => InviteProvider()),
+          ChangeNotifierProvider(create: (context) => MapProvider()),
+          ChangeNotifierProvider(create: (context) => OwnBike()),
+          ChangeNotifierProvider(create: (context) => UserData())
         ],
         child: const MaterialApp(
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Routes.onGenerateRoute,
-          initialRoute: "/Splash",
+          // initialRoute: "/Splash",
+          home: ChatScreen(),
         ),
       ),
     );
