@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bikerider/Models/get_trip_model.dart';
 import "package:http/http.dart" as http;
 
 import 'package:path/path.dart';
 import '../Models/UserModel.dart';
 import 'package:http_parser/http_parser.dart';
+
+import '../Utility/Secure_storeage.dart';
 
 class UserHttp {
   static Future registerUser(User user) async {
@@ -89,11 +92,28 @@ class UserHttp {
     return jsonDecode(secret.body);
   }
 
+  static Future createTrip(String createTripModal) async {
+    UserSecureStorage.getToken().then((value) async {
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/createTrip"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: createTripModal);
+      print("tried to upload");
+      print(response.body);
+      return jsonDecode(response.body);
+    });
+  }
+
   static Future<List> getTrips(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
+    print(response.body);
     return jsonDecode(response.body);
   }
 }

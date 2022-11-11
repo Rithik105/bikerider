@@ -1,19 +1,20 @@
 class LocationDetails {
-  late String name;
-  late double lat;
-  late double lon;
-  LocationDetails({required this.name, required this.lat, required this.lon});
+  late String place;
+  late double latitude;
+  late double longitude;
+  LocationDetails(
+      {required this.place, required this.latitude, required this.longitude});
   Map toJson() {
-    return {'name': name, 'lat': lat, 'lon': lon};
+    return {'place': place, 'latitude': latitude, 'longitude': longitude};
   }
 
   LocationDetails.fromJson(Map json) {
-    name = json['name'];
-    lat = json['lat'];
-    lon = json['lon'];
+    place = (json['place']);
+    latitude = double.parse(json['latitude']);
+    longitude = double.parse(json['longitude']);
   }
   @override
   String toString() {
-    return 'Name:$name,Lat:$lat,Lon:$lon';
+    return 'place:$place,latitude:$latitude,longitude:$longitude';
   }
 }

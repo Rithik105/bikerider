@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: TripCard(),
     ),
     GarageCard(),
-    ActivitiesCard(),
+    // ActivitiesCard(),
     ProfileHeader()
     // ActivityPage(),
     // MyProfilePage(),

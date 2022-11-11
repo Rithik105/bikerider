@@ -1,5 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bikerider">
+    <!--    Contacts manifest-->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+<!--    -->
+<!--    Geo locator-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!--    -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
    <application
@@ -32,5 +41,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <!--       Google Maps API-->
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyC0WM5NN5lrIELpRfT6OfU3spw9xZqkpqU"/>
     </application>
 </manifest>

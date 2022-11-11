@@ -96,7 +96,7 @@ class _OtpForgotScreenState extends State<OtpForgotScreen> {
                 onCompleted: (pin) {
                   UserHttp.verifyOtp(pin).then((value) {
                     print(value["message"]);
-                    if (value["message"] == false) {
+                    if (value["message"] == true) {
                       print("verified");
                       showToast(msg: "Verified");
                       Navigator.pushNamed(context, "/ForgotScreen",

@@ -1,5 +1,7 @@
+import 'package:bikerider/Models/tuple_class.dart';
 import 'package:flutter/material.dart';
 
+import '../Utility/enums.dart';
 import 'autocomplete.dart';
 
 class MilestoneModal {
@@ -24,20 +26,20 @@ class MilestoneModal {
   });
   toJson() {
     return {
-      'milestoneId': milestoneId,
-      'from': from?.toJson(),
-      'to': to?.toJson()
+      'Id': milestoneId,
+      'source': from?.toJson(),
+      'destination': to?.toJson()
     };
   }
 
   MilestoneModal.fromJson(Map json) {
-    milestoneId = json['id'];
+    milestoneId = json['Id'];
     type = json['type'];
     from = json['from'];
     to = json['to'];
   }
   @override
   String toString() {
-    return 'id:$milestoneId,From:$from,To:$to';
+    return 'Id:$milestoneId,From:$from,To:$to';
   }
 }

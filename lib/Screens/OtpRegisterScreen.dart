@@ -99,44 +99,42 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
+                  //   UserHttp.verifyOtp(pin).then((value) {
+                  // if (pin == value["otp"])
+
                   UserHttp.verifyOtp(pin).then((value) {
-                    // if (pin == value["otp"])
+                    if (value["message"] == true) {
+                      UserHttp.registerUser(User(
+                              email: widget.user.email,
+                              name: widget.user.name,
+                              password: widget.user.password,
+                              mobile: widget.user.mobile))
+                          .then((value1) {
+                        if (value1["message"] == "successfully registered..") {
+                          UserHttp.loginUserEmail(widget.user).then((value2) {
+                            print("login");
+                            print(value2["token"]);
+                            // print(value1["message"]);
+                            // print(value1['token']);
+                            if (value2["message"] == "Signin Success !!") {
+                              print(value1.toString());
+                              Provider.of<UserData>(context, listen: false)
+                                  .setUserData(widget.user);
+                              UserSecureStorage.setToken(value2["token"]);
 
-                    UserHttp.verifyOtp(pin).then((value) {
-                      if (value["message"] == false) {
-                        UserHttp.registerUser(User(
-                                email: widget.user.email,
-                                name: widget.user.name,
-                                password: widget.user.password,
-                                mobile: widget.user.mobile))
-                            .then((value1) {
-                          if (value1["message"] ==
-                              "successfully registered..") {
-                            UserHttp.loginUserEmail(widget.user).then((value2) {
-                              print("login");
-                              print(value2["token"]);
-                              // print(value1["message"]);
-                              // print(value1['token']);
-                              if (value2["message"] == "Signin Success !!") {
-                                print(value1.toString());
-                                Provider.of<UserData>(context, listen: false)
-                                    .setUserData(widget.user);
-                                UserSecureStorage.setToken(value2["token"]);
+                              Navigator.pushNamed(
+                                context,
+                                "/ChooseAvatarScreen",
+                              );
 
-                                Navigator.pushNamed(
-                                  context,
-                                  "/ChooseAvatarScreen",
-                                );
-
-                                showToast(msg: "Registered succefully");
-                              }
-                            });
-                          } else {
-                            showToast(msg: value1["message"]);
-                          }
-                        });
-                      }
-                    });
+                              showToast(msg: "Registered succefully");
+                            }
+                          });
+                        } else {
+                          showToast(msg: value1["message"]);
+                        }
+                      });
+                    }
                   });
                 },
               ),

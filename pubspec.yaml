@@ -96,6 +96,11 @@ flutter:
     - assets/images/Temp/
     - assets/images/homePage/bottom_navigation/
     - assets/images/homePage/garage_images/
+    - assets/images/create_trip/
+    - assets/images/search/
+    - assets/images/contacts/
+    - assets/images/google_maps/
+    - assets/images/trip_summary/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

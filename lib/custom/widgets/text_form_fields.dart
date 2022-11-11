@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/create_trip_modal.dart';
 import '../../Models/milestone.dart';
+import '../../Screens/search_location.dart';
 import '../../Utility/enums.dart';
 
 class EmailOrPhone {
@@ -188,7 +189,7 @@ class CustomTextFormField extends StatelessWidget {
                       ),
                     ),
                     labelText:
-                        getLabel(textFieldType: textFieldType, label: ""),
+                        getLabel(textFieldType: textFieldType, label: null),
                     labelStyle: GoogleFonts.roboto(
                       color: const Color(0xFF4F504F).withOpacity(0.8),
                       fontSize: 18,

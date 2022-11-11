@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,10 @@ class BikeTripFetchState extends BikeState {}
 
 class BikeEmptyTripState extends BikeState {}
 
-class BikeNonEmptyTripState extends BikeState {}
+class BikeNonEmptyTripState extends BikeState {
+  List<GetTripModel> getTripModel = [];
+  BikeNonEmptyTripState(this.getTripModel);
+}
 
 class BikeTimerExpiredState extends BikeState {}
 
@@ -38,7 +42,7 @@ class BikeCubit extends Cubit<BikeState> {
     }
     emit(BikeTimerState(start));
     const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (start == 0) {
@@ -56,12 +60,18 @@ class BikeCubit extends Cubit<BikeState> {
   void getTrips() {
     emit(BikeTripFetchState());
     UserSecureStorage.getToken().then((value) {
-      print("cubit token :$value");
-      UserHttp.getTrips(value!);
-      if (value == []) {
-        emit(BikeEmptyTripState());
-      } else
-        emit(BikeNonEmptyTripState());
+      UserHttp.getTrips(value!).then((value1) {
+        if (value1.isEmpty) {
+          emit(BikeEmptyTripState());
+        } else {
+          List<GetTripModel> temp = [];
+          value1.forEach((element) {
+            temp.add(GetTripModel.fromJson(element));
+          });
+          // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
+          emit(BikeNonEmptyTripState(temp));
+        }
+      });
     });
   }
 }

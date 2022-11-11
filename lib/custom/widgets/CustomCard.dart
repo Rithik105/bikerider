@@ -8,9 +8,10 @@ import '../../Models/milestone.dart';
 import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
-  String text;
+  String startDate, tripName;
   Function ontap;
-  CustomCard({required this.text, required this.ontap});
+  CustomCard(
+      {required this.startDate, required this.tripName, required this.ontap});
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -47,7 +48,7 @@ class _CustomCardState extends State<CustomCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Reunion Manali',
+                  widget.tripName,
                   style: GoogleFonts.roboto(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -57,7 +58,7 @@ class _CustomCardState extends State<CustomCard> {
                   height: 5,
                 ),
                 Text(
-                  "9-15 October",
+                  widget.startDate,
                   style: GoogleFonts.roboto(color: Colors.white),
                 ),
                 SizedBox(
@@ -388,7 +389,7 @@ class TripSummaryCard extends StatelessWidget {
             height: 15,
           ),
           Text(
-            CreateTripModal.fromDetails!.name,
+            CreateTripModal.fromDetails!.place,
             style: GoogleFonts.roboto(
               color: const Color(0xaa000000),
               fontSize: 19,
@@ -426,7 +427,7 @@ class TripSummaryCard extends StatelessWidget {
               SizedBox(
                 width: 90,
                 child: Text(
-                  CreateTripModal.fromDetails!.name,
+                  CreateTripModal.fromDetails!.place,
                   style: GoogleFonts.roboto(
                     color: const Color(0xaa000000),
                     fontSize: 16,
@@ -451,7 +452,7 @@ class TripSummaryCard extends StatelessWidget {
               SizedBox(
                 width: 90,
                 child: Text(
-                  CreateTripModal.toDetails!.name,
+                  CreateTripModal.toDetails!.place,
                   style: GoogleFonts.roboto(
                     color: const Color(0xbb000000),
                     fontSize: 16,

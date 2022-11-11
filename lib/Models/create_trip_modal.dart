@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:bikerider/Models/tuple_class.dart';
 
 import '../Http/mapHttp.dart';
+import '../Providers/invite_provider.dart';
 import 'autocomplete.dart';
 import 'milestone.dart';
 
@@ -16,18 +19,32 @@ class CreateTripModal {
   static List<MilestoneModal> milestone = [];
   static Tuple? distance;
   toJson() {
-    return {
+    return jsonEncode({
       'tripName': tripName,
-      'from': fromDetails?.toJson(),
-      'to': toDetails?.toJson(),
+      'source': fromDetails?.toJson(),
+      'destination': toDetails?.toJson(),
       'startDate': startDate,
       'endDate': endDate,
       'startTime': startTime,
-      'recommendations': recommendations,
+      //'recommendations': recommendations,
       'contacts': contacts.map((e) => e.toJson()).toList(),
       'milestone': milestone.map((e) => e.toJson()).toList(),
-      'distance': distance?.toJson(),
-    }.toString();
+
+      //'distance': distance?.toJson(),
+    });
+  }
+
+  static clearAll() {
+    toDetails = null;
+    fromDetails = null;
+    tripName = null;
+    startDate = null;
+    endDate = null;
+    startTime = null;
+    recommendations = [];
+    contacts = [];
+    milestone = [];
+    distance = null;
   }
 
   static printRecommendations() {
@@ -57,7 +74,7 @@ class CreateTripModal {
 //  static createMilestone() {}
   static printMilestones() {
     for (MilestoneModal e in milestone) {
-      print(e);
+      print(e.toJson());
     }
   }
 
