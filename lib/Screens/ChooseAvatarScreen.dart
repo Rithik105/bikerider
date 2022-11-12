@@ -129,14 +129,17 @@ class ChooseAvatarScreen extends StatelessWidget {
                                   } else {
                                     UserSecureStorage.getToken().then((value) {
                                       print(value);
-                                      UserImageHttp.submitSubscription(
-                                              file: storeImage)
+                                      UserSecureStorage.getToken()
                                           .then((value) {
-                                        Navigator.pushNamed(
-                                            context, "/GetStartedScreen",
-                                            arguments: {
-                                              "storeImage": storeImage
-                                            });
+                                        UserImageHttp.submitSubscription(
+                                                token: value!, file: storeImage)
+                                            .then((value) {
+                                          Navigator.pushNamed(
+                                              context, "/GetStartedScreen",
+                                              arguments: {
+                                                "storeImage": storeImage
+                                              });
+                                        });
                                       });
                                     });
                                   }
@@ -182,7 +185,7 @@ class ChooseAvatarScreen extends StatelessWidget {
                                     UserSecureStorage.getToken().then((value) {
                                       print(value);
                                       UserImageHttp.submitSubscription(
-                                              file: storeImage)
+                                              token: value!, file: storeImage)
                                           .then((value) {
                                         Navigator.pushNamed(
                                             context, "/GetStartedScreen",

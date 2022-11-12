@@ -1,4 +1,5 @@
 import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Screens/HomePage.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
@@ -11,21 +12,24 @@ import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
 import 'google_maps_preview.dart';
+import 'google_maps_preview_go.dart';
 import 'invite_people.dart';
 import 'milestone_card.dart';
 
-class TripSummary extends StatefulWidget {
-  TripSummary({
+class TripSummaryGo extends StatefulWidget {
+  GetTripModel getTripModel;
+  TripSummaryGo({
+    required this.getTripModel,
     Key? key,
   }) : super(key: key);
 
   // final List points = CreateTripModal.distance!.points;
 
   @override
-  State<TripSummary> createState() => _TripSummaryState();
+  State<TripSummaryGo> createState() => _TripSummaryGoState();
 }
 
-class _TripSummaryState extends State<TripSummary> {
+class _TripSummaryGoState extends State<TripSummaryGo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +67,7 @@ class _TripSummaryState extends State<TripSummary> {
         ),
       ),
       body: FutureBuilder(
-        future: CreateTripModal.setDetails().onError((error, stackTrace) {
+        future: widget.getTripModel.setDetails().onError((error, stackTrace) {
           Navigator.pop(context);
           showToast(msg: 'Route cannot be found');
           return false;
@@ -87,9 +91,9 @@ class _TripSummaryState extends State<TripSummary> {
               );
             }
             if (snapshot.connectionState == ConnectionState.done &&
-                CreateTripModal.distance!.points.isNotEmpty) {
+                widget.getTripModel.distance!.points.isNotEmpty) {
               print(
-                  'Points length: ${CreateTripModal.distance!.points.length}');
+                  'Points length: ${widget.getTripModel.distance!.points.length}');
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -106,9 +110,10 @@ class _TripSummaryState extends State<TripSummary> {
                                 // child: const Center(
                                 //   child: Text('HI'),
                                 // ),
-                                child: const MapCard(
-                                    // points: widget.points,
-                                    ),
+                                child: MapCardGo(
+                                  getTripModel: widget.getTripModel,
+                                  //points: widget.points,
+                                ),
                               ),
                               const SizedBox(
                                 height: 100,
@@ -116,11 +121,12 @@ class _TripSummaryState extends State<TripSummary> {
                             ],
                           ),
                         ),
-                        const Positioned(
+                        Positioned(
                           left: 20,
                           right: 20,
                           bottom: 0,
-                          child: TripSummaryCard(),
+                          child: TripSummaryGoCard(
+                              getTripModel: widget.getTripModel),
                         ),
                       ],
                     ),
@@ -261,23 +267,15 @@ class _TripSummaryState extends State<TripSummary> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: kLargeMapButtonDecoration,
-                      child: GestureDetector(
-                        onTap: () {
-                          CreateTripModal.printMilestones();
-                          print("called");
-                          UserHttp.createTrip(CreateTripModal().toJson());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
-                        },
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: kLargeMapButtonDecoration,
                         child: Center(
                           child: Text(
-                            "CREATE",
+                            "GO",
                             style: GoogleFonts.roboto(color: Colors.white),
                           ),
                         ),

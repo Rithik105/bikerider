@@ -8,12 +8,8 @@ class LeftTransitions extends PageRouteBuilder {
             pageBuilder: (context, animation, secondaryAnimation) => child);
 
   @override
-  Widget buildTransitions(
-          BuildContext context,
-          Animation<double> animation,
-          // TODO: implement buildTransitions
-          Animation<double> secondaryAnimation,
-          Widget child) =>
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) =>
       SlideTransition(
         position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
             .animate(animation),
@@ -29,12 +25,8 @@ class RightTransitions extends PageRouteBuilder {
             pageBuilder: (context, animation, secondaryAnimation) => child);
 
   @override
-  Widget buildTransitions(
-          BuildContext context,
-          Animation<double> animation,
-          // TODO: implement buildTransitions
-          Animation<double> secondaryAnimation,
-          Widget child) =>
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) =>
       SlideTransition(
         position: Tween(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
             .animate(animation),

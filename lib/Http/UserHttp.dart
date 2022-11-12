@@ -114,27 +114,32 @@ class UserHttp {
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
     print(response.body);
+    print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 }
 
 class UserImageHttp {
-  static Future submitSubscription({required File file}) async {
-    var request = await registerSubscription();
+  static Future submitSubscription(
+      {required File file, required String token}) async {
+    var request = await registerSubscription(token);
     request.files.add(
       http.MultipartFile(
           'image', file.readAsBytes().asStream(), file.lengthSync(),
           filename: basename(file.path)),
     );
     print(request.files.first.filename.toString());
-    var res = await request.send().then((value) {
+    var res = request.send().then((value) {
+      print("this is executed");
       value.stream.transform(utf8.decoder).listen((value) {
         print(value);
       });
+      print("hi");
     });
   }
 
-  static Future<http.MultipartRequest> registerSubscription() async {
+  static Future<http.MultipartRequest> registerSubscription(
+      String token) async {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
@@ -142,7 +147,8 @@ class UserImageHttp {
     );
     Map<String, String> headers = {
       "Content-type":
-          "multipart/form-data; boundary=<calculated when request is sent>"
+          "multipart/form-data; boundary=<calculated when request is sent>",
+      "Authorization": "BEARER $token",
     };
     request.headers.addAll(headers);
     return request;

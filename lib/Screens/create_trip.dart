@@ -1,4 +1,4 @@
-import 'package:bikerider/Screens/trip_summary.dart';
+import 'package:bikerider/Screens/trip_summary_create.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -210,7 +210,7 @@ class _CreateTripState extends State<CreateTrip> {
                           controller: startDate,
                           enable: false,
                           width: MediaQuery.of(context).size.width > 200
-                              ? MediaQuery.of(context).size.width * 0.4
+                              ? MediaQuery.of(context).size.width * 0.36
                               : null,
                         ),
                         // SizedBox(width: 10,),
@@ -220,7 +220,7 @@ class _CreateTripState extends State<CreateTrip> {
                           controller: endDate,
                           enable: false,
                           width: MediaQuery.of(context).size.width > 200
-                              ? MediaQuery.of(context).size.width * 0.3
+                              ? MediaQuery.of(context).size.width * 0.35
                               : null,
                         ),
                       ],
@@ -620,7 +620,7 @@ class _CreateTripState extends State<CreateTrip> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TripSummary(),
+                        builder: (context) => TripSummaryCreate(),
                       ),
                     );
                   }

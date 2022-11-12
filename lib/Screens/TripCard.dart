@@ -1,4 +1,5 @@
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/trip_summary_go.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +13,16 @@ import 'create_trip.dart';
 class TripCard extends StatelessWidget {
   TripCard({Key? key}) : super(key: key);
 
-  List<GetTripModel> trips = [];
-
   TextEditingController searchCardController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BikeCubit, BikeState>(builder: (context, state) {
       if (state is BikeTripFetchState) {
-        return const CircularProgressIndicator(
-          color: Colors.orange,
+        return Center(
+          child: const CircularProgressIndicator(
+            color: Colors.orange,
+          ),
         );
       } else if (state is BikeNonEmptyTripState) {
         return Scaffold(
@@ -67,10 +68,22 @@ class TripCard extends StatelessWidget {
                     itemCount: state.getTripModel.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       print(state.getTripModel[index].tripName!);
-                      return CustomCard(
-                        tripName: state.getTripModel[index].tripName!,
-                        startDate: state.getTripModel[index].startDate!,
-                        ontap: () {},
+                      return GestureDetector(
+                        onTap: () {
+                          print(index);
+                          print(state.getTripModel[index].source);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => TripSummaryGo(
+                                      getTripModel:
+                                          state.getTripModel[index]))));
+                        },
+                        child: CustomCard(
+                          tripName: state.getTripModel[index].tripName!,
+                          startDate: state.getTripModel[index].startDate!,
+                          ontap: () {},
+                        ),
                       );
                     }),
               ),

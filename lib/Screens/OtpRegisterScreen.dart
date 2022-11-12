@@ -103,7 +103,7 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                   // if (pin == value["otp"])
 
                   UserHttp.verifyOtp(pin).then((value) {
-                    if (value["message"] == true) {
+                    if (value["message"] == false) {
                       UserHttp.registerUser(User(
                               email: widget.user.email,
                               name: widget.user.name,

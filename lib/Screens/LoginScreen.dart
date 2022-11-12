@@ -5,12 +5,9 @@ import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Providers/Data.dart';
 import '../Utility/enums.dart';
 import '../custom/widgets/button.dart';
 import '../custom/widgets/text_form_fields.dart';
@@ -138,9 +135,9 @@ class LoginScreen extends StatelessWidget {
                                     password: _password.text))
                                 .then((value) {
                               if (value["message"] == "Signin Success !!") {
-                                print(value["token"]);
                                 UserSecureStorage.setToken(value["token"])
                                     .then((value) {
+                                  _setBool();
                                   Navigator.pushNamed(context, "/HomeScreen");
                                   showToast(msg: "Login Successful");
                                 });

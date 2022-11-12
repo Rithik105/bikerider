@@ -326,7 +326,8 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
               pickedDate = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
-                firstDate: DateTime(1950),
+                firstDate: DateTime.now(),
+                initialEntryMode: DatePickerEntryMode.calendarOnly,
                 //DateTime.now() - not to allow to choose before today.
                 lastDate: DateTime(2100),
                 builder: (context, child) {
@@ -347,10 +348,9 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
                   );
                 },
               );
-              print(pickedDate);
               setState(() {
                 widget.controller.text =
-                    DateFormat('dd-MM-yyyy').format(pickedDate!).toString();
+                    DateFormat('dd-MM-yy').format(pickedDate!).toString();
                 if (widget.controller.text.isNotEmpty) {
                   widget.label == 'Start Date'
                       ? CreateTripModal.startDate = widget.controller.text
