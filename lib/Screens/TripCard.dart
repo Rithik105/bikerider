@@ -70,16 +70,25 @@ class TripCard extends StatelessWidget {
                       print(state.getTripModel[index].tripName!);
                       return GestureDetector(
                         onTap: () {
+                          print(
+                              'milestone length${state.getTripModel[index].milestones.length}');
+                          print(state.getTripModel[index].milestones);
+
                           print(index);
                           print(state.getTripModel[index].source);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => TripSummaryGo(
-                                      getTripModel:
-                                          state.getTripModel[index]))));
+                          Navigator.pushNamed(context, '/TripSummaryGo',
+                              arguments: {
+                                "getTripModel": state.getTripModel[index]
+                              });
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: ((context) => TripSummaryGo(
+                          //             getTripModel:
+                          //                 state.getTripModel[index]))));
                         },
                         child: CustomCard(
+                          id: state.getTripModel[index].id!,
                           tripName: state.getTripModel[index].tripName!,
                           startDate: state.getTripModel[index].startDate!,
                           ontap: () {},
@@ -95,9 +104,10 @@ class TripCard extends StatelessWidget {
             disabledElevation: 0,
             splashColor: Colors.transparent,
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CreateTrip();
-              }));
+              Navigator.pushNamed(context, "/CreateTrip");
+              // Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //   return CreateTrip();
+              // }));
             },
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.transparent,
@@ -150,10 +160,11 @@ class TripCard extends StatelessWidget {
                       child: LargeSubmitButton(
                           text: "CREATE A TRIP",
                           ontap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CreateTrip();
-                            }));
+                            Navigator.pushNamed(context, "/CreateTrip");
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return CreateTrip();
+                            // }));
                           }))
                 ],
               ).paddingAll(40, 40, 40, 40)

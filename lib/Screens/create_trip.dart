@@ -360,12 +360,13 @@ class _CreateTripState extends State<CreateTrip> {
                   debugPrint('Add a invite button pressed');
                   // print('encrypt');
                   // encryptTest();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const InvitePage(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/InvitePage');
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const InvitePage(),
+                  //   ),
+                  // );
                 },
                 child: Column(
                   children: [
@@ -377,12 +378,13 @@ class _CreateTripState extends State<CreateTrip> {
                             type: CircularButtonType.invite,
                             callBack: () {
                               debugPrint('Add a invite button pressed');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const InvitePage(),
-                                ),
-                              );
+                              Navigator.pushNamed(context, '/InvitePage');
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => const InvitePage(),
+                              //   ),
+                              // );
                             },
                           ),
                           const SizedBox(
@@ -616,13 +618,15 @@ class _CreateTripState extends State<CreateTrip> {
                     // double zoom =
                     //     (CreateTripModal.distance!.points.length).toDouble();
                     // print('length: $zoom');
-                    CreateTripModal.printAll();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TripSummaryCreate(),
-                      ),
-                    );
+                    CreateTripModal.printMilestones();
+                    CreateTripModal.printContacts();
+                    Navigator.pushNamed(context, '/TripSummaryCreate');
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => TripSummaryCreate(),
+                    //   ),
+                    // );
                   }
                 },
                 child: Container(

@@ -1,7 +1,10 @@
+import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/text_form_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -10,10 +13,13 @@ import '../../Models/milestone.dart';
 import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
-  String startDate, tripName;
+  String startDate, id, tripName;
   Function ontap;
   CustomCard(
-      {required this.startDate, required this.tripName, required this.ontap});
+      {required this.startDate,
+      required this.tripName,
+      required this.ontap,
+      required this.id});
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -81,12 +87,19 @@ class _CustomCardState extends State<CustomCard> {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(5),
-            height: 45,
-            child: Image.asset(
-              "assets/images/homePage/cancel.png",
-              color: Colors.white,
+          GestureDetector(
+            onTap: () {
+              UserHttp.deleteTrip(widget.id);
+              print(widget.id);
+              BlocProvider.of<BikeCubit>(context).getTrips();
+            },
+            child: Container(
+              padding: EdgeInsets.all(5),
+              height: 45,
+              child: Image.asset(
+                "assets/images/homePage/cancel.png",
+                color: Colors.white,
+              ),
             ),
           )
         ],

@@ -1,4 +1,5 @@
 import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Screens/LoginScreen.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/Material.dart';
@@ -89,12 +90,17 @@ class _ForgotScreenState extends State<ForgotScreen> {
                               UserHttp.changePassword(widget.mobile,
                                       _confirmPasswordController.text)
                                   .then((value) {
-                                Navigator.pushNamed(context, "/SuccessScreen",
-                                    arguments: {
-                                      "title":
-                                          "Your Password has been successfully changed.",
-                                      "nextScreen": "/LoginScreen"
-                                    });
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                // Navigator.popUntil(context, (route) {
+                                //   if (route ==
+                                //       MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               LoginScreen())) {
+                                //     return true;
+                                //   } else
+                                //     return false;
+                                // });
                               });
                             }
                           })).paddingAll(10, 10, 0, 0)

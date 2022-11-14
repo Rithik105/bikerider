@@ -11,8 +11,8 @@ class CreateTripModal {
   static LocationDetails? toDetails;
   static LocationDetails? fromDetails;
   static String? tripName;
-  static String? startDate;
-  static String? endDate;
+  static DateTime? startDate;
+  static DateTime? endDate;
   static String? startTime;
   static List<String> recommendations = [];
   static List<ContactDetails> contacts = [];
@@ -23,14 +23,13 @@ class CreateTripModal {
       'tripName': tripName,
       'source': fromDetails?.toJson(),
       'destination': toDetails?.toJson(),
-      'startDate': startDate,
-      'endDate': endDate,
+      'startDate': startDate.toString(),
+      'endDate': endDate.toString(),
       'startTime': startTime,
-      //'recommendations': recommendations,
-      'contacts': contacts.map((e) => e.toJson()).toList(),
-      'milestone': milestone.map((e) => e.toJson()).toList(),
-
-      //'distance': distance?.toJson(),
+      'recommendations': recommendations,
+      'riders': contacts.map((e) => e.toJson()).toList(),
+      'milestones': milestone.map((e) => e.toJson()).toList(),
+      'distance': distance?.distance ?? '0',
     });
   }
 
@@ -89,7 +88,7 @@ class CreateTripModal {
     // print('Print contacts called');
     print('Selected Contacts:');
     for (ContactDetails e in contacts) {
-      print(e);
+      print(e.toJson());
     }
   }
 

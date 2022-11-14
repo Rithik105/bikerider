@@ -16,8 +16,7 @@ class GetTripModel {
   String? endDate;
   List<ContactDetails> riders = [];
   String? startTime;
-  List<MilestoneModal> milestone = [];
-  List<ContactDetails> contacts = [];
+  List<MilestoneModal> milestones = [];
   List<String> recommendations = [];
   Tuple? distance;
   GetTripModel(
@@ -31,6 +30,7 @@ class GetTripModel {
       required this.tripName,
       required this.source});
   GetTripModel.fromJson(Map json) {
+    print(json["recommendations"].runtimeType);
     id = json['_id'];
     mobile = json['mobile'];
     url = json['url'];
@@ -39,9 +39,14 @@ class GetTripModel {
     tripName = json['tripName'];
     startDate = json['startDate'];
     endDate = json['endDate'];
+    // recommendations.add(json["recommendations"]);
+    json['recommendations'].forEach((e) => recommendations.add(e));
+
     startTime = json['startTime'];
-    json['riders'].map((e) => riders.add(ContactDetails.fromJson(e)));
-    json['milestones'].map((e) => MilestoneModal.fromJson(e));
+    json['riders'].forEach((e) => riders.add(ContactDetails.fromJson(e)));
+    json['milestones']
+        .forEach((e) => milestones.add(MilestoneModal.fromJson(e)));
+    print(milestones);
   }
   @override
   String toString() {

@@ -23,7 +23,7 @@ class TripSummaryGo extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  // final List points = CreateTripModal.distance!.points;
+  // final List points = widget.getTripModel.distance!.points;
 
   @override
   State<TripSummaryGo> createState() => _TripSummaryGoState();
@@ -44,21 +44,6 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
             letterSpacing: 1,
           ),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              CreateTripModal.printRecommendations();
-              // Navigator.pop(context);
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 25.0),
-              child: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
@@ -135,48 +120,48 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                     ),
 
                     //If only one present
-                    CreateTripModal.milestone.length == 1
+                    widget.getTripModel.milestones.length == 1
                         ? TimeLine(
-                            details: CreateTripModal.milestone.first,
+                            details: widget.getTripModel.milestones[0],
                             first: true,
                             last: true,
                           )
                         : Container(),
 
                     //If only two present
-                    CreateTripModal.milestone.length == 2
+                    widget.getTripModel.milestones.length == 2
                         ? TimeLine(
-                            details: CreateTripModal.milestone.first,
+                            details: widget.getTripModel.milestones.first,
                             first: true,
                           )
                         : Container(),
-                    CreateTripModal.milestone.length == 2
+                    widget.getTripModel.milestones.length == 2
                         ? TimeLine(
-                            details: CreateTripModal.milestone.last,
+                            details: widget.getTripModel.milestones.last,
                             last: true,
                           )
                         : Container(),
-                    CreateTripModal.milestone.length >= 3
+                    widget.getTripModel.milestones.length >= 3
                         ? TimeLine(
-                            details: CreateTripModal.milestone.first,
+                            details: widget.getTripModel.milestones.first,
                             first: true,
                           )
                         : Container(),
-                    CreateTripModal.milestone.length >= 3
+                    widget.getTripModel.milestones.length >= 3
                         ? Column(
                             children: [
-                              ...CreateTripModal.milestone
-                                  .sublist(
-                                      1, CreateTripModal.milestone.length - 1)
+                              ...widget.getTripModel.milestones
+                                  .sublist(1,
+                                      widget.getTripModel.milestones.length - 1)
                                   .map(
                                     (e) => TimeLine(details: e),
                                   ),
                             ],
                           )
                         : Container(),
-                    CreateTripModal.milestone.length >= 3
+                    widget.getTripModel.milestones.length >= 3
                         ? TimeLine(
-                            details: CreateTripModal.milestone.last,
+                            details: widget.getTripModel.milestones.last,
                             last: true,
                           )
                         : Container(),
@@ -203,7 +188,7 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                ...CreateTripModal.recommendations.map(
+                                ...widget.getTripModel.recommendations.map(
                                   (e) => TextCircularButton(
                                       label: e, disable: true, callBack: () {}),
                                 ),
@@ -217,46 +202,22 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    top: 8,
-                                    bottom: 10,
-                                    right: 5,
-                                    left: 5,
-                                  ),
-                                  child: CircularButton(
-                                    type: CircularButtonType.invite,
-                                    callBack: () {
-                                      debugPrint('Add a invite button pressed');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const InvitePage(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                ...Provider.of<InviteProvider>(context,
-                                        listen: true)
-                                    .selectedContact
-                                    .map(
-                                      (e) => Container(
-                                        margin: const EdgeInsets.symmetric(
-                                          horizontal: 5,
-                                        ),
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.grey,
-                                          child: Image.asset(
-                                            'assets/images/create_trip/rider.png',
-                                          ),
-                                        ),
+                                ...widget.getTripModel.riders.map(
+                                  (e) => Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 5,
+                                    ),
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      child: Image.asset(
+                                        'assets/images/create_trip/rider.png',
                                       ),
                                     ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

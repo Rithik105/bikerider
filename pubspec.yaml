@@ -60,6 +60,7 @@ dependencies:
   google_maps_flutter: ^2.2.1
   location: ^4.4.0
   flutter_polyline_points: ^1.0.0
+  url_launcher: ^6.1.6
 
 dev_dependencies:
   flutter_test:
@@ -100,6 +101,7 @@ flutter:
     - assets/images/search/
     - assets/images/contacts/
     - assets/images/google_maps/
+    - assets/images/Chat/
     - assets/images/trip_summary/
   #   - images/a_dot_ham.jpeg
 

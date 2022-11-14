@@ -222,13 +222,15 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                                     type: CircularButtonType.invite,
                                     callBack: () {
                                       debugPrint('Add a invite button pressed');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const InvitePage(),
-                                        ),
-                                      );
+                                      Navigator.pushNamed(
+                                          context, '/InvitePage');
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) =>
+                                      //         const InvitePage(),
+                                      //   ),
+                                      // );
                                     },
                                   ),
                                 ),
@@ -265,11 +267,18 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                       onTap: () {
                         CreateTripModal.printMilestones();
                         print("called");
-                        UserHttp.createTrip(CreateTripModal().toJson());
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                        UserHttp.createTrip(CreateTripModal().toJson())
+                            .then((value) {
+                          showToast(msg: "TripCreated Successfully");
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/HomeScreen");
+                        });
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => HomeScreen()));
                       },
                       child: Container(
                         height: 50,

@@ -11,10 +11,9 @@ class TimeLine extends StatelessWidget {
   TimeLine(
       {Key? key, required this.details, this.first = false, this.last = false})
       : super(key: key);
-  final MilestoneModal details;
+  MilestoneModal details;
   bool first;
   bool last;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -165,7 +164,8 @@ class TimeLine extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      details.distance!.distance,
+                                      details.milDistance ??
+                                          details.distance!.distance,
                                       style: GoogleFonts.roboto(
                                           color: const Color(0xff979797),
                                           fontSize: 15),

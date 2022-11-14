@@ -193,6 +193,10 @@ class GetStartedScreen extends StatelessWidget {
             LargeSubmitButton(
                 text: "LETS GET STARTED",
                 ontap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                   Navigator.pushNamed(context, "/HomeScreen");
                 })
           ]),

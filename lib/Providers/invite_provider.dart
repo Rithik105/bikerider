@@ -49,12 +49,12 @@ class ContactDetails {
   //String? initials;
   ContactDetails({required this.name, required this.phoneNumber});
   Map toJson() {
-    return {'name': name, 'phoneNumber': phoneNumber};
+    return {'riderName': name, 'riderPhoneNumber': phoneNumber};
   }
 
   ContactDetails.fromJson(json) {
-    name = json['name'];
-    phoneNumber = json['phoneNumber'];
+    name = json['riderName'];
+    phoneNumber = json['riderPhoneNumber'];
   }
   // @override
   // String toString() {

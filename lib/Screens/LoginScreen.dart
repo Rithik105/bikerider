@@ -7,6 +7,7 @@ import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Utility/enums.dart';
 import '../custom/widgets/button.dart';
@@ -175,6 +176,17 @@ class LoginScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             print('FaceBook login');
+
+                            const String url = 'https://www.facebook.com';
+                            canLaunchUrl(Uri.parse(url)).then(
+                              (value) {
+                                if (value) {
+                                  launchUrl(Uri.parse(url));
+                                } else {
+                                  print('Could not launch $url');
+                                }
+                              },
+                            );
                           },
                           child: Image.asset(
                             'assets/images/login/fbicon.png',
@@ -187,6 +199,16 @@ class LoginScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             print('Google login');
+                            const String url = 'https://accounts.google.com';
+                            canLaunchUrl(Uri.parse(url)).then(
+                              (value) {
+                                if (value) {
+                                  launchUrl(Uri.parse(url));
+                                } else {
+                                  print('Could not launch $url');
+                                }
+                              },
+                            );
                           },
                           child: Image.asset(
                             'assets/images/login/gicon.png',

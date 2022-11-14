@@ -140,13 +140,13 @@ class _TutorialState extends State<Tutorial> {
                   Padding(
                     padding: const EdgeInsets.only(top: 35),
                     child: LargeSubmitButton(
-                      text: "REGISTER",
+                      text: "LOGIN / REGISTER",
                       ontap: () {
                         Navigator.pushNamed(context, "/OwnBikeScreen");
                       },
                       width: 320,
                     ),
-                  )
+                  ),
                 ],
               )
             ],

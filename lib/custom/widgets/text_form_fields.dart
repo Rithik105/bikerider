@@ -353,8 +353,8 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
                     DateFormat('dd-MM-yy').format(pickedDate!).toString();
                 if (widget.controller.text.isNotEmpty) {
                   widget.label == 'Start Date'
-                      ? CreateTripModal.startDate = widget.controller.text
-                      : CreateTripModal.endDate = widget.controller.text;
+                      ? CreateTripModal.startDate = pickedDate
+                      : CreateTripModal.endDate = pickedDate;
                 }
               });
             }

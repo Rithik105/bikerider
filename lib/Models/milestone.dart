@@ -11,6 +11,7 @@ class MilestoneModal {
   LocationDetails? to;
   // String? distance;
   Tuple? distance;
+  String? milDistance;
   // late double lat;
   // late double lon;
   final TextEditingController fromController = TextEditingController();
@@ -26,20 +27,28 @@ class MilestoneModal {
   });
   toJson() {
     return {
-      'Id': milestoneId,
+      'id': milestoneId,
       'source': from?.toJson(),
-      'destination': to?.toJson()
+      'destination': to?.toJson(),
+      'distance': distance?.distance
     };
   }
 
   MilestoneModal.fromJson(Map json) {
-    milestoneId = json['Id'];
-    type = json['type'];
-    from = json['from'];
-    to = json['to'];
+    // milestoneId = json['Id'];
+    // type = json['type'];
+    milestoneId = int.parse(json["id"]);
+    print('test $json');
+    from = LocationDetails.fromJson(json['source'][0]);
+    print(json['destination']);
+    to = LocationDetails.fromJson(json['destination'][0]);
+
+    // to = json['destination'];
+    // distance!.distance = json['distance'];
+    milDistance = json['distance'];
   }
   @override
   String toString() {
-    return 'Id:$milestoneId,From:$from,To:$to';
+    return 'Id:$milestoneId,From:$from,To:$to,dis:${distance}';
   }
 }
