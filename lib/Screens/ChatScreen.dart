@@ -303,8 +303,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     _messageController.text = _messageController.text
                         .substring(0, _messageController.text.length - 2);
                   },
-                  textEditingController:
-                      _messageController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                  textEditingController: _messageController,
+                  // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
                   config: const Config(
                     columns: 7,
                     emojiSizeMax: 32 * 1.0,
@@ -326,9 +326,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       'No Recents',
                       style: TextStyle(fontSize: 20, color: Colors.black26),
                       textAlign: TextAlign.center,
-                    ), // Needs to be const Widget
-                    loadingIndicator:
-                        SizedBox.shrink(), // Needs to be const Widget
+                    ),
+                    // Needs to be const Widget
+                    loadingIndicator: SizedBox.shrink(),
+                    // Needs to be const Widget
                     tabIndicatorAnimDuration: kTabScrollDuration,
                     categoryIcons: CategoryIcons(),
                     buttonMode: ButtonMode.MATERIAL,

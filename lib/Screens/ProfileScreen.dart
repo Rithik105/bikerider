@@ -1,8 +1,9 @@
+import 'package:bikerider/Models/timeLineModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Models/timeLineModel.dart';
+import '../Http/UserHttp.dart';
 import '../custom/widgets/Follower.dart';
 import '../custom/widgets/timeLine.dart';
 
@@ -15,9 +16,18 @@ class ProfileHeader extends StatefulWidget {
 
 class _ProfileHeaderState extends State<ProfileHeader> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // getTimeline().then((value) => print('ProfileHeader GetTimeLine:$value'));
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('builds again');
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
@@ -29,21 +39,21 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         alignment: Alignment.bottomRight,
-                        image: const AssetImage(
-                            'assets/images/homePage/rider.png'),
+                        image: AssetImage('assets/images/homePage/rider.png'),
                         scale: 1.9,
                         opacity: 0.1,
                       ),
                       gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Color(0xffED7E2C),
-                            Color(0xffF7B557),
-                          ]),
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Color(0xffED7E2C),
+                          Color(0xffF7B557),
+                        ],
+                      ),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(top: 60),
+                      padding: const EdgeInsets.only(top: 60),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -53,7 +63,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             child: CircleAvatar(
                               radius: 70,
                               backgroundColor: Colors.transparent,
-                              backgroundImage: const AssetImage(
+                              backgroundImage: AssetImage(
                                   "assets/images/homePage/woman.png"),
                             ),
                           ),
@@ -107,12 +117,13 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 ],
               ),
               Positioned(
-                  right: 25,
-                  top: 30,
-                  child: Image.asset(
-                    "assets/images/homePage/edit_pencil.png",
-                    scale: 2.2,
-                  )),
+                right: 25,
+                top: 30,
+                child: Image.asset(
+                  "assets/images/homePage/edit_pencil.png",
+                  scale: 2.2,
+                ),
+              ),
               Positioned(
                 top: 380,
                 left: 10,
@@ -122,11 +133,26 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               ),
             ],
           ),
-          SizedBox(
-            height: 50,
+          const SizedBox(
+            height: 30,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              'My Activities',
+              style: GoogleFonts.robotoFlex(
+                color: const Color(0xFF616161),
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
           FutureBuilder(
-            future: getMyActivities(),
+            // future: getMyActivities(),
+            future: getTimeline(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -135,13 +161,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
-                var data = snapshot.data as TimeLineModel;
-                print('length ${data.tripList.length}');
+                // print(snapshot.data);
+                TimeLineModel? data = snapshot.data;
+                print('length ${data}');
                 return Container(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        ...data.tripList.asMap().entries.map(
+                        ...data!.tripList.asMap().entries.map(
                           (e) {
                             print(e.value.id);
                             if (e.key == 0) {

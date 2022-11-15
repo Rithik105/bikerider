@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import '../Models/create_trip_modal.dart';
 import '../Providers/invite_provider.dart';
 import '../Utility/enums.dart';
@@ -13,7 +14,6 @@ import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
 import 'google_maps_preview.dart';
-import 'invite_people.dart';
 import 'milestone_card.dart';
 
 class TripSummaryCreate extends StatefulWidget {
@@ -269,17 +269,20 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                       onTap: () {
                         UserHttp.createTrip(CreateTripModal().toJson())
                             .then((value) {
+                          showToast(msg: 'Trip created successfully');
+                          Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
 
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BlocProvider(
-                                        create: (context) =>
-                                            BikeCubit()..getTrips(),
-                                        child: HomeScreen(),
-                                      )));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider(
+                                create: (context) => BikeCubit()..getTrips(),
+                                child: HomeScreen(),
+                              ),
+                            ),
+                          );
                           Provider.of<InviteProvider>(context, listen: false)
                               .selectedContact
                               .clear();
