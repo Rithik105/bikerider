@@ -1,55 +1,58 @@
 import 'dart:async';
 
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Http/UserHttp.dart';
+import '../bloc/BikeCubit.dart';
 import '../custom/widgets/bubble.dart';
 
-class NewChatScreen extends StatefulWidget {
-  const NewChatScreen({Key? key}) : super(key: key);
+class ChatScreen extends StatefulWidget {
+  String groupId, number, token;
+
+  List chatList;
+  ChatScreen(
+      {Key? key,
+      required this.chatList,
+      required this.number,
+      required this.groupId,
+      required this.token})
+      : super(key: key);
 
   @override
-  State<NewChatScreen> createState() => _NewChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _NewChatScreenState extends State<NewChatScreen> {
+class _ChatScreenState extends State<ChatScreen> {
   ScrollController chatListController = ScrollController();
-  String sender = 'esikiel';
-  List<Map<String, String>> chatList = [
-    {"sender": "esikiel", "message": "whats your name"},
-    {"sender": "tony", "message": "whaaaat!!"},
-    {"sender": "esikiel", "message": "what is your name"},
-    {"sender": "tony", "message": "tony"},
-  ];
   TextEditingController _messageController = TextEditingController();
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
-  Timer? timer;
+  Timer? timer1;
 
   @override
   void initState() {
+    print(widget.chatList);
     // TODO: implement initState
     super.initState();
-    // timer = Timer.periodic(Duration(seconds: 10), (timer) {
-    //   UserHttp.getChats().then((value) {
-    //     chatList = value;
-    //   });
-    // });
-    // UserHttp.getChats().then((value) {
-    //   chatList = value;
-    // });
-    // UserHttp.getNumber().then((value) {
-    //   sender = value;
-    // });
+    timer1 = Timer.periodic(Duration(seconds: 1), (timer) {
+      print(widget.groupId);
+      UserHttp.getChats(widget.groupId, widget.token).then((value) {
+        widget.chatList = value;
+        setState(() {});
+      });
+    });
   }
 
   @override
   void dispose() {
-    timer!.cancel();
     // TODO: implement dispose
     super.dispose();
+    timer1!.cancel();
   }
 
   @override
@@ -63,7 +66,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
                 GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w600),
           ),
         ),
-        backgroundColor: Color.fromRGBO(240, 148, 85, 1),
+        backgroundColor: const Color.fromRGBO(240, 148, 85, 1),
         actions: [
           PopupMenuButton<int>(
             onSelected: (value) {
@@ -71,7 +74,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
             },
             // position: PopupMenuPosition.under,
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 1,
                 child: Text(
                   "Group Info",
@@ -81,7 +84,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
                 ),
               ),
               // popupmenu item 2
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 2,
                 child: Text(
                   "Notifications",
@@ -90,7 +93,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   ),
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 3,
                 child: Text(
                   "Clear Chat",
@@ -100,10 +103,10 @@ class _NewChatScreenState extends State<NewChatScreen> {
                 ),
               ),
             ],
-            color: Colors.white, padding: EdgeInsets.all(0),
+            color: Colors.white, padding: const EdgeInsets.all(0),
           ),
         ],
-        leading: BackButton(
+        leading: const BackButton(
           color: Colors.white,
         ),
       ),
@@ -112,35 +115,35 @@ class _NewChatScreenState extends State<NewChatScreen> {
           children: [
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  image: DecorationImage(
-                    alignment: Alignment.bottomRight,
-                    image: AssetImage(
-                      'images/chat.png',
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    image: DecorationImage(
+                      alignment: Alignment.bottomRight,
+                      image: AssetImage(
+                        'assets/images/Chat/chat.png',
+                      ),
+                      scale: 1.7,
+                      opacity: 0.05,
                     ),
-                    scale: 1.7,
-                    opacity: 0.05,
                   ),
-                ),
-                child: ListView.builder(
-                  controller: chatListController,
-                  itemCount: chatList.length,
-                  itemBuilder: ((context, index) {
-                    if (chatList[index]["sender"] == sender) {
-                      return MessageBubble(
-                          isMe: true,
-                          messageText: chatList[index]["message"]!,
-                          senderName: chatList[index]["sender"]!);
-                    } else {
-                      return MessageBubble(
-                          isMe: false,
-                          messageText: chatList[index]["message"]!,
-                          senderName: chatList[index]["sender"]!);
-                    }
-                  }),
-                ),
-              ),
+                  child: ListView.builder(
+                      controller: chatListController,
+                      itemCount: widget.chatList.length,
+                      itemBuilder: ((context, index) {
+                        if (widget.chatList[index]["memberNumber"] ==
+                            widget.number) {
+                          print(widget.number);
+                          return MessageBubble(
+                              isMe: true,
+                              messageText: widget.chatList[index]["chat"],
+                              senderName: widget.chatList[index]["senderName"]);
+                        } else {
+                          return MessageBubble(
+                              isMe: false,
+                              messageText: widget.chatList[index]["chat"],
+                              senderName: widget.chatList[index]["senderName"]);
+                        }
+                      }))),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -159,7 +162,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   ), //BoxShadow
                 ],
               ),
-              margin: EdgeInsets.only(bottom: 30),
+              margin: const EdgeInsets.only(bottom: 30),
               height: 50,
               width: 350,
               child: Row(
@@ -173,7 +176,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
                         focus.canRequestFocus = true;
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.emoji_emotions_outlined,
                       color: Color(0xff7F7F7F),
                       size: 32,
@@ -181,7 +184,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   ),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(left: 3),
+                      margin: const EdgeInsets.only(left: 3),
                       child: AutoSizeTextField(
                         onTap: () {
                           setState(() {
@@ -190,63 +193,63 @@ class _NewChatScreenState extends State<NewChatScreen> {
                         },
                         autofocus: false,
                         controller: _messageController,
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                         minFontSize: 15,
                         minLines: 1,
                         maxLines: 10,
-                        decoration: InputDecoration(border: InputBorder.none),
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
                       ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                leading: new Icon(Icons.photo),
-                                title: new Text('Photo'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: new Icon(Icons.music_note),
-                                title: new Text('Music'),
-                                onTap: () {
-                                  //   Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: new Icon(Icons.videocam),
-                                title: new Text('Video'),
-                                onTap: () {
-                                  //  Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: new Icon(Icons.share),
-                                title: new Text('Share'),
-                                onTap: () {
-                                  // Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: new Icon(Icons.file_copy_rounded),
-                                title: new Text('Files'),
-                                onTap: () {
-                                  // Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                          context: context,
+                          builder: (context) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: const Icon(Icons.photo),
+                                  title: const Text('Photo'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.music_note),
+                                  title: const Text('Music'),
+                                  onTap: () {
+                                    //   Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.videocam),
+                                  title: const Text('Video'),
+                                  onTap: () {
+                                    //  Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.share),
+                                  title: const Text('Share'),
+                                  onTap: () {
+                                    // Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.file_copy_rounded),
+                                  title: const Text('Files'),
+                                  onTap: () {
+                                    // Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.attach_file_outlined,
                       color: Color(0xff7F7F7F),
                       size: 32,
@@ -255,19 +258,26 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   GestureDetector(
                     onTap: () {
                       if (_messageController.text != "") {
-                        chatList.add({
-                          "sender": sender,
-                          "message": _messageController.text
+                        UserSecureStorage.getToken().then((value) {
+                          UserHttp.sendChat(widget.groupId, widget.token,
+                                  _messageController.text)
+                              .then((value) {
+                            print(value);
+                            _messageController.clear();
+                          });
                         });
-                        chatListController.animateTo(
-                            chatListController.position.maxScrollExtent + 100,
-                            duration: Duration(seconds: 1),
-                            curve: Curves.fastOutSlowIn);
-                        setState(() {});
-                        _messageController.clear();
+
+                        // chatList.add({
+                        //   "sender": sender,
+                        //   "message": _messageController.text
+                        // });
+                        // chatListController.animateTo(
+                        //     chatListController.position.maxScrollExtent + 100,
+                        //     duration: const Duration(seconds: 1),
+                        //     curve: Curves.fastOutSlowIn);
                       }
                     },
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       backgroundColor: Color(0xffED7F2C),
                       radius: 22,
                       child: Center(

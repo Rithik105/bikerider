@@ -1,6 +1,7 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Screens/HomePage.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,7 @@ import '../Utility/enums.dart';
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
+import 'ChatScreen.dart';
 import 'google_maps_preview.dart';
 import 'google_maps_preview_go.dart';
 import 'invite_people.dart';
@@ -229,7 +231,24 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                       height: 20,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        UserSecureStorage.getToken().then((value) {
+                          UserHttp.getNumber(value!).then((value1) {
+                            UserHttp.getChats(widget.getTripModel.id!, value)
+                                .then((value2) {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ChatScreen(
+                                  token: value,
+                                  chatList: value2,
+                                  number: value1["mobile"],
+                                  groupId: widget.getTripModel.id!,
+                                );
+                              }));
+                            });
+                          });
+                        });
+                      },
                       child: Container(
                         height: 50,
                         width: double.infinity,
