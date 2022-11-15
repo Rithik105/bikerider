@@ -1,4 +1,4 @@
-import 'package:bikerider/Screens/trip_summary_create.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,6 @@ import '../Utility/enums.dart';
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/button.dart';
 import '../custom/widgets/text_form_fields.dart';
-import 'invite_people.dart';
 
 class CreateTrip extends StatefulWidget {
   const CreateTrip({Key? key}) : super(key: key);
@@ -619,9 +618,15 @@ class _CreateTripState extends State<CreateTrip> {
                     // double zoom =
                     //     (CreateTripModal.distance!.points.length).toDouble();
                     // print('length: $zoom');
-                    CreateTripModal.printMilestones();
-                    CreateTripModal.printContacts();
-                    Navigator.pushNamed(context, '/TripSummaryCreate');
+                    if (CreateTripModal.startDate!
+                            .compareTo(CreateTripModal.endDate!) >
+                        0) {
+                      showToast(msg: 'End date cannot be before start date');
+                    } else {
+                      CreateTripModal.printMilestones();
+                      CreateTripModal.printContacts();
+                      Navigator.pushNamed(context, '/TripSummaryCreate');
+                    }
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(

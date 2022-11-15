@@ -16,9 +16,9 @@ class ActivityModel {
   ActivityModel.fromJson(Map json, {int Id = 0}) {
     id = Id;
     tripName = json['tripName'];
-    startDate = json['startDate'];
-    endDate = json['endDate'];
-    url = json['url'];
+    startDate = DateTime.parse(json['startDate']);
+    endDate = DateTime.parse(json['endDate']);
+    // url = json['url'];
   }
 
   @override

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../custom/widgets/bubble.dart';
@@ -27,6 +27,7 @@ class _NewChatScreenState extends State<NewChatScreen> {
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
   Timer? timer;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -123,21 +124,22 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   ),
                 ),
                 child: ListView.builder(
-                    controller: chatListController,
-                    itemCount: chatList.length,
-                    itemBuilder: ((context, index) {
-                      if (chatList[index]["sender"] == sender) {
-                        return MessageBubble(
-                            isMe: true,
-                            messageText: chatList[index]["message"]!,
-                            senderName: chatList[index]["sender"]!);
-                      } else {
-                        return MessageBubble(
-                            isMe: false,
-                            messageText: chatList[index]["message"]!,
-                            senderName: chatList[index]["sender"]!);
-                      }
-                    })),
+                  controller: chatListController,
+                  itemCount: chatList.length,
+                  itemBuilder: ((context, index) {
+                    if (chatList[index]["sender"] == sender) {
+                      return MessageBubble(
+                          isMe: true,
+                          messageText: chatList[index]["message"]!,
+                          senderName: chatList[index]["sender"]!);
+                    } else {
+                      return MessageBubble(
+                          isMe: false,
+                          messageText: chatList[index]["message"]!,
+                          senderName: chatList[index]["sender"]!);
+                    }
+                  }),
+                ),
               ),
             ),
             Container(
@@ -199,49 +201,50 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: new Icon(Icons.photo),
-                                  title: new Text('Photo'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.music_note),
-                                  title: new Text('Music'),
-                                  onTap: () {
-                                    //   Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.videocam),
-                                  title: new Text('Video'),
-                                  onTap: () {
-                                    //  Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.share),
-                                  title: new Text('Share'),
-                                  onTap: () {
-                                    // Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.file_copy_rounded),
-                                  title: new Text('Files'),
-                                  onTap: () {
-                                    // Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          });
+                        context: context,
+                        builder: (context) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: new Icon(Icons.photo),
+                                title: new Text('Photo'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: new Icon(Icons.music_note),
+                                title: new Text('Music'),
+                                onTap: () {
+                                  //   Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: new Icon(Icons.videocam),
+                                title: new Text('Video'),
+                                onTap: () {
+                                  //  Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: new Icon(Icons.share),
+                                title: new Text('Share'),
+                                onTap: () {
+                                  // Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: new Icon(Icons.file_copy_rounded),
+                                title: new Text('Files'),
+                                onTap: () {
+                                  // Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Icon(
                       Icons.attach_file_outlined,
@@ -290,8 +293,8 @@ class _NewChatScreenState extends State<NewChatScreen> {
                     _messageController.text = _messageController.text
                         .substring(0, _messageController.text.length - 2);
                   },
-                  textEditingController:
-                      _messageController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                  textEditingController: _messageController,
+                  // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
                   config: const Config(
                     columns: 7,
                     emojiSizeMax: 32 * 1.0,
@@ -313,9 +316,10 @@ class _NewChatScreenState extends State<NewChatScreen> {
                       'No Recents',
                       style: TextStyle(fontSize: 20, color: Colors.black26),
                       textAlign: TextAlign.center,
-                    ), // Needs to be const Widget
-                    loadingIndicator:
-                        SizedBox.shrink(), // Needs to be const Widget
+                    ),
+                    // Needs to be const Widget
+                    loadingIndicator: SizedBox.shrink(),
+                    // Needs to be const Widget
                     tabIndicatorAnimDuration: kTabScrollDuration,
                     categoryIcons: CategoryIcons(),
                     buttonMode: ButtonMode.MATERIAL,

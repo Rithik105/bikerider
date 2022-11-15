@@ -138,13 +138,18 @@ getValidator({required TextFieldType textFieldType, String? data}) {
   return returnValue;
 }
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   TextEditingController controller = TextEditingController();
   CustomTextFormField(
       {Key? key, required this.textFieldType, required this.controller})
       : super(key: key);
   final TextFieldType textFieldType;
 
+  @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
   bool visibilityController = true;
 
   @override
@@ -157,24 +162,26 @@ class CustomTextFormField extends StatelessWidget {
             child: Consumer<VisibilityProvider>(
               builder: (BuildContext context, provider, child) {
                 return TextFormField(
-                  controller: controller,
+                  controller: widget.controller,
                   cursorColor: Colors.orangeAccent,
-                  keyboardType: textFieldType == TextFieldType.mobile
+                  keyboardType: widget.textFieldType == TextFieldType.mobile
                       ? TextInputType.number
                       : TextInputType.text,
                   validator: (value) {
                     return getValidator(
-                        textFieldType: textFieldType, data: value);
+                        textFieldType: widget.textFieldType, data: value);
                   },
-                  textInputAction: textFieldType == TextFieldType.password
-                      ? TextInputAction.done
-                      : TextInputAction.next,
+                  textInputAction:
+                      widget.textFieldType == TextFieldType.password
+                          ? TextInputAction.done
+                          : TextInputAction.next,
                   style: GoogleFonts.roboto(
                     fontSize: 20,
                     color: const Color(0xFF4F504F),
                   ),
-                  obscureText: textFieldType == TextFieldType.password
-                      ? provider.visibility
+                  obscureText: widget.textFieldType == TextFieldType.password
+                      ? visibilityController
+                      // provider.visibility
                       : false,
                   obscuringCharacter: 'x',
                   decoration: InputDecoration(
@@ -184,12 +191,12 @@ class CustomTextFormField extends StatelessWidget {
                     prefixIcon: Container(
                       // color: Colors.red,
                       child: Image.asset(
-                        getPreffixIcon(textFieldType: textFieldType),
+                        getPreffixIcon(textFieldType: widget.textFieldType),
                         scale: 2.5,
                       ),
                     ),
-                    labelText:
-                        getLabel(textFieldType: textFieldType, label: null),
+                    labelText: getLabel(
+                        textFieldType: widget.textFieldType, label: null),
                     labelStyle: GoogleFonts.roboto(
                       color: const Color(0xFF4F504F).withOpacity(0.8),
                       fontSize: 18,
@@ -215,13 +222,17 @@ class CustomTextFormField extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
 
-                    suffixIcon: textFieldType == TextFieldType.password
+                    suffixIcon: widget.textFieldType == TextFieldType.password
                         ? IconButton(
                             splashRadius: 15,
                             onPressed: () {
-                              Provider.of<VisibilityProvider>(context,
-                                      listen: false)
-                                  .checkVisibility();
+                              // Provider.of<VisibilityProvider>(context,
+                              //         listen: false)
+                              //     .checkVisibility();
+                              print(visibilityController);
+                              setState(() {
+                                visibilityController = !visibilityController;
+                              });
                             },
                             icon: Icon(
                               visibilityController
@@ -233,7 +244,8 @@ class CustomTextFormField extends StatelessWidget {
                         : null,
                     counterText: '',
                   ),
-                  maxLength: textFieldType == TextFieldType.mobile ? 10 : null,
+                  maxLength:
+                      widget.textFieldType == TextFieldType.mobile ? 10 : null,
                 );
               },
             ),
@@ -325,7 +337,9 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
             if (widget.textFieldType == TextFieldType.date) {
               pickedDate = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: CreateTripModal.startDate == null
+                    ? DateTime.now()
+                    : CreateTripModal.startDate!,
                 firstDate: DateTime.now(),
                 initialEntryMode: DatePickerEntryMode.calendarOnly,
                 //DateTime.now() - not to allow to choose before today.

@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Models/timeLineModel.dart';
 import "package:http/http.dart" as http;
-
 import 'package:path/path.dart';
-import '../Models/UserModel.dart';
-import 'package:http_parser/http_parser.dart';
 
+import '../Models/UserModel.dart';
 import '../Utility/Secure_storeage.dart';
 
 class UserHttp {
@@ -173,4 +171,23 @@ class UserImageHttp {
     request.headers.addAll(headers);
     return request;
   }
+}
+
+Future<TimeLineModel> getTimeline() async {
+  final token = await UserSecureStorage.getToken();
+  // print('Token  ' + token.toString());
+  final response = await http.get(
+    Uri.parse("https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+    headers: {'Authorization': 'BEARER $token'},
+  );
+
+  print("${jsonDecode(response.body)}");
+  print(
+    'T  ' +
+        TimeLineModel.fromJson(jsonDecode(response.body))
+            .tripList
+            .length
+            .toString(),
+  );
+  return TimeLineModel.fromJson(jsonDecode(response.body));
 }
