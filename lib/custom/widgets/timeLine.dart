@@ -21,7 +21,7 @@ class ProfileTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Data Id:${data.id}');
+    // print('Data Id:${data.id}');
     return Container(
       margin: EdgeInsets.only(left: center || data.id == 0 ? 10 : 14),
       child: Row(
@@ -197,11 +197,11 @@ class _ProfileTimelineCardState extends State<ProfileTimelineCard> {
                 Row(
                   children: [
                     Text(
-                      '${DateFormat('dd').format(DateTime.now()).toString()}-',
+                      '${DateFormat('dd').format(widget.startDate).toString()}-',
                       style: GoogleFonts.roboto(color: Colors.white),
                     ),
                     Text(
-                      DateFormat('dd MMMM').format(DateTime.now()).toString(),
+                      DateFormat('dd MMMM').format(widget.endDate).toString(),
                       style: GoogleFonts.roboto(color: Colors.white),
                     ),
                   ],
