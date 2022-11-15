@@ -1,4 +1,5 @@
 import 'package:bikerider/Screens/AccesoriesScreen.dart';
+import 'package:bikerider/Screens/ChatScreen.dart';
 import 'package:bikerider/Screens/ForgotScreen.dart';
 import 'package:bikerider/Screens/GetStartedScreen.dart';
 import 'package:bikerider/Screens/LoginScreen.dart';
@@ -106,6 +107,14 @@ class Routes {
       //---------------------------------------------------------
       case "/TripSummaryCreate":
         return LeftTransitions(child: TripSummaryCreate());
+      //---------------------------------------------------------
+      case "/ChatScreen":
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (context) => ChatScreen(
+                  groupId: arguments["groupId"],
+                ));
     }
   }
 }
