@@ -1,6 +1,7 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/text_form_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,9 +90,10 @@ class _CustomCardState extends State<CustomCard> {
           ),
           GestureDetector(
             onTap: () {
-              UserHttp.deleteTrip(widget.id);
-              print(widget.id);
-              BlocProvider.of<BikeCubit>(context).getTrips();
+              UserHttp.deleteTrip(widget.id).then((value) {
+                showToast(msg: "Trip Successfully Deleted");
+                BlocProvider.of<BikeCubit>(context).getTrips();
+              });
             },
             child: Container(
               padding: EdgeInsets.all(5),

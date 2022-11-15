@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bikerider/Models/tuple_class.dart';
+import 'package:intl/intl.dart';
 
 import '../Http/mapHttp.dart';
 import '../Providers/invite_provider.dart';
@@ -19,6 +20,7 @@ class CreateTripModal {
   static List<MilestoneModal> milestone = [];
   static Tuple? distance;
   toJson() {
+    print(recommendations);
     return jsonEncode({
       'tripName': tripName,
       'source': fromDetails?.toJson(),
@@ -30,6 +32,7 @@ class CreateTripModal {
       'riders': contacts.map((e) => e.toJson()).toList(),
       'milestones': milestone.map((e) => e.toJson()).toList(),
       'distance': distance?.distance ?? '0',
+      'year': DateFormat('yyyy').format(startDate!)
     });
   }
 

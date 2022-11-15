@@ -114,16 +114,14 @@ class UserHttp {
 
   static Future<void> deleteTrip(String id) async {
     UserSecureStorage.getToken().then((value) async {
-      final http.Response response = await http.delete(
+      final http.Response response = await http.post(
           Uri.parse(
               'https://riding-application.herokuapp.com/api/v1/trip/deleteTrip'),
           headers: {
-            // 'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
           },
-          body: {
-            '_id': id
-          });
+          body: jsonEncode({'_id': id}));
       print(value);
       print(jsonDecode(response.body));
       return jsonDecode(response.body);
@@ -136,7 +134,7 @@ class UserHttp {
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
 
-    // print(" hello world ${jsonDecode(response.body)[2]["milestones"]}");
+    print(" hello world ${jsonDecode(response.body)}");
     return jsonDecode(response.body);
   }
 }

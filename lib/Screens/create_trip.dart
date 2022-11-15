@@ -26,6 +26,7 @@ class _CreateTripState extends State<CreateTrip> {
     // TODO: implement initState
     super.initState();
     CreateTripModal.clearAll();
+    //  Provider.of<InviteProvider>(context, listen: true).selectedContact.clear();
   }
 
   // Future<DateTime?> getDate() {

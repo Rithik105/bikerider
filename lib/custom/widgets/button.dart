@@ -65,6 +65,7 @@ class _TextCircularButtonState extends State<TextCircularButton> {
                 widget.callBack(widget.selected);
               });
               if (widget.selected) {
+                print(widget.label);
                 CreateTripModal.recommendations.add(widget.label);
               } else {
                 if (CreateTripModal.recommendations.contains(widget.label)) {
@@ -72,7 +73,7 @@ class _TextCircularButtonState extends State<TextCircularButton> {
                   print(CreateTripModal.recommendations);
                 }
               }
-              print(CreateTripModal.recommendations);
+              print('this is called ${CreateTripModal.recommendations}');
             },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5),

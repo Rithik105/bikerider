@@ -1,7 +1,9 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Screens/HomePage.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../Models/create_trip_modal.dart';
@@ -265,20 +267,23 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        CreateTripModal.printMilestones();
-                        print("called");
                         UserHttp.createTrip(CreateTripModal().toJson())
                             .then((value) {
-                          showToast(msg: "TripCreated Successfully");
                           Navigator.pop(context);
                           Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, "/HomeScreen");
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                        create: (context) =>
+                                            BikeCubit()..getTrips(),
+                                        child: HomeScreen(),
+                                      )));
+                          Provider.of<InviteProvider>(context, listen: false)
+                              .selectedContact
+                              .clear();
                         });
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => HomeScreen()));
                       },
                       child: Container(
                         height: 50,

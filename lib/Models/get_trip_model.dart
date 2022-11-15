@@ -30,7 +30,6 @@ class GetTripModel {
       required this.tripName,
       required this.source});
   GetTripModel.fromJson(Map json) {
-    print(json["recommendations"].runtimeType);
     id = json['_id'];
     mobile = json['mobile'];
     url = json['url'];

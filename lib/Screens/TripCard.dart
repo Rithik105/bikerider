@@ -62,7 +62,7 @@ class TripCard extends StatelessWidget {
                 height: 20,
               ),
               Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height * 0.75,
                 child: ListView.builder(
                     padding: const EdgeInsets.all(0),
                     itemCount: state.getTripModel.length,
