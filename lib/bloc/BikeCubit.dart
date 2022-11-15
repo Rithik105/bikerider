@@ -16,15 +16,6 @@ class BikeTimerState extends BikeState {
   BikeTimerState(this.time);
 }
 
-class BikeChatEmptyState extends BikeState {}
-
-class BikeChatNonEmptyState extends BikeState {
-  List<Map> chatList;
-  BikeChatNonEmptyState(this.chatList);
-}
-
-class BikeChatFetchingState extends BikeState {}
-
 class BikeTripFetchState extends BikeState {}
 
 class BikeEmptyTripState extends BikeState {}
@@ -38,7 +29,6 @@ class BikeTimerExpiredState extends BikeState {}
 
 class BikeCubit extends Cubit<BikeState> {
   BikeCubit() : super(BikeInitialState());
-  @override
   void firtsLogin() {
     emit(BikeFirstLoginState());
   }
@@ -81,29 +71,6 @@ class BikeCubit extends Cubit<BikeState> {
           // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
           emit(BikeNonEmptyTripState(temp));
         }
-      });
-    });
-  }
-
-  void getFirstChat(String groupId) {
-    emit(BikeChatFetchingState());
-    UserSecureStorage.getToken().then((value) {
-      print(value);
-      Timer.periodic(Duration(seconds: 10), (timer) {
-        UserHttp.getChats(groupId, value!).then((value1) {
-          if (value1.isEmpty) {
-            emit(BikeChatEmptyState());
-          } else {
-            List<Map> chatList = [];
-            value1.forEach((element) {
-              chatList.add({
-                "sender": element["senderName"]!,
-                "message": element["chat"]!
-              });
-              emit(BikeChatNonEmptyState(chatList));
-            });
-          }
-        });
       });
     });
   }

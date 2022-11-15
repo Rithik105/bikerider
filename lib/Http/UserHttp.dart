@@ -128,41 +128,13 @@ class UserHttp {
     });
   }
 
-  static Future getTrips(String token) async {
+  static Future<List> getTrips(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
 
     print(" hello world ${jsonDecode(response.body)}");
-    return jsonDecode(response.body);
-  }
-
-  static Future sendChat(String groupId, String token, String message) async {
-    final http.Response response = await http.post(
-        Uri.parse(
-            'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'BEARER $token'
-        },
-        body: jsonEncode({'chat': message, 'groupId': groupId}));
-    print(jsonDecode(response.body));
-    return jsonDecode(response.body);
-  }
-
-  static Future getChats(String groupId, String token) async {
-    print("yoyoyoyoy $token");
-    final http.Response response = await http.post(
-        Uri.parse(
-            'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'BEARER $token'
-        },
-        body: jsonEncode({'groupId': groupId}));
-    print('executed');
-    print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 }

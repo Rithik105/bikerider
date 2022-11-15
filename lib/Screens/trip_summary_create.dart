@@ -272,8 +272,6 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                           Navigator.pop(context);
                           Navigator.pop(context);
 
-                          Navigator.pop(context);
-
                           Navigator.push(
                               context,
                               MaterialPageRoute(

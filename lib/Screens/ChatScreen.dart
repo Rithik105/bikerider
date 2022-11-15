@@ -1,70 +1,55 @@
 import 'dart:async';
 
-import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Http/UserHttp.dart';
-import '../bloc/BikeCubit.dart';
 import '../custom/widgets/bubble.dart';
 
-class ChatScreen extends StatefulWidget {
-  String groupId; //number;
-  ChatScreen({
-    Key? key,
-    required this.groupId,
-  }) : super(key: key);
+class NewChatScreen extends StatefulWidget {
+  const NewChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<NewChatScreen> createState() => _NewChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  String sender = 'varun';
-  List<Map<String, String>>? chatList;
-  //   {"sender": "esikiel", "message": "whats your name"},
-  //   {"sender": "tony", "message": "whaaaat!!"},
-  //   {"sender": "esikiel", "message": "what is your name"},
-  //   {"sender": "tony", "message": "tony"},
-  // ];
+class _NewChatScreenState extends State<NewChatScreen> {
+  ScrollController chatListController = ScrollController();
+  String sender = 'esikiel';
+  List<Map<String, String>> chatList = [
+    {"sender": "esikiel", "message": "whats your name"},
+    {"sender": "tony", "message": "whaaaat!!"},
+    {"sender": "esikiel", "message": "what is your name"},
+    {"sender": "tony", "message": "tony"},
+  ];
   TextEditingController _messageController = TextEditingController();
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
   Timer? timer;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    //   UserHttp.getChats().then((value) {
+    //     chatList = value;
+    //   });
+    // });
+    // UserHttp.getChats().then((value) {
+    //   chatList = value;
+    // });
+    // UserHttp.getNumber().then((value) {
+    //   sender = value;
+    // });
+  }
 
-  // void initState() {
-  //   super.initState();
-  //   chatRefresh();
-
-  //   timer = Timer.periodic(Duration(seconds: 10), (timer) {
-  //     chatRefresh();
-  //   });
-  // }
-
-  // void chatRefresh() async {
-  //   chatList = [];
-  //   UserSecureStorage.getToken().then((value) {
-  //     UserHttp.getChats(widget.groupId, value!).then((value) {
-  //       value.forEach((element) {
-  //         chatList.add(
-  //             {"sender": element["senderName"]!, "message": element["chat"]!});
-  //         setState(() {});
-  //         print(chatList);
-  //       });
-  //       // });
-  //     });
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   timer!.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    timer!.cancel();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w600),
           ),
         ),
-        backgroundColor: const Color.fromRGBO(240, 148, 85, 1),
+        backgroundColor: Color.fromRGBO(240, 148, 85, 1),
         actions: [
           PopupMenuButton<int>(
             onSelected: (value) {
@@ -85,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
             },
             // position: PopupMenuPosition.under,
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 1,
                 child: Text(
                   "Group Info",
@@ -95,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               // popupmenu item 2
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 2,
                 child: Text(
                   "Notifications",
@@ -104,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 3,
                 child: Text(
                   "Clear Chat",
@@ -114,10 +99,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ],
-            color: Colors.white, padding: const EdgeInsets.all(0),
+            color: Colors.white, padding: EdgeInsets.all(0),
           ),
         ],
-        leading: const BackButton(
+        leading: BackButton(
           color: Colors.white,
         ),
       ),
@@ -126,52 +111,33 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Colors.transparent,
                   image: DecorationImage(
                     alignment: Alignment.bottomRight,
                     image: AssetImage(
-                      'assets/images/Chat/chat.png',
+                      'images/chat.png',
                     ),
                     scale: 1.7,
                     opacity: 0.05,
                   ),
                 ),
-                child: BlocBuilder<BikeCubit, BikeState>(
-                  builder: (context, state) {
-                    if (state is BikeChatFetchingState) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.orange,
-                        ),
-                      );
-                    } else if (state is BikeChatNonEmptyState) {
-                      ScrollController chatListController =
-                          ScrollController(initialScrollOffset: 1000000);
-                      return ListView.builder(
-                          controller: chatListController,
-                          itemCount: state.chatList.length,
-                          itemBuilder: ((context, index) {
-                            if (state.chatList[index]["sender"] == sender) {
-                              return MessageBubble(
-                                  isMe: true,
-                                  messageText: state.chatList![index]
-                                      ["message"]!,
-                                  senderName: state.chatList![index]
-                                      ["sender"]!);
-                            } else {
-                              return MessageBubble(
-                                  isMe: false,
-                                  messageText: state.chatList![index]
-                                      ["message"]!,
-                                  senderName: state.chatList![index]
-                                      ["sender"]!);
-                            }
-                          }));
-                    } else
-                      return Container();
-                  },
-                ),
+                child: ListView.builder(
+                    controller: chatListController,
+                    itemCount: chatList.length,
+                    itemBuilder: ((context, index) {
+                      if (chatList[index]["sender"] == sender) {
+                        return MessageBubble(
+                            isMe: true,
+                            messageText: chatList[index]["message"]!,
+                            senderName: chatList[index]["sender"]!);
+                      } else {
+                        return MessageBubble(
+                            isMe: false,
+                            messageText: chatList[index]["message"]!,
+                            senderName: chatList[index]["sender"]!);
+                      }
+                    })),
               ),
             ),
             Container(
@@ -191,7 +157,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ), //BoxShadow
                 ],
               ),
-              margin: const EdgeInsets.only(bottom: 30),
+              margin: EdgeInsets.only(bottom: 30),
               height: 50,
               width: 350,
               child: Row(
@@ -205,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         focus.canRequestFocus = true;
                       });
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.emoji_emotions_outlined,
                       color: Color(0xff7F7F7F),
                       size: 32,
@@ -213,7 +179,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(left: 3),
+                      margin: EdgeInsets.only(left: 3),
                       child: AutoSizeTextField(
                         onTap: () {
                           setState(() {
@@ -222,12 +188,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         },
                         autofocus: false,
                         controller: _messageController,
-                        style: const TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16),
                         minFontSize: 15,
                         minLines: 1,
                         maxLines: 10,
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
+                        decoration: InputDecoration(border: InputBorder.none),
                       ),
                     ),
                   ),
@@ -240,36 +205,36 @@ class _ChatScreenState extends State<ChatScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 ListTile(
-                                  leading: const Icon(Icons.photo),
-                                  title: const Text('Photo'),
+                                  leading: new Icon(Icons.photo),
+                                  title: new Text('Photo'),
                                   onTap: () {
                                     Navigator.pop(context);
                                   },
                                 ),
                                 ListTile(
-                                  leading: const Icon(Icons.music_note),
-                                  title: const Text('Music'),
+                                  leading: new Icon(Icons.music_note),
+                                  title: new Text('Music'),
                                   onTap: () {
                                     //   Navigator.pop(context);
                                   },
                                 ),
                                 ListTile(
-                                  leading: const Icon(Icons.videocam),
-                                  title: const Text('Video'),
+                                  leading: new Icon(Icons.videocam),
+                                  title: new Text('Video'),
                                   onTap: () {
                                     //  Navigator.pop(context);
                                   },
                                 ),
                                 ListTile(
-                                  leading: const Icon(Icons.share),
-                                  title: const Text('Share'),
+                                  leading: new Icon(Icons.share),
+                                  title: new Text('Share'),
                                   onTap: () {
                                     // Navigator.pop(context);
                                   },
                                 ),
                                 ListTile(
-                                  leading: const Icon(Icons.file_copy_rounded),
-                                  title: const Text('Files'),
+                                  leading: new Icon(Icons.file_copy_rounded),
+                                  title: new Text('Files'),
                                   onTap: () {
                                     // Navigator.pop(context);
                                   },
@@ -278,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             );
                           });
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.attach_file_outlined,
                       color: Color(0xff7F7F7F),
                       size: 32,
@@ -287,25 +252,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   GestureDetector(
                     onTap: () {
                       if (_messageController.text != "") {
-                        UserSecureStorage.getToken().then((value) {
-                          UserHttp.sendChat(widget.groupId, value!,
-                                  _messageController.text)
-                              .then((value) {
-                            _messageController.clear();
-                          });
+                        chatList.add({
+                          "sender": sender,
+                          "message": _messageController.text
                         });
-
-                        // chatList.add({
-                        //   "sender": sender,
-                        //   "message": _messageController.text
-                        // });
-                        // chatListController.animateTo(
-                        //     chatListController.position.maxScrollExtent + 100,
-                        //     duration: const Duration(seconds: 1),
-                        //     curve: Curves.fastOutSlowIn);
+                        chatListController.animateTo(
+                            chatListController.position.maxScrollExtent + 100,
+                            duration: Duration(seconds: 1),
+                            curve: Curves.fastOutSlowIn);
+                        setState(() {});
+                        _messageController.clear();
                       }
                     },
-                    child: const CircleAvatar(
+                    child: CircleAvatar(
                       backgroundColor: Color(0xffED7F2C),
                       radius: 22,
                       child: Center(

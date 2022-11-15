@@ -1,16 +1,13 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Screens/ChatScreen.dart';
 import 'package:bikerider/Screens/HomePage.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../Models/create_trip_modal.dart';
 import '../Providers/invite_provider.dart';
 import '../Utility/enums.dart';
-import '../bloc/BikeCubit.dart';
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
@@ -232,18 +229,7 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                       height: 20,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return BlocProvider(
-                            create: (context) => BikeCubit()
-                              ..getFirstChat(widget.getTripModel.id!),
-                            child: ChatScreen(
-                              groupId: widget.getTripModel.id!,
-                            ),
-                          );
-                        }));
-                      },
+                      onTap: () {},
                       child: Container(
                         height: 50,
                         width: double.infinity,
