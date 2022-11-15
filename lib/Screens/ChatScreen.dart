@@ -12,59 +12,48 @@ import '../bloc/BikeCubit.dart';
 import '../custom/widgets/bubble.dart';
 
 class ChatScreen extends StatefulWidget {
-  String groupId; //number;
-  ChatScreen({
-    Key? key,
-    required this.groupId,
-  }) : super(key: key);
+  String groupId, number, token;
+
+  List chatList;
+  ChatScreen(
+      {Key? key,
+      required this.chatList,
+      required this.number,
+      required this.groupId,
+      required this.token})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  String sender = 'varun';
-  List<Map<String, String>>? chatList;
-  //   {"sender": "esikiel", "message": "whats your name"},
-  //   {"sender": "tony", "message": "whaaaat!!"},
-  //   {"sender": "esikiel", "message": "what is your name"},
-  //   {"sender": "tony", "message": "tony"},
-  // ];
+  ScrollController chatListController = ScrollController();
   TextEditingController _messageController = TextEditingController();
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
   Timer? timer;
+
   @override
+  void initState() {
+    print("i ${widget.chatList}");
+    // TODO: implement initState
+    super.initState();
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      updateChat();
+    });
+  }
 
-  // void initState() {
-  //   super.initState();
-  //   chatRefresh();
+  void updateChat() async {
+    widget.chatList = await UserHttp.getChats(widget.groupId, widget.token);
+  }
 
-  //   timer = Timer.periodic(Duration(seconds: 10), (timer) {
-  //     chatRefresh();
-  //   });
-  // }
-
-  // void chatRefresh() async {
-  //   chatList = [];
-  //   UserSecureStorage.getToken().then((value) {
-  //     UserHttp.getChats(widget.groupId, value!).then((value) {
-  //       value.forEach((element) {
-  //         chatList.add(
-  //             {"sender": element["senderName"]!, "message": element["chat"]!});
-  //         setState(() {});
-  //         print(chatList);
-  //       });
-  //       // });
-  //     });
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   timer!.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timer!.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,53 +115,35 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  image: DecorationImage(
-                    alignment: Alignment.bottomRight,
-                    image: AssetImage(
-                      'assets/images/Chat/chat.png',
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    image: DecorationImage(
+                      alignment: Alignment.bottomRight,
+                      image: AssetImage(
+                        'assets/images/Chat/chat.png',
+                      ),
+                      scale: 1.7,
+                      opacity: 0.05,
                     ),
-                    scale: 1.7,
-                    opacity: 0.05,
                   ),
-                ),
-                child: BlocBuilder<BikeCubit, BikeState>(
-                  builder: (context, state) {
-                    if (state is BikeChatFetchingState) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.orange,
-                        ),
-                      );
-                    } else if (state is BikeChatNonEmptyState) {
-                      ScrollController chatListController =
-                          ScrollController(initialScrollOffset: 1000000);
-                      return ListView.builder(
-                          controller: chatListController,
-                          itemCount: state.chatList.length,
-                          itemBuilder: ((context, index) {
-                            if (state.chatList[index]["sender"] == sender) {
-                              return MessageBubble(
-                                  isMe: true,
-                                  messageText: state.chatList![index]
-                                      ["message"]!,
-                                  senderName: state.chatList![index]
-                                      ["sender"]!);
-                            } else {
-                              return MessageBubble(
-                                  isMe: false,
-                                  messageText: state.chatList![index]
-                                      ["message"]!,
-                                  senderName: state.chatList![index]
-                                      ["sender"]!);
-                            }
-                          }));
-                    } else
-                      return Container();
-                  },
-                ),
-              ),
+                  child: ListView.builder(
+                      controller: chatListController,
+                      itemCount: widget.chatList.length,
+                      itemBuilder: ((context, index) {
+                        if (widget.chatList[index]["senderNum"] ==
+                            widget.number) {
+                          print(widget.number);
+                          return MessageBubble(
+                              isMe: true,
+                              messageText: widget.chatList[index]["message"]!,
+                              senderName: widget.chatList[index]["sender"]!);
+                        } else {
+                          return MessageBubble(
+                              isMe: false,
+                              messageText: widget.chatList[index]["message"]!,
+                              senderName: widget.chatList[index]["sender"]!);
+                        }
+                      }))),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6),

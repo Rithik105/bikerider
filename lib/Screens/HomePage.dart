@@ -21,10 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int bottomIndex = 0;
   final _pageOptions = [
-    BlocProvider(
-      create: (context) => BikeCubit()..getTrips(),
-      child: TripCard(),
-    ),
+    TripCard(),
+
     GarageCard(),
     // ActivitiesCard(),
     ProfileHeader()

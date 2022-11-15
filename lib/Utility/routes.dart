@@ -14,12 +14,14 @@ import 'package:bikerider/Screens/trip_summary_go.dart';
 import 'package:bikerider/Utility/PageTransition.dart';
 import 'package:bikerider/custom/widgets/CustomCard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../Screens/ChooseAvatarScreen.dart';
 import '../Screens/HomePage.dart';
 import '../Screens/OtpForgotScreen.dart';
 import '../Screens/SplashScreen.dart';
 import '../Screens/Tutorial.dart';
+import '../bloc/BikeCubit.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -92,7 +94,11 @@ class Routes {
         return LeftTransitions(child: RegisterScreen());
       //---------------------------------------------------------
       case "/HomeScreen":
-        return MaterialPageRoute(builder: (context) => HomeScreen());
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => BikeCubit()..getTrips(),
+                  child: HomeScreen(),
+                ));
       //---------------------------------------------------------
       case "/ChooseAvatarScreen":
         return LeftTransitions(child: ChooseAvatarScreen());
@@ -108,13 +114,6 @@ class Routes {
       case "/TripSummaryCreate":
         return LeftTransitions(child: TripSummaryCreate());
       //---------------------------------------------------------
-      case "/ChatScreen":
-        Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-            builder: (context) => ChatScreen(
-                  groupId: arguments["groupId"],
-                ));
     }
   }
 }

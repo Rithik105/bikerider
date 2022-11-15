@@ -85,6 +85,17 @@ class UserHttp {
     return jsonDecode(secret.body);
   }
 
+  static Future getNumber(String token) async {
+    final http.Response secret = await http.get(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/getMyNumber"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        });
+    return jsonEncode(secret.body);
+  }
+
   static Future getToken(String pin) async {
     final http.Response secret = await http.post(
         Uri.parse(
@@ -151,8 +162,7 @@ class UserHttp {
     return jsonDecode(response.body);
   }
 
-  static Future getChats(String groupId, String token) async {
-    print("yoyoyoyoy $token");
+  static Future<List> getChats(String groupId, String token) async {
     final http.Response response = await http.post(
         Uri.parse(
             'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
@@ -161,8 +171,6 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'groupId': groupId}));
-    print('executed');
-    print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 }

@@ -39,6 +39,12 @@ class BikeTimerExpiredState extends BikeState {}
 class BikeCubit extends Cubit<BikeState> {
   BikeCubit() : super(BikeInitialState());
   @override
+  Future<void> close() {
+    // TODO: implement close
+    return super.close();
+  }
+
+  @override
   void firtsLogin() {
     emit(BikeFirstLoginState());
   }
@@ -98,6 +104,7 @@ class BikeCubit extends Cubit<BikeState> {
             value1.forEach((element) {
               chatList.add({
                 "sender": element["senderName"]!,
+                "senderNum": element["memberNumber"],
                 "message": element["chat"]!
               });
               emit(BikeChatNonEmptyState(chatList));

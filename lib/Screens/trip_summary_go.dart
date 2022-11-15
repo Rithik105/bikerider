@@ -2,6 +2,7 @@ import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Screens/ChatScreen.dart';
 import 'package:bikerider/Screens/HomePage.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -233,16 +234,22 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return BlocProvider(
-                            create: (context) => BikeCubit()
-                              ..getFirstChat(widget.getTripModel.id!),
-                            child: ChatScreen(
-                              groupId: widget.getTripModel.id!,
-                            ),
-                          );
-                        }));
+                        UserSecureStorage.getToken().then((value) {
+                          UserHttp.getNumber(value!).then((value1) {
+                            UserHttp.getChats(widget.getTripModel.id!, value)
+                                .then((value2) {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ChatScreen(
+                                  token: value,
+                                  chatList: value2,
+                                  number: value1,
+                                  groupId: widget.getTripModel.id!,
+                                );
+                              }));
+                            });
+                          });
+                        });
                       },
                       child: Container(
                         height: 50,
