@@ -16,15 +16,6 @@ class BikeTimerState extends BikeState {
   BikeTimerState(this.time);
 }
 
-class BikeChatEmptyState extends BikeState {}
-
-class BikeChatNonEmptyState extends BikeState {
-  List<Map> chatList;
-  BikeChatNonEmptyState(this.chatList);
-}
-
-class BikeChatFetchingState extends BikeState {}
-
 class BikeTripFetchState extends BikeState {}
 
 class BikeEmptyTripState extends BikeState {}

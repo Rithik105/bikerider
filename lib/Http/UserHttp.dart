@@ -139,7 +139,7 @@ class UserHttp {
     });
   }
 
-  static Future getTrips(String token) async {
+  static Future<List> getTrips(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),

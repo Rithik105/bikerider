@@ -1,17 +1,14 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Screens/ChatScreen.dart';
 import 'package:bikerider/Screens/HomePage.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../Models/create_trip_modal.dart';
 import '../Providers/invite_provider.dart';
 import '../Utility/enums.dart';
-import '../bloc/BikeCubit.dart';
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
