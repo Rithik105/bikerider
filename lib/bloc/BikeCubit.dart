@@ -82,27 +82,27 @@ class BikeCubit extends Cubit<BikeState> {
     });
   }
 
-  void getFirstChat(String groupId) {
-    emit(BikeChatFetchingState());
-    UserSecureStorage.getToken().then((value) {
-      print(value);
-      Timer.periodic(Duration(seconds: 10), (timer) {
-        UserHttp.getChats(groupId, value!).then((value1) {
-          if (value1.isEmpty) {
-            emit(BikeChatEmptyState());
-          } else {
-            List<Map> chatList = [];
-            value1.forEach((element) {
-              chatList.add({
-                "sender": element["senderName"]!,
-                "senderNum": element["memberNumber"],
-                "message": element["chat"]!
-              });
-              emit(BikeChatNonEmptyState(chatList));
-            });
-          }
-        });
-      });
-    });
-  }
+  // void getFirstChat(String groupId) {
+  //   emit(BikeChatFetchingState());
+  //   UserSecureStorage.getToken().then((value) {
+  //     print(value);
+  //     Timer.periodic(Duration(seconds: 10), (timer) {
+  //       UserHttp.getChats(groupId, value!).then((value1) {
+  //         if (value1.isEmpty) {
+  //           emit(BikeChatEmptyState());
+  //         } else {
+  //           List<Map> chatList = [];
+  //           value1.forEach((element) {
+  //             chatList.add({
+  //               "sender": element["senderName"]!,
+  //               "senderNum": element["memberNumber"],
+  //               "message": element["chat"]!
+  //             });
+  //             emit(BikeChatNonEmptyState(chatList));
+  //           });
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
 }

@@ -93,7 +93,7 @@ class UserHttp {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         });
-    return jsonEncode(secret.body);
+    return jsonDecode(secret.body);
   }
 
   static Future getToken(String pin) async {

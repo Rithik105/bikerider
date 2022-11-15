@@ -12,6 +12,7 @@ import '../Utility/enums.dart';
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
+import 'ChatScreen.dart';
 import 'google_maps_preview.dart';
 import 'google_maps_preview_go.dart';
 import 'invite_people.dart';
@@ -240,7 +241,7 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                                 return ChatScreen(
                                   token: value,
                                   chatList: value2,
-                                  number: value1,
+                                  number: value1["mobile"],
                                   groupId: widget.getTripModel.id!,
                                 );
                               }));

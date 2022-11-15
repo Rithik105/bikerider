@@ -36,23 +36,23 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    print("i ${widget.chatList}");
+    print(widget.chatList);
     // TODO: implement initState
     super.initState();
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      updateChat();
+    timer1 = Timer.periodic(Duration(seconds: 1), (timer) {
+      print(widget.groupId);
+      UserHttp.getChats(widget.groupId, widget.token).then((value) {
+        widget.chatList = value;
+        setState(() {});
+      });
     });
-  }
-
-  void updateChat() async {
-    widget.chatList = await UserHttp.getChats(widget.groupId, widget.token);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    timer!.cancel();
+    timer1!.cancel();
   }
 
   @override
@@ -130,18 +130,18 @@ class _ChatScreenState extends State<ChatScreen> {
                       controller: chatListController,
                       itemCount: widget.chatList.length,
                       itemBuilder: ((context, index) {
-                        if (widget.chatList[index]["senderNum"] ==
+                        if (widget.chatList[index]["memberNumber"] ==
                             widget.number) {
                           print(widget.number);
                           return MessageBubble(
                               isMe: true,
-                              messageText: widget.chatList[index]["message"]!,
-                              senderName: widget.chatList[index]["sender"]!);
+                              messageText: widget.chatList[index]["chat"],
+                              senderName: widget.chatList[index]["senderName"]);
                         } else {
                           return MessageBubble(
                               isMe: false,
-                              messageText: widget.chatList[index]["message"]!,
-                              senderName: widget.chatList[index]["sender"]!);
+                              messageText: widget.chatList[index]["chat"],
+                              senderName: widget.chatList[index]["senderName"]);
                         }
                       }))),
             ),
@@ -259,9 +259,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     onTap: () {
                       if (_messageController.text != "") {
                         UserSecureStorage.getToken().then((value) {
-                          UserHttp.sendChat(widget.groupId, value!,
+                          UserHttp.sendChat(widget.groupId, widget.token,
                                   _messageController.text)
                               .then((value) {
+                            print(value);
                             _messageController.clear();
                           });
                         });
