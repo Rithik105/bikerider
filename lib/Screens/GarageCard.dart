@@ -2,6 +2,9 @@ import 'package:bikerider/Screens/BookServiceScreen.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'manual/manual_model.dart';
+import 'manual/select_vehicle.dart';
+import 'manual/servieces.dart';
 
 class GarageCard extends StatefulWidget {
   GarageCard({Key? key}) : super(key: key);
@@ -11,6 +14,8 @@ class GarageCard extends StatefulWidget {
 }
 
 class _GarageCardState extends State<GarageCard> {
+  List<BikeDetailsModel> bikes = [];
+  PersonalDetailsModel? personalDetails;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +107,29 @@ class _GarageCardState extends State<GarageCard> {
               thickness: 0.5,
             ),
             GestureDetector(
+              onTap: () {
+                GetOwnerDetails.getOwner().then(
+                  (value) {
+                    personalDetails = PersonalDetailsModel.fromJson(value[0]);
+                    GetBikeDetails.getBikes().then(
+                      (value) {
+                        value.forEach(
+                          (e) {
+                            bikes.add(BikeDetailsModel.fromJson(e));
+                          },
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SelectBike(
+                                bikeCategories: bikes,
+                                personalDetails: personalDetails!),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
               child: Row(
                 children: [
                   Image.asset(
