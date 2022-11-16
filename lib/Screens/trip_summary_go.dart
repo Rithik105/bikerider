@@ -24,6 +24,30 @@ class TripSummaryGo extends StatefulWidget {
 }
 
 class _TripSummaryGoState extends State<TripSummaryGo> {
+  double checkEmpty() {
+    if (widget.getTripModel.milestones.length == 0) {
+      if (widget.getTripModel.recommendations.length == 0) {
+        if (widget.getTripModel.riders.length == 0) {
+          return 70;
+        } else
+          return 90;
+      } else
+        return 105;
+    } else if (widget.getTripModel.recommendations.length == 0) {
+      return 0;
+    } else {
+      return 0;
+    }
+  }
+
+  String checkRecommendations() {
+    if (widget.getTripModel.recommendations.length == 0) {
+      return "No Recommendations";
+    } else {
+      return "Recommendation";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,7 +192,7 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Recommendation',
+                            checkRecommendations(),
                             style: GoogleFonts.roboto(
                               color: const Color(0xFF4F504F),
                               fontWeight: FontWeight.w500,
@@ -260,14 +284,17 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                         //   },
                         // );
                       },
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: kLargeMapButtonDecoration,
-                        child: Center(
-                          child: Text(
-                            "GO",
-                            style: GoogleFonts.roboto(color: Colors.white),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: checkEmpty()),
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: kLargeMapButtonDecoration,
+                          child: Center(
+                            child: Text(
+                              "GO",
+                              style: GoogleFonts.roboto(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),

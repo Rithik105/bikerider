@@ -84,7 +84,11 @@ class Routes {
         return LeftTransitions(child: LoginScreen());
       //---------------------------------------------------------
       case "/AccessoriesScreen":
-        return LeftTransitions(child: AccessoriesScreen());
+        return LeftTransitions(
+            child: BlocProvider(
+          create: (context) => BikeCubit()..getAcc(""),
+          child: AccessoriesScreen(),
+        ));
       //---------------------------------------------------------
       case "/OwnBikeScreen":
         return LeftTransitions(child: OwnBikeScreen());
@@ -100,7 +104,12 @@ class Routes {
                 ));
       //---------------------------------------------------------
       case "/ChooseAvatarScreen":
-        return LeftTransitions(child: ChooseAvatarScreen());
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return LeftTransitions(
+            child: ChooseAvatarScreen(
+          name: arguments["name"],
+        ));
       //---------------------------------------------------------
       case "/GetStartedScreen":
         Map<String, dynamic> arguments =

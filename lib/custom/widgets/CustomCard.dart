@@ -33,7 +33,11 @@ class _CustomCardState extends State<CustomCard> {
       margin: EdgeInsets.only(bottom: 10),
       height: 155,
       decoration: BoxDecoration(
-        color: Colors.grey,
+        image: DecorationImage(
+            image: NetworkImage(
+              "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80",
+            ),
+            fit: BoxFit.fill),
         borderRadius: BorderRadius.circular(4),
         boxShadow: [
           BoxShadow(

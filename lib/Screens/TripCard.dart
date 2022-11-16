@@ -61,40 +61,45 @@ class TripCard extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.75,
-                child: ListView.builder(
-                    padding: const EdgeInsets.all(0),
-                    itemCount: state.getTripModel.length,
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      print(state.getTripModel[index].tripName!);
-                      return GestureDetector(
-                        onTap: () {
-                          print(
-                              'milestone length${state.getTripModel[index].milestones.length}');
-                          print(state.getTripModel[index].milestones);
+              RefreshIndicator(
+                onRefresh: () async {
+                  BlocProvider.of<BikeCubit>(context).getTrips();
+                },
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.75,
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(0),
+                      itemCount: state.getTripModel.length,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        print(state.getTripModel[index].tripName!);
+                        return GestureDetector(
+                          onTap: () {
+                            print(
+                                'milestone length${state.getTripModel[index].milestones.length}');
+                            print(state.getTripModel[index].milestones);
 
-                          print(index);
-                          print(state.getTripModel[index].source);
-                          Navigator.pushNamed(context, '/TripSummaryGo',
-                              arguments: {
-                                "getTripModel": state.getTripModel[index]
-                              });
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: ((context) => TripSummaryGo(
-                          //             getTripModel:
-                          //                 state.getTripModel[index]))));
-                        },
-                        child: CustomCard(
-                          id: state.getTripModel[index].id!,
-                          tripName: state.getTripModel[index].tripName!,
-                          startDate: state.getTripModel[index].startDate!,
-                          ontap: () {},
-                        ),
-                      );
-                    }),
+                            print(index);
+                            print(state.getTripModel[index].source);
+                            Navigator.pushNamed(context, '/TripSummaryGo',
+                                arguments: {
+                                  "getTripModel": state.getTripModel[index]
+                                });
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: ((context) => TripSummaryGo(
+                            //             getTripModel:
+                            //                 state.getTripModel[index]))));
+                          },
+                          child: CustomCard(
+                            id: state.getTripModel[index].id!,
+                            tripName: state.getTripModel[index].tripName!,
+                            startDate: state.getTripModel[index].startDate!,
+                            ontap: () {},
+                          ),
+                        );
+                      }),
+                ),
               ),
             ],
           ).paddingAll(20, 20, 60, 20)),
@@ -121,9 +126,14 @@ class TripCard extends StatelessWidget {
         return SafeArea(
           child: Column(
             children: [
-              SizedBox(
-                width: double.infinity,
-                child: Image.asset("assets/images/homePage/empty_card.png"),
+              RefreshIndicator(
+                onRefresh: () async {
+                  BlocProvider.of<BikeCubit>(context).getTrips();
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Image.asset("assets/images/homePage/empty_card.png"),
+                ),
               ),
               const SizedBox(
                 height: 10,

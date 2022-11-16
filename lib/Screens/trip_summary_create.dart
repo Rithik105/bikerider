@@ -28,6 +28,30 @@ class TripSummaryCreate extends StatefulWidget {
 }
 
 class _TripSummaryCreateState extends State<TripSummaryCreate> {
+  double checkEmpty() {
+    if (CreateTripModal.milestone.length == 0) {
+      if (CreateTripModal.recommendations.length == 0) {
+        if (CreateTripModal.contacts.length == 0) {
+          return 40;
+        }
+        return 70;
+      } else
+        return 45;
+    } else if (CreateTripModal.recommendations.length == 0) {
+      return 0;
+    } else {
+      return 0;
+    }
+  }
+
+  String checkRecommendations() {
+    if (CreateTripModal.recommendations.length == 0) {
+      return "No Recommendations";
+    } else {
+      return "Recommendation";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,7 +209,7 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Recommendation',
+                            checkRecommendations(),
                             style: GoogleFonts.roboto(
                               color: const Color(0xFF4F504F),
                               fontWeight: FontWeight.w500,
@@ -291,14 +315,17 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                               .clear();
                         });
                       },
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: kLargeMapButtonDecoration,
-                        child: Center(
-                          child: Text(
-                            "CREATE",
-                            style: GoogleFonts.roboto(color: Colors.white),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: checkEmpty()),
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: kLargeMapButtonDecoration,
+                          child: Center(
+                            child: Text(
+                              "CREATE",
+                              style: GoogleFonts.roboto(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),

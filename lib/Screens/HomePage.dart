@@ -1,3 +1,4 @@
+import 'package:bikerider/Screens/ActivitiesCard.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     GarageCard(),
     BlocProvider(
-      create: (context) => BikeCubit()..getTrips(),
-      child: TripCard(),
+      create: (context) => BikeCubit()..getTripDetails(),
+      child: ActivityCard(),
     ),
     // ActivitiesCard(),
     ProfileHeader()
