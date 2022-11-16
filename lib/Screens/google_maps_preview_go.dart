@@ -1,8 +1,6 @@
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../Models/create_trip_modal.dart';
 // import 'package:ride_app/screens/custom_padding.dart';
 // import 'package:ride_app/service/direction.dart';
 //
@@ -36,39 +34,70 @@ class _MapCardGoState extends State<MapCardGo> {
 
   static CameraPosition _initialCameraPosition =
       CameraPosition(target: LatLng(28.67921234833848, 77.16738359902374));
-  double getZoomLevel() {
-    int length = widget.getTripModel.distance!.points.length;
-    if (length > 9000) {
-      return 3;
-    } else if (length > 7000) {
-      return 6;
-    } else if (length > 6000) {
-      return 7;
-    } else if (length > 5000) {
-      return 8;
-    } else if (length > 2000) {
-      return 8.15;
-    } else if (length < 1000) {
-      return 12;
+  // double getZoomLevel() {
+  //   int length = widget.getTripModel.distance!.points.length;
+  //   if (length > 9000) {
+  //     return 3;
+  //   } else if (length > 7000) {
+  //     return 6;
+  //   } else if (length > 6000) {
+  //     return 7;
+  //   } else if (length > 5000) {
+  //     return 8;
+  //   } else if (length > 2000) {
+  //     return 8.15;
+  //   } else if (length < 1000) {
+  //     return 12;
+  //   }
+  //   return 8;
+  // }
+  LatLng getSouthWestBounds(LatLng src, LatLng dst) {
+    double? lat, lon;
+    if (src.latitude < dst.latitude) {
+      lat = src.latitude;
+    } else {
+      lat = dst.latitude;
     }
-    return 8;
+
+    if (src.longitude < dst.longitude) {
+      lon = src.longitude;
+    } else {
+      lon = dst.longitude;
+    }
+    return LatLng(lat, lon);
+  }
+
+  LatLng getNorthEastBounds(LatLng src, LatLng dst) {
+    double? lat, lon;
+    if (src.latitude > dst.latitude) {
+      lat = src.latitude;
+    } else {
+      lat = dst.latitude;
+    }
+
+    if (src.longitude > dst.longitude) {
+      lon = src.longitude;
+    } else {
+      lon = dst.longitude;
+    }
+    return LatLng(lat, lon);
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    _initialCameraPosition = _initialCameraPosition = CameraPosition(
-      // target: LatLng(13.336817194763675, 74.737992486596),
-      // var coordinates = CreateTripModal
-      //   .distance!.points[CreateTripModal.distance!.points.length ~/ 2];
-      target: LatLng(
-        widget.getTripModel.distance!
-                .points[widget.getTripModel.distance!.points.length ~/ 2]
-            ['latitude'],
-        widget.getTripModel.distance!
-                .points[widget.getTripModel.distance!.points.length ~/ 2]
-            ['longitude'],
-      ),
-      zoom: getZoomLevel(),
-    );
+    // _initialCameraPosition = _initialCameraPosition = CameraPosition(
+    //   // target: LatLng(13.336817194763675, 74.737992486596),
+    //   // var coordinates = CreateTripModal
+    //   //   .distance!.points[CreateTripModal.distance!.points.length ~/ 2];
+    //   target: LatLng(
+    //     widget.getTripModel.distance!
+    //             .points[widget.getTripModel.distance!.points.length ~/ 2]
+    //         ['latitude'],
+    //     widget.getTripModel.distance!
+    //             .points[widget.getTripModel.distance!.points.length ~/ 2]
+    //         ['longitude'],
+    //   ),
+    //   zoom: getZoomLevel(),
+    // );
     myController = controller;
     controller.getVisibleRegion().then(
           (value) => print('Visible region $value'),
@@ -76,26 +105,45 @@ class _MapCardGoState extends State<MapCardGo> {
     // controller.getZoomLevel().then((value) => print('Zoom level $value'));
     // double zoom = (CreateTripModal.distance!.points.length ~/ 10) as double;
     // print(zoom);
-    controller.animateCamera(
-      CameraUpdate.newLatLngZoom(
-        LatLng(
-          widget.getTripModel.distance!
-                  .points[widget.getTripModel.distance!.points.length ~/ 2]
-              ['latitude'],
-          widget.getTripModel.distance!
-                  .points[widget.getTripModel.distance!.points.length ~/ 2]
-              ['longitude'],
-        ),
-        getZoomLevel(),
-      ),
-    );
+    // controller.animateCamera(
+    //   CameraUpdate.newLatLngZoom(
+    //     LatLng(
+    //       widget.getTripModel.distance!
+    //               .points[widget.getTripModel.distance!.points.length ~/ 2]
+    //           ['latitude'],
+    //       widget.getTripModel.distance!
+    //               .points[widget.getTripModel.distance!.points.length ~/ 2]
+    //           ['longitude'],
+    //     ),
+    //     getZoomLevel(),
+    //   ),
+    // );
     // controller.getVisibleRegion().then(
     //       (value) => print('Visible region $value'),
     //     );
+    print('Map Created');
+    LatLng source = LatLng(widget.getTripModel.source!.latitude,
+        widget.getTripModel.source!.longitude);
+    LatLng destination = LatLng(widget.getTripModel.destination!.latitude,
+        widget.getTripModel.destination!.longitude);
+    print('${source.latitude},${source.longitude}');
+    print('${destination.latitude},${destination.longitude}');
+    LatLng southWest = getSouthWestBounds(source, destination);
+    LatLng northEast = getNorthEastBounds(source, destination);
+    print('southWest: $southWest');
+    print('northEast: $northEast');
+    LatLngBounds(southwest: southWest, northeast: northEast);
+    Future.delayed(const Duration(milliseconds: 250)).then(
+      (value) => myController.animateCamera(
+        CameraUpdate.newLatLngBounds(
+            LatLngBounds(southwest: southWest, northeast: northEast), 80),
+      ),
+    );
   }
 
   @override
   void dispose() {
+    print('Preview maps disposed');
     myController.dispose();
     super.dispose();
   }

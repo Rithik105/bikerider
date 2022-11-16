@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:geolocator/geolocator.dart';
 import "package:http/http.dart" as http;
+
 import '../Models/autocomplete.dart';
 import '../Models/tuple_class.dart';
 
@@ -49,4 +51,23 @@ Future<http.Response> getSuggestions(search) {
         'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
         'accept': 'application/json'
       });
+}
+
+Future<http.Response> getData(city) {
+  var result = http.get(Uri.parse(
+      "https://api.tomtom.com/routing/1/calculateRoute/13.336817194763675,74.737992486596:12.913909224973084,74.85484793693875/json?key=sC9cDEhhsj0O9fCVgUp0kZYia2IaGm7L"));
+  return result;
+}
+
+Future<void> getCurrentLocationData() async {
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission != LocationPermission.whileInUse) {
+    LocationPermission permission = await Geolocator.requestPermission();
+  }
+
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.low);
+  var lattitude = position.latitude;
+  var longitude = position.longitude;
+  // print(position);
 }

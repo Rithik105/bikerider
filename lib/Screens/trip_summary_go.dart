@@ -1,21 +1,13 @@
-import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Screens/HomePage.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../Models/create_trip_modal.dart';
-import '../Providers/invite_provider.dart';
-import '../Utility/enums.dart';
+
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/button.dart';
-import 'ChatScreen.dart';
-import 'google_maps_preview.dart';
 import 'google_maps_preview_go.dart';
-import 'invite_people.dart';
+import 'map_trip_start.dart';
 import 'milestone_card.dart';
 
 class TripSummaryGo extends StatefulWidget {
@@ -232,22 +224,41 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        UserSecureStorage.getToken().then((value) {
-                          UserHttp.getNumber(value!).then((value1) {
-                            UserHttp.getChats(widget.getTripModel.id!, value)
-                                .then((value2) {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return ChatScreen(
-                                  token: value,
-                                  chatList: value2,
-                                  number: value1["mobile"],
-                                  groupId: widget.getTripModel.id!,
-                                );
-                              }));
-                            });
-                          });
-                        });
+                        print('Go button');
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => MapStart(
+                              getTripModel: widget.getTripModel,
+                            ),
+                          ),
+                        );
+                        // UserSecureStorage.getToken().then(
+                        //   (value) {
+                        //     UserHttp.getNumber(value!).then(
+                        //       (value1) {
+                        //         UserHttp.getChats(
+                        //                 widget.getTripModel.id!, value)
+                        //             .then(
+                        //           (value2) {
+                        //             Navigator.push(
+                        //               context,
+                        //               MaterialPageRoute(
+                        //                 builder: (context) {
+                        //                   return ChatScreen(
+                        //                     token: value,
+                        //                     chatList: value2,
+                        //                     number: value1["mobile"],
+                        //                     groupId: widget.getTripModel.id!,
+                        //                   );
+                        //                 },
+                        //               ),
+                        //             );
+                        //           },
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        // );
                       },
                       child: Container(
                         height: 50,
