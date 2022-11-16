@@ -6,6 +6,7 @@ import '../custom/widgets/button.dart';
 
 class SuccessPage extends StatefulWidget {
   SuccessPage({super.key, required this.title, required this.nextScreen});
+
   String title, nextScreen;
 
   @override
@@ -25,6 +26,9 @@ class _SuccessPageState extends State<SuccessPage> {
           icon: const Icon(Icons.arrow_back),
           color: Color(0xff575656),
           onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
             Navigator.pop(context);
           },
         ),
@@ -59,13 +63,20 @@ class _SuccessPageState extends State<SuccessPage> {
               height: 25,
             ),
             SizedBox(
-                width: double.infinity,
-                child: LargeSubmitButton(
-                    text: "Done",
-                    ontap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, widget.nextScreen, (route) => false);
-                    })).paddingAll(20, 20, 0, 0)
+              width: double.infinity,
+              child: LargeSubmitButton(
+                text: "Done",
+                ontap: () {
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //     context, widget.nextScreen, (route) => false);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+            ).paddingAll(20, 20, 0, 0)
           ],
         ).paddingAll(20, 20, 50, 0),
       ),
