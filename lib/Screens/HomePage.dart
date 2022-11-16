@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../bloc/BikeCubit.dart';
 import 'GarageCard.dart';
 import 'ProfileScreen.dart';
+import 'ServiceRecods/add_bike.dart';
 import 'TripCard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,10 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ActivityCard(),
     ),
     // ActivitiesCard(),
-    ProfileHeader()
+    ProfileHeader(),
     // ActivityPage(),
     // MyProfilePage(),
-    // More()
+    AddBike()
   ];
 
   @override
