@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../Http/UserHttp.dart';
+import '../Utility/Secure_storeage.dart';
 import '../custom/constants.dart';
+import 'ChatScreen.dart';
 import 'maps_provider.dart';
 
 class MapStart extends StatefulWidget {
@@ -330,6 +333,31 @@ class _MapStartState extends State<MapStart> {
             alignment: Alignment.bottomRight,
             child: GestureDetector(
               onTap: () {
+                UserSecureStorage.getToken().then(
+                  (value) {
+                    UserHttp.getNumber(value!).then(
+                      (value1) {
+                        UserHttp.getChats(widget.getTripModel.id!, value).then(
+                          (value2) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ChatScreen(
+                                    token: value,
+                                    chatList: value2,
+                                    number: value1["mobile"],
+                                    groupId: widget.getTripModel.id!,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
                 // getDirections(widget.getTripModel.source!,
                 //         widget.getTripModel.destination!)
                 //     .then(
