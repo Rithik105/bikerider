@@ -2,6 +2,7 @@ import 'package:bikerider/Screens/BookServiceScreen.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'manual/manual_model.dart';
 import 'manual/select_vehicle.dart';
 import 'manual/servieces.dart';
@@ -179,6 +180,7 @@ class _GarageCardState extends State<GarageCard> {
             ),
             GestureDetector(
               onTap: () {
+                print('test');
                 Navigator.pushNamed(context, "/AccessoriesScreen");
               },
               child: Row(

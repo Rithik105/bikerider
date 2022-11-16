@@ -7,6 +7,11 @@ import 'package:provider/provider.dart';
 import '../custom/constants.dart';
 import 'maps_provider.dart';
 
+//  Lodge:      19016
+//  Restaurant: 13000
+//  ATM:        11044
+//  Petrol:     19007
+
 class MapStart extends StatefulWidget {
   MapStart({
     Key? key,
