@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.directions_bike_rounded),
               title: const Text('Enter a bike'),
               onTap: () {
-                //   Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
             // ListTile(

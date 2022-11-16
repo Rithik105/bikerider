@@ -294,9 +294,12 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                         UserHttp.createTrip(CreateTripModal().toJson())
                             .then((value) {
                           showToast(msg: 'Trip created successfully');
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                          Future.delayed(const Duration(milliseconds: 100))
+                              .then((value) => Navigator.pop(context));
+                          Future.delayed(const Duration(milliseconds: 150))
+                              .then((value) => Navigator.pop(context));
+                          Future.delayed(const Duration(milliseconds: 200))
+                              .then((value) => Navigator.pop(context));
 
                           Navigator.push(
                             context,

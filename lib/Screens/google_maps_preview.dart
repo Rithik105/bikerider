@@ -44,22 +44,54 @@ class _MapCardState extends State<MapCard> {
     ),
     zoom: 14.14,
   );
-  double getZoomLevel() {
-    int length = CreateTripModal.distance!.points.length;
-    if (length > 9000) {
-      return 3;
-    } else if (length > 7000) {
-      return 6;
-    } else if (length > 6000) {
-      return 7;
-    } else if (length > 5000) {
-      return 8;
-    } else if (length > 2000) {
-      return 8.15;
-    } else if (length < 1000) {
-      return 12;
+  // double getZoomLevel() {
+  //   int length = CreateTripModal.distance!.points.length;
+  //   if (length > 9000) {
+  //     return 3;
+  //   } else if (length > 7000) {
+  //     return 6;
+  //   } else if (length > 6000) {
+  //     return 7;
+  //   } else if (length > 5000) {
+  //     return 8;
+  //   } else if (length > 2000) {
+  //     return 8.15;
+  //   } else if (length < 1000) {
+  //     return 12;
+  //   }
+  //   return 8;
+  // }
+
+  LatLng getSouthWestBounds(LatLng src, LatLng dst) {
+    double? lat, lon;
+    if (src.latitude < dst.latitude) {
+      lat = src.latitude;
+    } else {
+      lat = dst.latitude;
     }
-    return 8;
+
+    if (src.longitude < dst.longitude) {
+      lon = src.longitude;
+    } else {
+      lon = dst.longitude;
+    }
+    return LatLng(lat, lon);
+  }
+
+  LatLng getNorthEastBounds(LatLng src, LatLng dst) {
+    double? lat, lon;
+    if (src.latitude > dst.latitude) {
+      lat = src.latitude;
+    } else {
+      lat = dst.latitude;
+    }
+
+    if (src.longitude > dst.longitude) {
+      lon = src.longitude;
+    } else {
+      lon = dst.longitude;
+    }
+    return LatLng(lat, lon);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -70,21 +102,40 @@ class _MapCardState extends State<MapCard> {
     // controller.getZoomLevel().then((value) => print('Zoom level $value'));
     // double zoom = (CreateTripModal.distance!.points.length ~/ 10) as double;
     // print(zoom);
-    controller.animateCamera(
-      CameraUpdate.newLatLngZoom(
-        LatLng(
-          CreateTripModal.distance!
-              .points[CreateTripModal.distance!.points.length ~/ 2]['latitude'],
-          CreateTripModal.distance!
-                  .points[CreateTripModal.distance!.points.length ~/ 2]
-              ['longitude'],
-        ),
-        getZoomLevel(),
-      ),
-    );
+    // controller.animateCamera(
+    //   CameraUpdate.newLatLngZoom(
+    //     LatLng(
+    //       CreateTripModal.distance!
+    //           .points[CreateTripModal.distance!.points.length ~/ 2]['latitude'],
+    //       CreateTripModal.distance!
+    //               .points[CreateTripModal.distance!.points.length ~/ 2]
+    //           ['longitude'],
+    //     ),
+    //     getZoomLevel(),
+    //   ),
+    // );
     // controller.getVisibleRegion().then(
     //       (value) => print('Visible region $value'),
     //     );
+
+    print('Map Created');
+    LatLng source = LatLng(CreateTripModal.fromDetails!.latitude,
+        CreateTripModal.fromDetails!.longitude);
+    LatLng destination = LatLng(CreateTripModal.toDetails!.latitude,
+        CreateTripModal.toDetails!.longitude);
+    // print('${source.latitude},${source.longitude}');
+    // print('${destination.latitude},${destination.longitude}');
+    LatLng southWest = getSouthWestBounds(source, destination);
+    LatLng northEast = getNorthEastBounds(source, destination);
+    print('southWest: $southWest');
+    print('northEast: $northEast');
+    LatLngBounds(southwest: southWest, northeast: northEast);
+    Future.delayed(const Duration(milliseconds: 250)).then(
+      (value) => myController.animateCamera(
+        CameraUpdate.newLatLngBounds(
+            LatLngBounds(southwest: southWest, northeast: northEast), 80),
+      ),
+    );
   }
 
   @override

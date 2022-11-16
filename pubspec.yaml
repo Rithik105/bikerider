@@ -98,6 +98,7 @@ flutter:
     - assets/images/Chat/
     - assets/images/trip_summary/
     - assets/images/manual/
+    - assets/images/trip_start/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
