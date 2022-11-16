@@ -1,5 +1,9 @@
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/accessoriesCard.dart';
 import 'package:flutter/Material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AccessoriesScreen extends StatefulWidget {
@@ -10,11 +14,9 @@ class AccessoriesScreen extends StatefulWidget {
 }
 
 class _AccessoriesScreenState extends State<AccessoriesScreen> {
-  TextEditingController searchCardController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFFFFEDC2),
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
@@ -34,20 +36,47 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
       ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 70),
-            child: GridView.builder(
-              padding: const EdgeInsets.all(0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 1,
-                crossAxisSpacing: 1,
-                childAspectRatio: 1 / 2,
-                mainAxisExtent: 230,
-                crossAxisCount: 2,
-              ),
-              itemCount: 8,
-              itemBuilder: (context, index) => const AccessoriesCard(),
-            ),
+          BlocBuilder<BikeCubit, BikeState>(
+            builder: (context, state) {
+              if (state is BikeAccFetchingState)
+                return Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.orange,
+                ));
+              else if (state is BikeAccFetchedState) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 70),
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 1,
+                      crossAxisSpacing: 1,
+                      childAspectRatio: 1 / 2,
+                      mainAxisExtent: 230,
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: state.accessories.length,
+                    itemBuilder: (context, index) => Container(
+                      color: Color(0XFFFFEDC2),
+                      padding: EdgeInsets.all(1),
+                      child: AccessoriesCard(
+                        productImage: state.accessories[index]["productImage"],
+                        productName: state.accessories[index]["productName"],
+                        productPrice: state.accessories[index]["productPrice"],
+                        createdDate:
+                            DateTime.parse(state.accessories[index]["created"]),
+                        category: state.accessories[index]["category"],
+                      ),
+                    ),
+                  ),
+                );
+              } else
+                return Center(
+                    child: Text(
+                  "No match Found",
+                  style: TextStyle(color: Colors.orange),
+                ));
+            },
           ),
           Column(
             children: [
@@ -56,7 +85,9 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                 height: 20,
               ),
               TextField(
-                controller: searchCardController,
+                onSubmitted: (value) {
+                  BlocProvider.of<BikeCubit>(context).getAcc(value);
+                },
                 decoration: InputDecoration(
                   labelText: "What do you want?",
                   labelStyle: GoogleFonts.roboto(

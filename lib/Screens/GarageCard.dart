@@ -178,6 +178,9 @@ class _GarageCardState extends State<GarageCard> {
               thickness: 0.5,
             ),
             GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, "/AccessoriesScreen");
+              },
               child: Row(
                 children: [
                   Image.asset(

@@ -1,9 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class AccessoriesCard extends StatefulWidget {
-  const AccessoriesCard({Key? key}) : super(key: key);
+  AccessoriesCard(
+      {Key? key,
+      required this.category,
+      required this.productImage,
+      required this.productName,
+      required this.productPrice,
+      required this.createdDate})
+      : super(key: key);
+  String productName, category, productImage;
+  int productPrice;
+  DateTime createdDate;
 
   @override
   State<AccessoriesCard> createState() => _AccessoriesCardState();
@@ -23,7 +34,10 @@ class _AccessoriesCardState extends State<AccessoriesCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "22 SEp",
+                DateFormat('dd MMM')
+                    .format(widget.createdDate)
+                    .toString()
+                    .toUpperCase(),
                 style: GoogleFonts.roboto(color: Color(0x99664700)),
               ),
               IconButton(
@@ -50,7 +64,7 @@ class _AccessoriesCardState extends State<AccessoriesCard> {
               height: 100,
               width: 80,
               child: Center(
-                child: Image.asset("assets/images/Temp/gloves.png"),
+                child: Image.network(widget.productImage),
               ),
             ),
           ),
@@ -58,14 +72,14 @@ class _AccessoriesCardState extends State<AccessoriesCard> {
             height: 10,
           ),
           Text(
-            "Probiker Glovs",
+            widget.productName,
             style: GoogleFonts.roboto(color: Color(0xff664700), fontSize: 16),
           ),
           SizedBox(
             height: 10,
           ),
           Text(
-            "Rs 189.00",
+            "Rs${widget.productPrice.toDouble().toString()}",
             style: TextStyle(
                 color: Color(0xffED802E),
                 fontSize: 18,

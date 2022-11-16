@@ -25,6 +25,15 @@ class BikeNonEmptyTripState extends BikeState {
   BikeNonEmptyTripState(this.getTripModel);
 }
 
+class BikeAccFetchingState extends BikeState {}
+
+class BikeAccFetchedState extends BikeState {
+  List accessories;
+  BikeAccFetchedState(this.accessories);
+}
+
+class BikeAccEmptyFetchedState extends BikeState {}
+
 class BikeTimerExpiredState extends BikeState {}
 
 class BikeCubit extends Cubit<BikeState> {
@@ -82,27 +91,34 @@ class BikeCubit extends Cubit<BikeState> {
     });
   }
 
-  // void getFirstChat(String groupId) {
-  //   emit(BikeChatFetchingState());
-  //   UserSecureStorage.getToken().then((value) {
-  //     print(value);
-  //     Timer.periodic(Duration(seconds: 10), (timer) {
-  //       UserHttp.getChats(groupId, value!).then((value1) {
-  //         if (value1.isEmpty) {
-  //           emit(BikeChatEmptyState());
-  //         } else {
-  //           List<Map> chatList = [];
-  //           value1.forEach((element) {
-  //             chatList.add({
-  //               "sender": element["senderName"]!,
-  //               "senderNum": element["memberNumber"],
-  //               "message": element["chat"]!
-  //             });
-  //             emit(BikeChatNonEmptyState(chatList));
-  //           });
-  //         }
-  //       });
-  //     });
-  //   });
-  // }
+  void getTripDetails() {
+    emit(BikeTripFetchState());
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.getTripDetails(value!).then((value1) {
+        if (value1.isEmpty) {
+          emit(BikeEmptyTripState());
+        } else {
+          List<GetTripModel> temp = [];
+          value1.forEach((element) {
+            temp.add(GetTripModel.fromJson(element));
+          });
+          // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
+          emit(BikeNonEmptyTripState(temp));
+        }
+      });
+    });
+  }
+
+  void getAcc(String item) {
+    List accessories;
+    emit(BikeAccFetchingState());
+    UserHttp.getAccessories(item).then((value) {
+      if (value.isEmpty) {
+        emit(BikeAccEmptyFetchedState());
+      } else {
+        accessories = value;
+        emit(BikeAccFetchedState(accessories));
+      }
+    });
+  }
 }

@@ -13,7 +13,8 @@ import '../Models/UserModel.dart';
 class ChooseAvatarScreen extends StatelessWidget {
   @override
   File? storeImage;
-  ChooseAvatarScreen({Key? key}) : super(key: key);
+  String name;
+  ChooseAvatarScreen({Key? key, required this.name}) : super(key: key);
 
   Future pickImage(ImageSource source) async {
     try {
@@ -71,8 +72,8 @@ class ChooseAvatarScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    const Text(
-                      "Hey Ashlesh!!",
+                    Text(
+                      "Hey ${name} !!",
                       style: TextStyle(fontSize: 25, color: Color(0xff4F504F)),
                     ),
                     const Text("to make it more cool selct",

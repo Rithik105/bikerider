@@ -123,9 +123,8 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                               UserSecureStorage.setToken(value2["token"]);
 
                               Navigator.pushNamed(
-                                context,
-                                "/ChooseAvatarScreen",
-                              );
+                                  context, "/ChooseAvatarScreen",
+                                  arguments: {"name": widget.user.name});
 
                               showToast(msg: "Registered succefully");
                             }
