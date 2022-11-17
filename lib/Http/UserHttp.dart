@@ -204,6 +204,11 @@ class UserHttp {
         body: jsonEncode({'text': item}));
     return jsonDecode(response.body);
   }
+
+  static Future<List> getProfile() async {
+    final http.Response response = await http.post(Uri.parse("uri"));
+    return jsonDecode(response.body);
+  }
 }
 
 class UserImageHttp {

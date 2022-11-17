@@ -40,7 +40,7 @@ class _ToolKitScreenState extends State<ToolKitScreen> {
         children: [
           BlocBuilder<BikeCubit, BikeState>(
             builder: (context, state) {
-              if (state is BikeAccFetchingState)
+              if (state is BikeFetchingState)
                 return Center(
                     child: CircularProgressIndicator(
                   color: Colors.orange,
