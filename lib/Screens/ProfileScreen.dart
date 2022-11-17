@@ -1,9 +1,11 @@
 import 'package:bikerider/Models/timeLineModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Http/UserHttp.dart';
+import '../bloc/BikeCubit.dart';
 import '../custom/widgets/Follower.dart';
 import '../custom/widgets/timeLine.dart';
 
@@ -33,82 +35,91 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             children: [
               Column(
                 children: [
-                  Container(
-                    height: 420,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        alignment: Alignment.bottomRight,
-                        image: AssetImage('assets/images/homePage/rider.png'),
-                        scale: 1.9,
-                        opacity: 0.1,
-                      ),
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          Color(0xffED7E2C),
-                          Color(0xffF7B557),
-                        ],
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 60),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CircleAvatar(
-                            radius: 75,
-                            backgroundColor: Color.fromRGBO(233, 176, 129, 1),
-                            child: CircleAvatar(
-                              radius: 70,
-                              backgroundColor: Colors.transparent,
-                              backgroundImage: AssetImage(
-                                  "assets/images/homePage/woman.png"),
+                  BlocBuilder<BikeCubit, BikeState>(
+                    builder: (context, state) {
+                      if (state is BikeFetchingState) {
+                        return Container(
+                          height: 420,
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              alignment: Alignment.bottomRight,
+                              image: AssetImage(
+                                  'assets/images/homePage/rider.png'),
+                              scale: 1.9,
+                              opacity: 0.1,
+                            ),
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                Color(0xffED7E2C),
+                                Color(0xffF7B557),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text("Ashlesh MD",
-                              style: GoogleFonts.roboto(
-                                  color: const Color(0xffffffff),
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w600)),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text("Chase your dreams",
-                              style: GoogleFonts.roboto(
-                                  color: const Color(0xffffffff),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 15),
-                          Container(
-                            width: 100,
-                            height: 30,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 3),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border:
-                                    Border.all(color: Colors.white, width: 1)),
-                            child: Center(
-                              child: Text(
-                                "Follow",
-                                style: GoogleFonts.roboto(
-                                    color: const Color(0xffffffff),
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 60),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CircleAvatar(
+                                  radius: 75,
+                                  backgroundColor:
+                                      Color.fromRGBO(233, 176, 129, 1),
+                                  child: CircleAvatar(
+                                    radius: 70,
+                                    backgroundColor: Colors.transparent,
+                                    backgroundImage: AssetImage(
+                                        "assets/images/homePage/woman.png"),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text("Ashlesh MD",
+                                    style: GoogleFonts.roboto(
+                                        color: const Color(0xffffffff),
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w600)),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text("Chase your dreams",
+                                    style: GoogleFonts.roboto(
+                                        color: const Color(0xffffffff),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600)),
+                                const SizedBox(height: 15),
+                                Container(
+                                  width: 100,
+                                  height: 30,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 3),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                          color: Colors.white, width: 1)),
+                                  child: Center(
+                                    child: Text(
+                                      "Follow",
+                                      style: GoogleFonts.roboto(
+                                          color: const Color(0xffffffff),
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        ],
-                      ),
-                    ),
+                        );
+                      } else
+                        return Container();
+                    },
                   ),
                   Container(
                     height: 50,

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Models/timeLineModel.dart';
+import 'package:bikerider/Screens/milestone_card.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +18,9 @@ class BikeTimerState extends BikeState {
   BikeTimerState(this.time);
 }
 
-class BikeTripFetchState extends BikeState {}
+class BikeFetchingState extends BikeState {}
+
+class BikeProfileFetchedState extends BikeState {}
 
 class BikeEmptyTripState extends BikeState {}
 
@@ -24,8 +28,6 @@ class BikeNonEmptyTripState extends BikeState {
   List<GetTripModel> getTripModel = [];
   BikeNonEmptyTripState(this.getTripModel);
 }
-
-class BikeAccFetchingState extends BikeState {}
 
 class BikeAccFetchedState extends BikeState {
   List accessories;
@@ -79,7 +81,7 @@ class BikeCubit extends Cubit<BikeState> {
   }
 
   void getTrips() {
-    emit(BikeTripFetchState());
+    emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTrips(value!).then((value1) {
         if (value1.isEmpty) {
@@ -97,7 +99,7 @@ class BikeCubit extends Cubit<BikeState> {
   }
 
   void getTripDetails() {
-    emit(BikeTripFetchState());
+    emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTripDetails(value!).then((value1) {
         if (value1.isEmpty) {
@@ -116,7 +118,7 @@ class BikeCubit extends Cubit<BikeState> {
 
   void getAcc(String item) {
     List accessories;
-    emit(BikeAccFetchingState());
+    emit(BikeFetchingState());
     UserHttp.getAccessories(item).then((value) {
       if (value.isEmpty) {
         emit(BikeAccEmptyFetchedState());
@@ -129,7 +131,7 @@ class BikeCubit extends Cubit<BikeState> {
 
   void getToolKit(String item) {
     List toolKit;
-    emit(BikeAccFetchingState());
+    emit(BikeFetchingState());
     UserHttp.getToolKit(item).then((value) {
       if (value.isEmpty) {
         emit(BikeAccEmptyFetchedState());
@@ -137,6 +139,17 @@ class BikeCubit extends Cubit<BikeState> {
         toolKit = value;
         emit(BikeToolKitFetchedState(toolKit));
       }
+    });
+  }
+
+  void getProfile(String item) {
+    List profile;
+    TimeLineModel timeLine;
+    emit(BikeFetchingState());
+    UserHttp.getProfile().then((value) async {
+      profile = value;
+      timeLine = await getTimeline();
+      emit(BikeProfileFetchedState());
     });
   }
 }
