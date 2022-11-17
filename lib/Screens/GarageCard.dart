@@ -1,4 +1,5 @@
 import 'package:bikerider/Screens/BookServiceScreen.dart';
+import 'package:bikerider/Screens/took_kit_screen.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -154,6 +155,9 @@ class _GarageCardState extends State<GarageCard> {
               thickness: 0.5,
             ),
             GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, "/ToolKitScreen");
+              },
               child: Row(
                 children: [
                   Image.asset(

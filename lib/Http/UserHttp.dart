@@ -193,6 +193,17 @@ class UserHttp {
         body: jsonEncode({'text': item}));
     return jsonDecode(response.body);
   }
+
+  static Future<List> getToolKit(String item) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/tool/viewToolKit"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'text': item}));
+    return jsonDecode(response.body);
+  }
 }
 
 class UserImageHttp {

@@ -8,6 +8,7 @@ import 'package:bikerider/Screens/RegisterScreen.dart';
 import 'package:bikerider/Screens/SuccessPage.dart';
 import 'package:bikerider/Screens/create_trip.dart';
 import 'package:bikerider/Screens/invite_people.dart';
+import 'package:bikerider/Screens/took_kit_screen.dart';
 import 'package:bikerider/Screens/trip_summary_create.dart';
 import 'package:bikerider/Screens/trip_summary_go.dart';
 import 'package:bikerider/Utility/PageTransition.dart';
@@ -122,6 +123,13 @@ class Routes {
       case "/TripSummaryCreate":
         return LeftTransitions(child: TripSummaryCreate());
       //---------------------------------------------------------
+      //---------------------------------------------------------
+      case "/ToolKitScreen":
+        return LeftTransitions(
+            child: BlocProvider(
+          create: (context) => BikeCubit()..getToolKit(""),
+          child: ToolKitScreen(),
+        ));
     }
   }
 }
