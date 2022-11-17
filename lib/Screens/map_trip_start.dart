@@ -1,3 +1,4 @@
+import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,11 @@ import '../Utility/Secure_storeage.dart';
 import '../custom/constants.dart';
 import 'ChatScreen.dart';
 import 'maps_provider.dart';
+
+//  Lodge:      19016
+//  Restaurant: 13000
+//  ATM:        11044
+//  Petrol:     19007
 
 class MapStart extends StatefulWidget {
   MapStart({
@@ -378,6 +384,12 @@ class _MapStartState extends State<MapStart> {
               width: 40,
               child: FloatingActionButton(
                 onPressed: () {
+                  print('Current Location');
+                  getCurrentLocationData().then((value) {
+                    myController.animateCamera(
+                      CameraUpdate.newLatLngZoom(value, 15),
+                    );
+                  });
                   // myController.animateCamera(
                   //   CameraUpdate.newCameraPosition(_initialCameraPosition),
                   // );
