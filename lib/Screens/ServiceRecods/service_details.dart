@@ -32,7 +32,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xffed863a),
@@ -148,9 +147,12 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       style: GoogleFonts.roboto(
                                           color: Color(0x99000000)),
                                     ),
-
                                     RatingBarIndicator(
-                                      rating: _rating==-1?widget.serviceRecordList.dealerRating!.toDouble():_rating,
+                                      rating: _rating == -1
+                                          ? widget
+                                              .serviceRecordList.dealerRating!
+                                              .toDouble()
+                                          : _rating,
                                       itemBuilder: (context, index) => Icon(
                                         Icons.star,
                                         color: Color(0xffF3DA3B),
@@ -212,26 +214,29 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                     Positioned(
                         right: 0,
                         top: 0,
-                        child:DateTime.parse(
-                            widget.serviceRecordList.slotDate!).isAfter(DateTime.now())? Container(
-                          decoration: kServiceCardTagDecoration,
-                          height: 25,
-                          width: 65,
-                          child: Center(
-                              child: Text(
-                                "New",
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ):Container(
-                          decoration: kBookingDetailsTagDecoration,
-                          height: 25,
-                          width: 65,
-                          child: Center(
-                              child: Text(
-                            "Past",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                        ))
+                        child:
+                            DateTime.parse(widget.serviceRecordList.slotDate!)
+                                    .isAfter(DateTime.now())
+                                ? Container(
+                                    decoration: kServiceCardTagDecoration,
+                                    height: 25,
+                                    width: 65,
+                                    child: Center(
+                                        child: Text(
+                                      "New",
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                                  )
+                                : Container(
+                                    decoration: kBookingDetailsTagDecoration,
+                                    height: 25,
+                                    width: 65,
+                                    child: Center(
+                                        child: Text(
+                                      "Past",
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                                  ))
                   ],
                 ),
               ),
@@ -270,19 +275,16 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   _selectedIcon ?? Icons.star,
                   color: Colors.amber,
                 ),
-
-                onRatingUpdate: (rating) async{
-                    store = rating;
-                    await AddBikeHttp.addReview(widget.serviceRecordList.id!, rating,
-                            widget.serviceRecordList.dealerPhone!)
-                        .then((value) {
-                      print("the value is${value["dealerTotalRatings"]}");
-                      _rating = rating;
-                      print(_rating);
-                    });
-                    setState(() {
-
-                    });
+                onRatingUpdate: (rating) async {
+                  store = rating;
+                  await AddBikeHttp.addReview(widget.serviceRecordList.id!,
+                          rating, widget.serviceRecordList.dealerPhone!)
+                      .then((value) {
+                    print("the value is${value["dealerTotalRatings"]}");
+                    _rating = rating;
+                    print(_rating);
+                  });
+                  setState(() {});
                 },
                 updateOnDrag: true,
               ),

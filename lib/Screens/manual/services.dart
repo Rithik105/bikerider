@@ -14,7 +14,7 @@ class GetBikeDetails {
         'Authorization': 'BEARER $token'
       },
     );
-    // print(jsonDecode(response.body));
+    //print(jsonDecode(response.body));
     // return response;
     return jsonDecode(response.body);
   }

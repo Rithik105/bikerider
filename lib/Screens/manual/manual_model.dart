@@ -12,14 +12,14 @@ class PersonalDetailsModel {
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   PersonalDetailsModel.fromJson(Map json) {
-    nameController.text = json['userName'];
-    licenceNumberController.text = json['lisenceNumber'];
-    doorNoController.text = json['doorNumber'];
-    cityController.text = json['city'];
-    stateController.text = json['state'];
-    pincodeController.text = json['pincode'].toString();
-    mobileController.text = json['mobile'];
-    emailController.text = json['email'];
+    nameController.text = json['userName'] ?? "";
+    licenceNumberController.text = json['lisenceNumber'] ?? "";
+    doorNoController.text = json['doorNumber'] ?? "";
+    cityController.text = json['city'] ?? "";
+    stateController.text = json['state'] ?? "";
+    pincodeController.text = json['pincode'].toString() ?? "";
+    mobileController.text = json['mobile'] ?? "";
+    emailController.text = json['email'] ?? "";
   }
   toJson() {
     return json.encode({

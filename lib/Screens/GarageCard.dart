@@ -8,7 +8,7 @@ import '../Http/BookService.dart';
 import 'BookService/BookServiceScreen.dart';
 import 'manual/manual_model.dart';
 import 'manual/select_vehicle.dart';
-import 'manual/servieces.dart';
+import 'manual/services.dart';
 
 class GarageCard extends StatefulWidget {
   GarageCard({Key? key}) : super(key: key);
@@ -76,7 +76,6 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                 ),
               ),
-              Column(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],
