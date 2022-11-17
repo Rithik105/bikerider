@@ -20,9 +20,14 @@ class BikeTimerState extends BikeState {
 
 class BikeFetchingState extends BikeState {}
 
-class BikeProfileFetchedState extends BikeState {
+class BikeMineProfileFetchedState extends BikeState {
   Map profile;
-  BikeProfileFetchedState({required this.profile});
+  BikeMineProfileFetchedState({required this.profile});
+}
+
+class BikeOtherProfileFetchedState extends BikeState {
+  Map profile;
+  BikeOtherProfileFetchedState({required this.profile});
 }
 
 class BikeEmptyTripState extends BikeState {}
@@ -150,9 +155,14 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getProfile(value!).then((value2) {
-        emit(BikeProfileFetchedState(
-          profile: value2,
-        ));
+        UserSecureStorage.getDetails(key: "mobile").then((value3) {
+          if (value2["userDetails"]["mobile"] == value3) {
+            emit(BikeMineProfileFetchedState(
+              profile: value2,
+            ));
+          } else
+            emit(BikeOtherProfileFetchedState(profile: value2));
+        });
       });
     });
   }

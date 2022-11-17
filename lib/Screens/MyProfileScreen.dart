@@ -119,7 +119,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             ),
                           ),
                         );
-                      } else if (state is BikeProfileFetchedState) {
+                      } else if (state is BikeMineProfileFetchedState) {
                         return Container(
                           height: 420,
                           width: double.infinity,
@@ -174,25 +174,34 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600)),
                                 const SizedBox(height: 15),
-                                // Container(
-                                //   width: 100,
-                                //   height: 30,
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 6, vertical: 3),
-                                //   decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(15),
-                                //       border: Border.all(
-                                //           color: Colors.white, width: 1)),
-                                //   child: Center(
-                                //     child: Text(
-                                //       "Follow",
-                                //       style: GoogleFonts.roboto(
-                                //           color: const Color(0xffffffff),
-                                //           fontSize: 17,
-                                //           fontWeight: FontWeight.w500),
-                                //     ),
-                                //   ),
-                                // ),
+                                BlocBuilder<BikeCubit, BikeState>(
+                                  builder: (context, state) {
+                                    if (state is BikeOtherProfileFetchedState) {
+                                      return Container(
+                                        width: 100,
+                                        height: 30,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 6, vertical: 3),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                                color: Colors.white, width: 1)),
+                                        child: Center(
+                                          child: Text(
+                                            "Follow",
+                                            style: GoogleFonts.roboto(
+                                                color: const Color(0xffffffff),
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
                                 const SizedBox(
                                   height: 15,
                                 ),
@@ -289,17 +298,25 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   )
                 ],
               ),
-              Positioned(
-                right: 25,
-                top: 30,
-                child: Image.asset(
-                  "assets/images/homePage/edit_pencil.png",
-                  scale: 2.2,
-                ),
+              BlocBuilder<BikeCubit, BikeState>(
+                builder: (context, state) {
+                  if (state is BikeOtherProfileFetchedState) {
+                    return Positioned(
+                      right: 25,
+                      top: 30,
+                      child: Image.asset(
+                        "assets/images/homePage/edit_pencil.png",
+                        scale: 2.2,
+                      ),
+                    );
+                  } else {
+                    return Positioned(right: 25, top: 30, child: Text(""));
+                  }
+                },
               ),
               BlocBuilder<BikeCubit, BikeState>(
                 builder: (context, state) {
-                  if (state is BikeProfileFetchedState) {
+                  if (state is BikeMineProfileFetchedState) {
                     return Positioned(
                       top: 380,
                       left: 10,
