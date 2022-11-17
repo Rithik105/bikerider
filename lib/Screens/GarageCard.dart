@@ -1,11 +1,16 @@
-import 'package:bikerider/Screens/BookServiceScreen.dart';
-import 'package:bikerider/Screens/took_kit_screen.dart';
+import 'package:bikerider/Screens/BookService/BookServiceScreen.dart';
+import 'package:bikerider/Screens/ServiceRecods/add_bike.dart';
+import 'package:bikerider/Screens/ServiceRecods/service_records.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'manual/manual_model.dart';
 import 'manual/select_vehicle.dart';
 import 'manual/servieces.dart';
+
+import '../Http/BookService.dart';
 
 class GarageCard extends StatefulWidget {
   GarageCard({Key? key}) : super(key: key);
@@ -54,10 +59,27 @@ class _GarageCardState extends State<GarageCard> {
             ).paddingAll(20, 20, 0, 0),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BookServiceScreen()));
+                BookServiceHttp.prefillDetails().then(
+                      (value) {
+                    if (value.prefill.isEmpty) {
+                      showToast(msg: 'Please add Bike details');
+                      print('Please add your bike');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddBike(),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookServiceScreen(prefill:value),
+                        ),
+                      );
+                    }
+                  },
+                );
               },
               child: Row(
                 children: [
@@ -83,7 +105,28 @@ class _GarageCardState extends State<GarageCard> {
               color: Color(0xff979797),
               thickness: 0.5,
             ),
-            GestureDetector(
+            GestureDetector(onTap: (){
+              BookServiceHttp.prefillDetails().then(
+                    (value) {
+                  if (value.prefill.isEmpty) {
+                    print('Please add your bike');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddBike(),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ServiceRecords(prefillDetails:value),
+                      ),
+                    );
+                  }
+                },
+              );
+            },
               child: Row(
                 children: [
                   Image.asset(
@@ -183,6 +226,7 @@ class _GarageCardState extends State<GarageCard> {
             ),
             GestureDetector(
               onTap: () {
+                print('test');
                 Navigator.pushNamed(context, "/AccessoriesScreen");
               },
               child: Row(
