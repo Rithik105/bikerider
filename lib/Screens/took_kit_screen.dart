@@ -1,8 +1,4 @@
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Models/UserModel.dart';
-import 'package:bikerider/Screens/TripCard.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
-import 'package:bikerider/custom/widgets/accessoriesCard.dart';
 import 'package:bikerider/custom/widgets/tool_kit.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,12 +36,13 @@ class _ToolKitScreenState extends State<ToolKitScreen> {
         children: [
           BlocBuilder<BikeCubit, BikeState>(
             builder: (context, state) {
-              if (state is BikeFetchingState)
+              if (state is BikeFetchingState) {
                 return Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.orange,
-                ));
-              else if (state is BikeToolKitFetchedState) {
+                  child: CircularProgressIndicator(
+                    color: Colors.orange,
+                  ),
+                );
+              } else if (state is BikeToolKitFetchedState) {
                 return Padding(
                     padding: const EdgeInsets.only(top: 70),
                     child: ListView.builder(
