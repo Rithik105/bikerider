@@ -197,9 +197,10 @@ class _GarageCardState extends State<GarageCard> {
               color: Color(0xff979797),
               thickness: 0.5,
             ),
-            GestureDetector(onTap: (){
-
-            },
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, "/ToolKitScreen");
+              },
               child: Row(
                 children: [
                   Image.asset(

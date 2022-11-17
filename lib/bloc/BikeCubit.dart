@@ -32,6 +32,11 @@ class BikeAccFetchedState extends BikeState {
   BikeAccFetchedState(this.accessories);
 }
 
+class BikeToolKitFetchedState extends BikeState {
+  List toolKit;
+  BikeToolKitFetchedState(this.toolKit);
+}
+
 class BikeAccEmptyFetchedState extends BikeState {}
 
 class BikeTimerExpiredState extends BikeState {}
@@ -118,6 +123,19 @@ class BikeCubit extends Cubit<BikeState> {
       } else {
         accessories = value;
         emit(BikeAccFetchedState(accessories));
+      }
+    });
+  }
+
+  void getToolKit(String item) {
+    List toolKit;
+    emit(BikeAccFetchingState());
+    UserHttp.getToolKit(item).then((value) {
+      if (value.isEmpty) {
+        emit(BikeAccEmptyFetchedState());
+      } else {
+        toolKit = value;
+        emit(BikeToolKitFetchedState(toolKit));
       }
     });
   }
