@@ -46,12 +46,13 @@ Future<LocationDetails> getLocationDetails(String placeName) async {
 
 Future<http.Response> getSuggestions(search) {
   return http.get(
-      Uri.parse(
-          "https://api.foursquare.com/v3/autocomplete?query=${search}&types=geo"),
-      headers: {
-        'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
-        'accept': 'application/json'
-      });
+    Uri.parse(
+        "https://api.foursquare.com/v3/autocomplete?query=${search}&types=geo"),
+    headers: {
+      'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
+      'accept': 'application/json'
+    },
+  );
 }
 
 Future<http.Response> getData(city) {
@@ -72,4 +73,30 @@ Future<LatLng> getCurrentLocationData() async {
   var longitude = position.longitude;
   return LatLng(lattitude, longitude);
   // print(position);
+}
+
+Future<List<NearByServices>> getAtmLocations(LatLng location) async {
+  var rawData = await http.get(
+    Uri.parse(
+      'https://api.foursquare.com/v3/places/search?ll=${location.latitude},${location.longitude}&categories=11044',
+    ),
+    headers: {
+      'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
+      'accept': 'application/json'
+    },
+  );
+  Map json = jsonDecode(rawData.body);
+  List<NearByServices> details =
+      json['results'].map((e) => NearByServices.fromJson(e));
+  return details;
+}
+
+class NearByServices {
+  LatLng? place;
+  String? name;
+  NearByServices.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    var temp = json['geocodes']['main'];
+    place = LatLng(temp['latitude'], temp['longitude']);
+  }
 }

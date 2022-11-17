@@ -21,12 +21,31 @@ class MapStart extends StatefulWidget {
     Key? key,
     required this.getTripModel,
   }) : super(key: key);
+
   @override
   State<MapStart> createState() => _MapStartState();
   final GetTripModel getTripModel;
 }
 
 class _MapStartState extends State<MapStart> {
+  bool atm = false;
+  bool fuelStations = false;
+  bool restaurants = false;
+  bool lodging = false;
+
+  late BitmapDescriptor currentLocationIcon;
+  late BitmapDescriptor atmLocationIcon;
+  late BitmapDescriptor fuelStationLocationIcon;
+  late BitmapDescriptor restaurantLocationIcon;
+  late BitmapDescriptor lodgeLocationIcon;
+
+  setCustomIcons() async {
+    await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      'assets/images/google_maps/fab.png',
+    ).then((value) => currentLocationIcon = value);
+  }
+
   late GoogleMapController myController;
   bool pauseButton = false;
   Marker? origin;
@@ -141,6 +160,7 @@ class _MapStartState extends State<MapStart> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setCustomIcons();
     _setMarker(LatLng(widget.getTripModel.source!.latitude,
         widget.getTripModel.source!.longitude));
     _setMarker(LatLng(widget.getTripModel.destination!.latitude,
@@ -329,10 +349,10 @@ class _MapStartState extends State<MapStart> {
             //   if (destination != null) destination!
             // },
             onTap: (point) {
-              setState(() {
-                polygonLatLngs.add(point);
-                _setPolygon();
-              });
+              // setState(() {
+              //   polygonLatLngs.add(point);
+              //   _setPolygon();
+              // });
             },
           ),
           Align(
@@ -389,6 +409,21 @@ class _MapStartState extends State<MapStart> {
                     myController.animateCamera(
                       CameraUpdate.newLatLngZoom(value, 15),
                     );
+                    bool checkIfExist = _markers.contains((element) =>
+                        element.markerId == const MarkerId('currentLocation'));
+                    if (checkIfExist) {
+                      _markers.removeWhere((element) =>
+                          element.markerId ==
+                          const MarkerId('currentLocation'));
+                    }
+                    _markers.add(
+                      Marker(
+                        markerId: const MarkerId('currentLocation'),
+                        position: value,
+                        icon: currentLocationIcon,
+                      ),
+                    );
+                    setState(() {});
                   });
                   // myController.animateCamera(
                   //   CameraUpdate.newCameraPosition(_initialCameraPosition),
