@@ -40,4 +40,10 @@ class ServiceRecordModel {
     dealerRating = json['ratings'];
     invoice = json['invoice'];
   }
+
+  ServiceRecordModel.fetchSortedServices(Map json){
+    serviceType = json['serviceType'];
+    slotDate = json['slotDate'];
+    vehicleNumber = json['vehicleNumber'];
+  }
 }

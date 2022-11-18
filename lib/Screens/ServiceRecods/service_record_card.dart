@@ -22,7 +22,7 @@ class ServiceRecordsCard extends StatefulWidget {
 }
 
 class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
-  List<InvoiceModel> invoiceList = [];
+  List<ProductInvoiceModel> invoiceList = [];
   IconData? _selectedIcon;
   //double _userRating = widget.serviceRecordList.dealerRating!.toDouble();
   bool _isVertical = false;
@@ -36,7 +36,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
 
             for (var e in value) {
               print("value of e is ${e}");
-              invoiceList.add(InvoiceModel.fromJson(e));
+              invoiceList.add(ProductInvoiceModel.fromJson(e),);
             }
             //   serviceRecordList.add(value);
             print("invoice list is${invoiceList}");
@@ -46,7 +46,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
               MaterialPageRoute(
                 builder: (context) => ServiceDetails(
                     serviceRecordList: widget.serviceRecordList,
-                    invoiceList: invoiceList),
+                    invoiceModelList: invoiceList),
               ),
             );
           },
@@ -82,7 +82,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       decoration: kServiceCardTagDecoration,
                       height: 25,
                       width: 60,
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "New",
                           style: TextStyle(color: Colors.white),
@@ -93,11 +93,11 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       decoration: kBookingDetailsTagDecoration,
                       height: 25,
                       width: 60,
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         "Past",
                         style: TextStyle(color: Colors.white),
-                      )),
+                      ),),
                     ),
             ),
             Container(
@@ -113,7 +113,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       children: [
                         Text(
                             DateFormat('dd').format(DateTime.parse(
-                                widget.serviceRecordList.slotDate!)),
+                                widget.serviceRecordList.slotDate!),),
                             style: DateTime.parse(
                                         widget.serviceRecordList.slotDate!)
                                     .isAfter(
@@ -121,7 +121,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                             )
                                 ? kServiceRecordCardDateTextStyle
                                 : kServicePastRecordCardDateTextStyle),
-                        SizedBox(
+                        const SizedBox(
                           width: 3,
                         ),
                         Column(
@@ -129,7 +129,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                           children: [
                             Text(
                               DateFormat('MMM').format(DateTime.parse(
-                                  widget.serviceRecordList.slotDate!)),
+                                  widget.serviceRecordList.slotDate!),),
                               style: DateTime.parse(
                                           widget.serviceRecordList.slotDate!)
                                       .isAfter(
@@ -148,7 +148,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                               )
                                   ? kServiceRecordCardYearTextStyle
                                   : kServicePastRecordCardYearTextStyle,
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -179,7 +179,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                             _isVertical ? Axis.vertical : Axis.horizontal,
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

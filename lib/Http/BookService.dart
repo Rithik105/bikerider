@@ -30,6 +30,7 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json',
         });
+    print(jsonDecode(response.body));
     return PrefillModel.fromJson(jsonDecode(response.body));
 
     //return PrefillModel(mobile: '', prefill: []);
@@ -143,6 +144,20 @@ class BookServiceHttp {
           "serviceId": id,
         }));
     print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+
+  static Future getSortedServiceList() async {
+    String? token = await UserSecureStorage.getToken();
+    final http.Response response = await http.get(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/service/getAllService"),
+        headers: {
+          'Authorization': 'BEARER $token',
+          'Content-Type': 'application/json',
+        },
+      );
+    // print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 }

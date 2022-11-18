@@ -1,8 +1,15 @@
+import 'package:bikerider/Models/bike_list_model.dart';
+import 'package:bikerider/Screens/BookService/BookServiceScreen.dart';
 import 'package:bikerider/Screens/ServiceRecods/add_bike.dart';
 import 'package:bikerider/Screens/ServiceRecods/service_records.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../Http/AddBikeHttp.dart';
+import '../Models/service_records_model.dart';
+import 'manual/manual_model.dart';
+import 'manual/select_vehicle.dart';
+import 'manual/servieces.dart';
 
 import '../Http/BookService.dart';
 import 'BookService/BookServiceScreen.dart';
@@ -41,41 +48,97 @@ class _GarageCardState extends State<GarageCard> {
 
   List<BikeDetailsModel> bikes = [];
   PersonalDetailsModel? personalDetails;
+  List<BikeListModel> bikeList = [];
+  List<ServiceRecordModel> sortedAllList = [];
+
+  // List<ServiceRecordModel> sortedFutureList = [];
+  List<String> sortedDates = [];
+  String diffInDays = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    BookServiceHttp.getSortedServiceList().then((value) {
+      print(value);
+      // sortedList.clear();
+      for (var e in value["serviceDetails"]) {
+        //sortedList.clear();
+        sortedAllList.add(ServiceRecordModel.fetchSortedServices(e));
+      }
+      sortFunction(sortedAllList);
+    },);
+    super.initState();
+  }
+
+  sortFunction(List<ServiceRecordModel> sortedList) {
+    sortedDates = [];
+    for (var e in sortedList) {
+      // print(e.slotDate);
+      if (DateTime.parse(e.slotDate!).isAfter(
+        DateTime.now(),
+      )) {
+        sortedDates.add(e.slotDate!);
+        sortedDates.sort();
+        //  sortedDates.sort((a, b){ //sorting in descending order
+        //     return DateTime.parse(a).compareTo(DateTime.parse(b));
+        // });
+      }
+    }
+    print("ascending");
+    print(sortedDates);
+    if (sortedDates.isEmpty) {
+      print('No seervice booked');
+      diffInDays = "No service booked";
+    }
+    DateTime temp = DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 18);
+    print('EndDate: $temp');
+    Duration diff = DateTime.parse(sortedDates[0]).difference(temp);
+    print(diff.inHours);
+    // print(diff);
+    if (diff.inHours < 6) {
+      print('Today is the');
+      diffInDays = "Today is your";
+    } else if (diff.inDays == 0) {
+      print('Tommorow');
+      diffInDays = "Tommorow is your";
+    } else {
+      print(diff.inDays);
+      diffInDays = diff.inDays.toString() + " Days";
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                "15 Days",
-                style: GoogleFonts.roboto(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xffE08B4D)),
-              ),
-              Text(
-                "Next Service due",
-                style: GoogleFonts.roboto(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xffE08B4D)),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Image.asset(
-                    "assets/images/homePage/garage_images/indicator.png",
-                  ),
+ Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // diffInDays!>0?  Text("service"):
+                Text(
+                  "$diffInDays",
+                  style: GoogleFonts.roboto(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xffE08B4D)),
+                ),
+                // diffInDays!>0? Text("service"):
+                Text(
+                  "Next Service due",
+                  style: GoogleFonts.roboto(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xffE08B4D)),
                 ),
               ),
+ Row(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],
@@ -273,6 +336,7 @@ class _GarageCardState extends State<GarageCard> {
                               showToast(msg: 'No bike found');
                               enableAll(2);
                             }
+
                           },
                         );
                       },
@@ -382,6 +446,7 @@ class _GarageCardState extends State<GarageCard> {
                       ),
                     ),
                   ),
+
                   const Divider(
                     color: Color(0xff979797),
                     thickness: 0.5,
@@ -428,6 +493,7 @@ class _GarageCardState extends State<GarageCard> {
                     thickness: 0.5,
                     height: 0,
                   ),
+
                 ],
               )
             ],
