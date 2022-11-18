@@ -151,14 +151,16 @@ class BikeCubit extends Cubit<BikeState> {
     print("emitted");
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
-      UserHttp.getProfile(value!).then((value2) {
-        UserSecureStorage.getDetails(key: "mobile").then((value3) {
-          if (value2["userDetails"]["mobile"] == value3) {
-            emit(BikeMineProfileFetchedState(
-              profile: value2,
-            ));
-          } else
-            emit(BikeOtherProfileFetchedState(profile: value2));
+      UserSecureStorage.getDetails(key: "mobile").then((value2) {
+        UserHttp.getProfile(value!, value2!).then((value2) {
+          UserSecureStorage.getDetails(key: "mobile").then((value3) {
+            if (value2["userDetails"]["mobile"] == value3) {
+              emit(BikeMineProfileFetchedState(
+                profile: value2,
+              ));
+            } else
+              emit(BikeOtherProfileFetchedState(profile: value2));
+          });
         });
       });
     });

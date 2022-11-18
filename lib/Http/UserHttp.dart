@@ -219,14 +219,14 @@ class UserHttp {
     print(jsonDecode(response.body));
   }
 
-  static Future<Map> getProfile(String token) async {
-    final http.Response response = await http.get(
-      Uri.parse("https://riding-application.herokuapp.com/api/v1/getProfile"),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'BEARER $token'
-      },
-    );
+  static Future<Map> getProfile(String token, String number) async {
+    final http.Response response = await http.post(
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/getProfile"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"mobile": number}));
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }

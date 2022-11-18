@@ -31,9 +31,7 @@ class AddBikeHttp {
         'Authorization': 'BEARER $token'
       },
       body: json.encode(
-        {"_id": id,
-        "ratings":rating,
-        "dealerPhoneNumber":dealerPhone},
+        {"_id": id, "ratings": rating, "dealerPhoneNumber": dealerPhone},
       ),
     );
     print(jsonDecode(response.body));
@@ -41,16 +39,14 @@ class AddBikeHttp {
   }
 
   static Future addBikeList() async {
-
     final http.Response response = await http.get(
-      Uri.parse("https://riding-application.herokuapp.com/api/v1/company/getVehicle"),
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/company/getVehicle"),
       headers: {
         'Content-Type': 'application/json',
-
       },
-
     );
-
+    print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 }

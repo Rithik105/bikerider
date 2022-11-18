@@ -14,9 +14,10 @@ class ServiceRecordsCard extends StatefulWidget {
   ServiceRecordsCard({
     Key? key,
     required this.serviceRecordList,
+    required this.callBack,
     // required this.serviceRecordList,
   }) : super(key: key);
-
+  Function() callBack;
   @override
   State<ServiceRecordsCard> createState() => _ServiceRecordsCardState();
 }
@@ -36,7 +37,9 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
 
             for (var e in value) {
               print("value of e is ${e}");
-              invoiceList.add(ProductInvoiceModel.fromJson(e),);
+              invoiceList.add(
+                ProductInvoiceModel.fromJson(e),
+              );
             }
             //   serviceRecordList.add(value);
             print("invoice list is${invoiceList}");
@@ -46,6 +49,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
               MaterialPageRoute(
                 builder: (context) => ServiceDetails(
                     serviceRecordList: widget.serviceRecordList,
+                    callBack: widget.callBack,
                     invoiceModelList: invoiceList),
               ),
             );
@@ -94,10 +98,11 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       height: 25,
                       width: 60,
                       child: const Center(
-                          child: Text(
-                        "Past",
-                        style: TextStyle(color: Colors.white),
-                      ),),
+                        child: Text(
+                          "Past",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
             ),
             Container(
@@ -112,8 +117,10 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                            DateFormat('dd').format(DateTime.parse(
-                                widget.serviceRecordList.slotDate!),),
+                            DateFormat('dd').format(
+                              DateTime.parse(
+                                  widget.serviceRecordList.slotDate!),
+                            ),
                             style: DateTime.parse(
                                         widget.serviceRecordList.slotDate!)
                                     .isAfter(
@@ -128,8 +135,10 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              DateFormat('MMM').format(DateTime.parse(
-                                  widget.serviceRecordList.slotDate!),),
+                              DateFormat('MMM').format(
+                                DateTime.parse(
+                                    widget.serviceRecordList.slotDate!),
+                              ),
                               style: DateTime.parse(
                                           widget.serviceRecordList.slotDate!)
                                       .isAfter(
