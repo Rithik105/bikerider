@@ -22,7 +22,7 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class _InvoiceScreenState extends State<InvoiceScreen> {
-  PdfInvoiceServices pdf = PdfInvoiceServices();
+  PdfInvoiceServices? pdf;
 
   Future<void> savePDF(String filename, Uint8List byteList) async {
     var filepath = '/storage/emulated/0/Download/invoice.pdf';
@@ -30,7 +30,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     await file.writeAsBytes(byteList);
     return;
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.productInvoiceList);
+    pdf=PdfInvoiceServices(itemList: widget.productInvoiceList);
+  }
   @override
   Widget build(BuildContext context) {
     print(widget.productInvoiceList[0].itemList);
@@ -44,10 +50,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               width: 30,
               child: GestureDetector(
                 onTap: () async {
-                  final data = await pdf.createFinalInvoice(
-                      widget.productInvoiceList.cast<ProductInvoiceModel>());
+                  final data = await pdf?.createFinalInvoice();
                   print('Got Data');
-                  savePDF("sai", data);
+                  savePDF("sai", data!);
                   showToast(msg: "Pdf downloaded successfully");
                   Navigator.push(
                     context,
