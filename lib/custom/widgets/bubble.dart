@@ -5,11 +5,11 @@ class MessageBubble extends StatelessWidget {
   MessageBubble(
       {required this.isMe,
       required this.messageText,
-      required this.senderName});
+      required this.senderName,
+      required this.image});
   String messageText;
-  String senderName;
+  String senderName, image;
   bool isMe;
-  String profileUrl = "https://cdn-icons-png.flaticon.com/512/1226/1226082.png";
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +28,7 @@ class MessageBubble extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 25,
                   backgroundColor: Color(0x44ffaa10),
-                  foregroundImage: NetworkImage(profileUrl),
+                  foregroundImage: NetworkImage(image),
                   // backgroundImage: NetworkImage(profileUrl),
                 ),
               ),

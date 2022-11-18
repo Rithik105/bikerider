@@ -1,5 +1,6 @@
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -351,8 +352,9 @@ class _MapStartState extends State<MapStart> {
                                 builder: (context) {
                                   return ChatScreen(
                                     token: value,
-                                    chatList: value2,
+                                    chatList: value2["chatDetails"],
                                     number: value1["mobile"],
+                                    groupName: value2["tripName"],
                                     groupId: widget.getTripModel.id!,
                                   );
                                 },
@@ -420,6 +422,11 @@ class _MapStartState extends State<MapStart> {
             decoration: kLargeMapButtonDecoration,
             child: GestureDetector(
               onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GalleryPreviewScreen(),
+                    ));
                 Provider.of<MapProvider>(context, listen: false).toggleIcon();
               },
               child: Center(

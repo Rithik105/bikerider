@@ -14,13 +14,14 @@ import '../../Models/milestone.dart';
 import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
-  String startDate, id, tripName;
+  String startDate, id, tripName, url;
   Function ontap;
   CustomCard(
       {required this.startDate,
       required this.tripName,
       required this.ontap,
-      required this.id});
+      required this.id,
+      required this.url});
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -35,7 +36,7 @@ class _CustomCardState extends State<CustomCard> {
       decoration: BoxDecoration(
         image: DecorationImage(
             image: NetworkImage(
-              "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80",
+              widget.url,
             ),
             fit: BoxFit.fill),
         borderRadius: BorderRadius.circular(4),

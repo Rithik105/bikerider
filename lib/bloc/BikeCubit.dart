@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Http/photoHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Models/timeLineModel.dart';
 import 'package:bikerider/Screens/milestone_card.dart';
@@ -17,6 +18,10 @@ class BikeTimerState extends BikeState {
   int time;
   BikeTimerState(this.time);
 }
+
+class BikeGalleryFetchingState extends BikeState {}
+
+class BikeGalleryFetchedState extends BikeState {}
 
 class BikeFetchingState extends BikeState {}
 
@@ -162,6 +167,15 @@ class BikeCubit extends Cubit<BikeState> {
               emit(BikeOtherProfileFetchedState(profile: value2));
           });
         });
+      });
+    });
+  }
+
+  void initialGetGallery(String groupId) {
+    emit(BikeGalleryFetchingState());
+    UserSecureStorage.getToken().then((value) {
+      PhotosHttp.getGallery(groupId, value!).then((value) {
+        emit(BikeGalleryFetchedState());
       });
     });
   }

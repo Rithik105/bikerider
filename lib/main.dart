@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => OwnBike()),
           ChangeNotifierProvider(create: (context) => UserData())
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Routes.onGenerateRoute,
           initialRoute: "/Splash",

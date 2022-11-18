@@ -287,3 +287,42 @@ class UserImageHttp {
     return request;
   }
 }
+
+class UserChatImageHttp {
+  static Future submitSubscription(
+      {required File file,
+      required String token,
+      required String groupId}) async {
+    var request = await registerSubscription(token);
+    request.files.add(
+      http.MultipartFile(
+          'image', file.readAsBytes().asStream(), file.lengthSync(),
+          filename: basename(file.path)),
+    );
+    request.fields.addAll({"id": groupId});
+    print(request.files.first.filename.toString());
+    var res = request.send().then((value) {
+      print("this is executed");
+      value.stream.transform(utf8.decoder).listen((value) {
+        print(value);
+      });
+      print("hi");
+    });
+  }
+
+  static Future<http.MultipartRequest> registerSubscription(
+      String token) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/chat/uploadChatImage"),
+    );
+    Map<String, String> headers = {
+      "Content-type":
+          "multipart/form-data; boundary=<calculated when request is sent>",
+      "Authorization": "BEARER $token",
+    };
+    request.headers.addAll(headers);
+    return request;
+  }
+}

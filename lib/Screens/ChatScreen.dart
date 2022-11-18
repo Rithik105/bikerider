@@ -1,18 +1,21 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../Http/UserHttp.dart';
 import '../bloc/BikeCubit.dart';
 import '../custom/widgets/bubble.dart';
 
 class ChatScreen extends StatefulWidget {
-  String groupId, number, token;
+  String groupId, number, token, groupName;
 
   List chatList;
   ChatScreen(
@@ -20,7 +23,8 @@ class ChatScreen extends StatefulWidget {
       required this.chatList,
       required this.number,
       required this.groupId,
-      required this.token})
+      required this.token,
+      required this.groupName})
       : super(key: key);
 
   @override
@@ -34,6 +38,8 @@ class _ChatScreenState extends State<ChatScreen> {
   FocusNode focus = FocusNode();
   Timer? timer1;
 
+  File? storeImage;
+
   @override
   void initState() {
     print(widget.chatList);
@@ -42,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
     timer1 = Timer.periodic(Duration(seconds: 1), (timer) {
       print(widget.groupId);
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
-        widget.chatList = value;
+        widget.chatList = value["chatDetails"];
         setState(() {});
       });
     });
@@ -55,13 +61,31 @@ class _ChatScreenState extends State<ChatScreen> {
     timer1!.cancel();
   }
 
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: source, preferredCameraDevice: CameraDevice.front);
+      if (image == null)
+        return;
+      else {
+        final tempImage = File(image.path);
+
+        this.storeImage = tempImage;
+        return tempImage;
+      }
+    } on PlatformException catch (e) {
+      print("failed to pick image : $e");
+    }
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
-            "Reunion Manali",
+            widget.groupName,
             style:
                 GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w600),
           ),
@@ -135,11 +159,13 @@ class _ChatScreenState extends State<ChatScreen> {
                           print(widget.number);
                           return MessageBubble(
                               isMe: true,
+                              image: widget.chatList[index]["senderImage"],
                               messageText: widget.chatList[index]["chat"],
                               senderName: widget.chatList[index]["senderName"]);
                         } else {
                           return MessageBubble(
                               isMe: false,
+                              image: widget.chatList[index]["senderImage"],
                               messageText: widget.chatList[index]["chat"],
                               senderName: widget.chatList[index]["senderName"]);
                         }
@@ -214,7 +240,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                   leading: const Icon(Icons.photo),
                                   title: const Text('Photo'),
                                   onTap: () {
-                                    Navigator.pop(context);
+                                    pickImage(ImageSource.gallery)
+                                        .then((storeImage) {
+                                      print(storeImage.toString());
+                                      if (storeImage == null) {
+                                        print("null");
+                                      } else {
+                                        UserSecureStorage.getToken()
+                                            .then((value) {
+                                          print(value);
+                                          UserChatImageHttp.submitSubscription(
+                                              token: value!,
+                                              file: storeImage,
+                                              groupId: widget.groupId);
+                                        });
+                                      }
+                                    });
                                   },
                                 ),
                                 ListTile(

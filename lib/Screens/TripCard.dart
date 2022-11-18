@@ -95,6 +95,7 @@ class TripCard extends StatelessWidget {
                             id: state.getTripModel[index].id!,
                             tripName: state.getTripModel[index].tripName!,
                             startDate: state.getTripModel[index].startDate!,
+                            url: state.getTripModel[index].url!,
                             ontap: () {},
                           ),
                         );

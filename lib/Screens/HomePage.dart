@@ -10,6 +10,7 @@ import '../bloc/BikeCubit.dart';
 import 'GarageCard.dart';
 import 'Intermediate/activityInter.dart';
 import 'Intermediate/profileinter.dart';
+import 'Intermediate/tripcardinter.dart';
 import 'MyProfileScreen.dart';
 import 'ServiceRecods/add_bike.dart';
 import 'TripCard.dart';
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int bottomIndex = 0;
   int previousIndex = 0;
   final _pageOptions = [
-    TripCard(),
+    TripCardInter(),
     GarageCard(),
     ActivityInter(),
     ProfileInter()

@@ -88,6 +88,7 @@ class ActivityCard extends StatelessWidget {
                           //                 state.getTripModel[index]))));
                         },
                         child: CustomCard(
+                          url: state.getTripModel[index].url!,
                           id: state.getTripModel[index].id!,
                           tripName: state.getTripModel[index].tripName!,
                           startDate: state.getTripModel[index].startDate!,

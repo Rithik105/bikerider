@@ -19,20 +19,21 @@ class GetTripModel {
   List<MilestoneModal> milestones = [];
   List<String> recommendations = [];
   Tuple? distance;
-  GetTripModel(
-      {required this.destination,
-      required this.url,
-      required this.endDate,
-      required this.id,
-      required this.mobile,
-      required this.startDate,
-      required this.startTime,
-      required this.tripName,
-      required this.source});
+  GetTripModel({
+    required this.destination,
+    required this.url,
+    required this.endDate,
+    required this.id,
+    required this.mobile,
+    required this.startDate,
+    required this.startTime,
+    required this.tripName,
+    required this.source,
+  });
   GetTripModel.fromJson(Map json) {
     id = json['_id'];
     mobile = json['mobile'];
-    url = json['url'];
+    url = json['tripImage'];
     source = LocationDetails.fromJson(json['source'][0]);
     destination = LocationDetails.fromJson(json['destination'][0]);
     tripName = json['tripName'];
