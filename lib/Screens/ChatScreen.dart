@@ -258,12 +258,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   GestureDetector(
                     onTap: () {
                       if (_messageController.text != "") {
+                        String text = _messageController.text;
+                        _messageController.clear();
                         UserSecureStorage.getToken().then((value) {
-                          UserHttp.sendChat(widget.groupId, widget.token,
-                                  _messageController.text)
+                          UserHttp.sendChat(widget.groupId, widget.token, text)
                               .then((value) {
                             print(value);
-                            _messageController.clear();
                           });
                         });
 

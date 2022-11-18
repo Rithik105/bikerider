@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "package:http/http.dart" as http;
 
 import '../Models/autocomplete.dart';
@@ -59,7 +60,7 @@ Future<http.Response> getData(city) {
   return result;
 }
 
-Future<void> getCurrentLocationData() async {
+Future<LatLng> getCurrentLocationData() async {
   LocationPermission permission = await Geolocator.checkPermission();
   if (permission != LocationPermission.whileInUse) {
     LocationPermission permission = await Geolocator.requestPermission();
@@ -69,5 +70,6 @@ Future<void> getCurrentLocationData() async {
       desiredAccuracy: LocationAccuracy.low);
   var lattitude = position.latitude;
   var longitude = position.longitude;
+  return LatLng(lattitude, longitude);
   // print(position);
 }

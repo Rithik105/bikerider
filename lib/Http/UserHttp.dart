@@ -193,6 +193,61 @@ class UserHttp {
         body: jsonEncode({'text': item}));
     return jsonDecode(response.body);
   }
+
+  static Future<List> getToolKit(String item) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/tool/viewToolKit"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'text': item}));
+    return jsonDecode(response.body);
+  }
+
+  static Future accLike(String id, bool like) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/product/addLike"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({"_id": id, "likes": like}));
+    print(id);
+    print(jsonDecode(response.body));
+  }
+
+  static Future<Map> getProfile(String token) async {
+    final http.Response response = await http.get(
+      Uri.parse("https://riding-application.herokuapp.com/api/v1/getProfile"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    );
+    print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+
+  static Future<TimeLineModel> getTimeline() async {
+    final token = await UserSecureStorage.getToken();
+    // print('Token  ' + token.toString());
+    final response = await http.get(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+      headers: {'Authorization': 'BEARER $token'},
+    );
+
+    print("${jsonDecode(response.body)}");
+    print(
+      'T  ' +
+          TimeLineModel.fromJson(jsonDecode(response.body))
+              .tripList
+              .length
+              .toString(),
+    );
+    return TimeLineModel.fromJson(jsonDecode(response.body));
+  }
 }
 
 class UserImageHttp {
@@ -229,23 +284,4 @@ class UserImageHttp {
     request.headers.addAll(headers);
     return request;
   }
-}
-
-Future<TimeLineModel> getTimeline() async {
-  final token = await UserSecureStorage.getToken();
-  // print('Token  ' + token.toString());
-  final response = await http.get(
-    Uri.parse("https://riding-application.herokuapp.com/api/v1/trip/timeline"),
-    headers: {'Authorization': 'BEARER $token'},
-  );
-
-  print("${jsonDecode(response.body)}");
-  print(
-    'T  ' +
-        TimeLineModel.fromJson(jsonDecode(response.body))
-            .tripList
-            .length
-            .toString(),
-  );
-  return TimeLineModel.fromJson(jsonDecode(response.body));
 }
