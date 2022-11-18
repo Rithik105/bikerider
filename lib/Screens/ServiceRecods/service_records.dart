@@ -66,10 +66,10 @@ class _ServiceRecordsState extends State<ServiceRecords> {
             children: [
               textFieldDropdown
                   ? DropdownButtonFormField(
-                      icon: Image.asset("assets/drop_down.png", width: 10),
+                      icon: Image.asset("assets/images/book_service/drop_down.png", width: 10),
                       decoration: InputDecoration(
                         focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey)),
+                            borderSide: BorderSide(color: Colors.grey),),
                         labelText: 'Select vehicle',
                         labelStyle: GoogleFonts.roboto(
                             color: const Color(0xff9F9F9F), fontSize: 18),
@@ -167,7 +167,7 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                     serviceRecordList: e,
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

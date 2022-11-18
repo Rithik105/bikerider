@@ -192,6 +192,8 @@ class _DealerDetailsState extends State<DealerDetails> {
                                           ConfirmBookingDetails(dealerPhone: widget.dealerDetailsList.dealerPhoneNumber!,),
                                     ),
                                   );
+                                  BookServiceModel.slotDate=DateTime(BookServiceModel.slotDate!.year,BookServiceModel.slotDate!.month,BookServiceModel.slotDate!.day,pickedTime.hour,pickedTime.minute);
+                                  print('Formated booking date: ${BookServiceModel.slotDate}');
                                 }
                               } else {}
                             }),

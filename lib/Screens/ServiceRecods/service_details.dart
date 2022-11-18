@@ -1,26 +1,26 @@
 import 'dart:async';
 
-import 'package:bikerider/Http/AddBikeHttp.dart';
-import 'package:bikerider/Models/service_records_model.dart';
-import 'package:bikerider/Models/workstation_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/Material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../../Models/invoice_model.dart';
+import '../../Http/AddBikeHttp.dart';
+import '../../Models/service_records_model.dart';
 import '../../custom/constants.dart';
+import 'invoice_details.dart';
 
 class ServiceDetails extends StatefulWidget {
   ServiceDetails(
       {Key? key,
       required,
       required this.serviceRecordList,
-      required this.invoiceList})
+      required this.invoiceModelList})
       : super(key: key);
+
   final ServiceRecordModel serviceRecordList;
-  List<InvoiceModel> invoiceList;
+  final List<ProductInvoiceModel> invoiceModelList;
+
   @override
   State<ServiceDetails> createState() => _ServiceDetailsState();
 }
@@ -54,12 +54,19 @@ class _ServiceDetailsState extends State<ServiceDetails> {
               height: 40,
               width: 40,
               child: GestureDetector(
-                  onTap: () {
-                    // TODO:Navigate to invoice screen
-                  },
-                  child: Image.asset(
-                      "assets/images/book_service/invoice_logo.png")),
-            )
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          InvoiceScreen(productInvoiceList:widget.invoiceModelList,),
+                    ),
+                  );
+                },
+                child:
+                    Image.asset("assets/images/book_service/invoice_logo.png"),
+              ),
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -70,7 +77,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                 height: MediaQuery.of(context).size.height * 0.85,
                 margin: EdgeInsets.only(left: 20, right: 20, top: 30),
                 decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderRadius: BorderRadius.all(Radius.circular(8),),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -82,7 +89,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                         blurRadius: 6,
                         spreadRadius: 1,
                       ),
-                    ]),
+                    ],),
                 child: Stack(
                   children: [
                     Container(
@@ -99,13 +106,13 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                   children: [
                                     Text(
                                       DateFormat('dd').format(DateTime.parse(
-                                          widget.serviceRecordList.slotDate!)),
+                                          widget.serviceRecordList.slotDate!),),
                                       style: GoogleFonts.roboto(
                                           color: Color(0xffED7F2C),
                                           fontSize: 45,
                                           fontWeight: FontWeight.w900),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     Column(
@@ -116,7 +123,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                           DateFormat('MMM').format(
                                               DateTime.parse(widget
                                                   .serviceRecordList
-                                                  .slotDate!)),
+                                                  .slotDate!),),
                                           style: GoogleFonts.roboto(
                                               color: Color(0xffED7F2C),
                                               fontSize: 22,
@@ -126,7 +133,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                           DateFormat('yyyy').format(
                                               DateTime.parse(widget
                                                   .serviceRecordList
-                                                  .slotDate!)),
+                                                  .slotDate!),),
                                           style: GoogleFonts.roboto(
                                             fontSize: 18,
                                             color: Color(0xffED7F2C),
@@ -145,7 +152,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                     Text(
                                       widget.serviceRecordList.serviceType!,
                                       style: GoogleFonts.roboto(
-                                          color: Color(0x99000000)),
+                                          color: Color(0x99000000),),
                                     ),
                                     RatingBarIndicator(
                                       rating: _rating == -1
@@ -153,7 +160,9 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                               .serviceRecordList.dealerRating!
                                               .toDouble()
                                           : _rating,
-                                      itemBuilder: (context, index) => Icon(
+
+                                      itemBuilder: (context, index) => const Icon(
+
                                         Icons.star,
                                         color: Color(0xffF3DA3B),
                                       ),
@@ -161,13 +170,13 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       itemSize: 23.0,
                                       unratedColor: Color(0xffd3d3d3),
                                       direction: Axis.horizontal,
-                                    )
+                                    ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           ...widget.serviceRecordList
@@ -176,7 +185,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                               .toList()
                               .map((e) => Column(
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 25,
                                       ),
                                       Row(
@@ -190,8 +199,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                                 style: GoogleFonts.roboto(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w900,
-                                                    color: Color(0x99000000)),
-                                              )),
+                                                    color: Color(0x99000000),),
+                                              ),),
                                           Text(':'),
                                           Container(
                                             width: 150,
@@ -199,15 +208,15 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                             child: Text(e.value,
                                                 style: GoogleFonts.roboto(
                                                     fontSize: 15,
-                                                    color: Color(0x99000000))),
+                                                    color: Color(0x99000000),),),
                                           ),
                                         ],
                                       ),
-                                      Divider(
+                                      const Divider(
                                         thickness: 1,
                                       ),
                                     ],
-                                  )),
+                                  ),),
                         ],
                       ),
                     ),
@@ -221,26 +230,30 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                     decoration: kServiceCardTagDecoration,
                                     height: 25,
                                     width: 65,
-                                    child: Center(
+
+                                    child: const Center(
                                         child: Text(
                                       "New",
                                       style: TextStyle(color: Colors.white),
-                                    )),
+                                    ),),
+
                                   )
                                 : Container(
                                     decoration: kBookingDetailsTagDecoration,
                                     height: 25,
                                     width: 65,
-                                    child: Center(
+
+                                    child: const Center(
                                         child: Text(
                                       "Past",
                                       style: TextStyle(color: Colors.white),
-                                    )),
-                                  ))
+                                    ),),
+                                  ),),
+
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Text(
@@ -248,19 +261,19 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                 style:
                     GoogleFonts.roboto(color: Color(0x99000000), fontSize: 16),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text("Rs 4000/-",
+              Text("Rs ${widget.invoiceModelList[0].total}/-",
                   style: GoogleFonts.roboto(
                       color: Color(0xffED7F2C),
                       fontSize: 35,
-                      fontWeight: FontWeight.w400)),
-              SizedBox(
+                      fontWeight: FontWeight.w400),),
+              const SizedBox(
                 height: 20,
               ),
               Text("Rate the Service"),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               RatingBar.builder(
@@ -276,6 +289,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) async {
+                  print(widget.invoiceModelList[0].itemList[0].itemName);
                   store = rating;
                   await AddBikeHttp.addReview(widget.serviceRecordList.id!,
                           rating, widget.serviceRecordList.dealerPhone!)
@@ -288,11 +302,11 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                 },
                 updateOnDrag: true,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
             ],
           ),
-        ));
+        ),);
   }
 }
