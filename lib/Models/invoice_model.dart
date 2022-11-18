@@ -1,18 +1,18 @@
-class InvoiceModel {
+class ProductInvoiceModel {
   String? invoiceId;
   String? serviceId;
   String? invoiceNumber;
-  String? invoiceDate;
+ DateTime? invoiceDate;
   bool? paid;
   int? total;
   List<ItemDetails> itemList = [];
-  InvoiceModel.fromJson(Map json) {
+  ProductInvoiceModel.fromJson(Map json) {
     invoiceId = json['invoiceId'];
     invoiceNumber = json['invoiceNumber'];
-    invoiceDate = json['invoiceDate'];
+    invoiceDate = DateTime.parse(json['invoiceDate']);
     paid = json['paid'];
     total = json['total'];
-
+    serviceId=json["serviceId"];
     json['items'].forEach((e) => itemList.add(ItemDetails.fromJson(e)));
   }
 }

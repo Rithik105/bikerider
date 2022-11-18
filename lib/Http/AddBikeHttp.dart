@@ -39,4 +39,18 @@ class AddBikeHttp {
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
+
+  static Future addBikeList() async {
+
+    final http.Response response = await http.get(
+      Uri.parse("https://riding-application.herokuapp.com/api/v1/company/getVehicle"),
+      headers: {
+        'Content-Type': 'application/json',
+
+      },
+
+    );
+
+    return jsonDecode(response.body);
+  }
 }
