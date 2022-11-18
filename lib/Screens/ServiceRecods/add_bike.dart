@@ -77,10 +77,10 @@ class _AddBikeState extends State<AddBike> {
                 Row(
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 120,
                       child: Text(
                         "Vehicle Type",
-                        style: kGeneralTextStyle,
+                        style: kBikeGeneralTextStyle,
                       ),
                     ),
                     const Text(':'),
@@ -88,7 +88,7 @@ class _AddBikeState extends State<AddBike> {
                       width: 8,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width - 175,
+                      width: MediaQuery.of(context).size.width - 200,
                       child: DropdownButtonFormField(
                         isExpanded: true,
                         icon: Image.asset(
@@ -143,16 +143,16 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        width: 100,
+                        width: 120,
                         child: Text(
                           "Engine",
-                          style: kGeneralTextStyle,
+                          style: kBikeGeneralTextStyle,
                         )),
                     Text(':'),
                     const SizedBox(
@@ -180,16 +180,16 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 120,
                       child: Text(
                         "Frame No",
-                        style: kGeneralTextStyle,
+                        style: kBikeGeneralTextStyle,
                       ),
                     ),
                     Text(':'),
@@ -218,16 +218,16 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        width: 100,
+                        width: 120,
                         child: Text(
                           "Battery make",
-                          style: kGeneralTextStyle,
+                          style: kBikeGeneralTextStyle,
                         )),
                     Text(':'),
                     const SizedBox(
@@ -255,16 +255,16 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 120,
                       child: Text(
                         "Reg No.",
-                        style: kGeneralTextStyle,
+                        style: kBikeGeneralTextStyle,
                       ),
                     ),
                     Text(':'),
@@ -293,16 +293,16 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        width: 100,
+                        width: 120,
                         child: Text(
                           "Model",
-                          style: kGeneralTextStyle,
+                          style: kBikeGeneralTextStyle,
                         )),
                     Text(':'),
                     const SizedBox(
@@ -331,16 +331,16 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        width: 100,
+                        width: 120,
                         child: Text(
                           "Dealer code",
-                          style: kGeneralTextStyle,
+                          style: kBikeGeneralTextStyle,
                         )),
                     Text(':'),
                     const SizedBox(
@@ -368,15 +368,15 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   children: [
                     SizedBox(
-                        width: 100,
+                        width: 120,
                         child: Text(
-                          "vehicle number",
-                          style: kGeneralTextStyle,
+                          "Vehicle Number",
+                          style: kBikeGeneralTextStyle,
                         )),
                     Text(':'),
                     const SizedBox(
@@ -404,15 +404,15 @@ class _AddBikeState extends State<AddBike> {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Row(
                   children: [
                     SizedBox(
-                        width: 100,
+                        width: 120,
                         child: Text(
                           "Color",
-                          style: kGeneralTextStyle,
+                          style: kBikeGeneralTextStyle,
                         )),
                     Text(':'),
                     const SizedBox(

@@ -160,4 +160,37 @@ class BookServiceHttp {
     // print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
+
+  static Future updatePhoneNumber(String phone) async{
+    String? token = await UserSecureStorage.getToken();
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/service/updateMobileNumber"),
+        headers: {
+          'Authorization': 'BEARER $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          "mobile": phone,
+          "token":token,
+        }));
+    print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+  static Future getAccessOnChangedPhoneNumber(String phone) async{
+
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/getAccessOnChange"),
+        headers: {
+
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          "mobile": phone,
+        }));
+     //await UserSecureStorage.setToken(jsonDecode(response.body[0]));
+    print(jsonDecode(response.body[0]));
+    return jsonDecode(response.body);
+  }
 }

@@ -105,7 +105,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.73,
+              height: MediaQuery.of(context).size.height * 0.80,
               margin: EdgeInsets.only(left: 20, right: 20, top: 30),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(

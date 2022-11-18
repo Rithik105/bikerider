@@ -143,3 +143,5 @@ BoxDecoration kBookingDetailsTagDecoration = BoxDecoration(
 TextStyle kGeneralTextStyle = GoogleFonts.roboto(
     fontSize: 14, fontWeight: FontWeight.w900, color: Color(0x99000000));
 
+TextStyle kBikeGeneralTextStyle = GoogleFonts.roboto(
+    fontSize: 18, fontWeight: FontWeight.w900, color: Color(0x99000000));
