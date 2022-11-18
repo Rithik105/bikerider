@@ -78,7 +78,7 @@ Future<LatLng> getCurrentLocationData() async {
 Future<List<NearByServices>> getAtmLocations(LatLng location) async {
   var rawData = await http.get(
     Uri.parse(
-      'https://api.foursquare.com/v3/places/search?ll=${location.latitude},${location.longitude}&categories=11044',
+      'https://api.foursquare.com/v3/places/search?ll=${location.latitude},${location.longitude}&categories=11044&sort=DISTANCE',
     ),
     headers: {
       'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
@@ -86,17 +86,124 @@ Future<List<NearByServices>> getAtmLocations(LatLng location) async {
     },
   );
   Map json = jsonDecode(rawData.body);
-  List<NearByServices> details =
-      json['results'].map((e) => NearByServices.fromJson(e));
+  List<NearByServices> details = [];
+  // json['results'].map((e) => NearByServices.fromJson(e)).toList();
+  for (int i = 0; i < json['results'].length; i++) {
+    details.add(NearByServices.fromJson(json['results'][i]));
+  }
+  return details;
+}
+
+Future<List<NearByServices>> getRestaurantLocations(LatLng location) async {
+  var rawData = await http.get(
+    Uri.parse(
+      'https://api.foursquare.com/v3/places/search?ll=${location.latitude},${location.longitude}&categories=13000&sort=DISTANCE',
+    ),
+    headers: {
+      'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
+      'accept': 'application/json'
+    },
+  );
+  Map json = jsonDecode(rawData.body);
+  List<NearByServices> details = [];
+  // json['results'].map((e) => NearByServices.fromJson(e)).toList();
+  for (int i = 0; i < json['results'].length; i++) {
+    details.add(NearByServices.fromJson(json['results'][i]));
+  }
+  return details;
+}
+
+Future<List<NearByServices>> getFuelStationsLocations(LatLng location) async {
+  var rawData = await http.get(
+    Uri.parse(
+      'https://api.foursquare.com/v3/places/search?ll=${location.latitude},${location.longitude}&categories=19007&sort=DISTANCE',
+    ),
+    headers: {
+      'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
+      'accept': 'application/json'
+    },
+  );
+  Map json = jsonDecode(rawData.body);
+  List<NearByServices> details = [];
+  // json['results'].map((e) => NearByServices.fromJson(e)).toList();
+  for (int i = 0; i < json['results'].length; i++) {
+    details.add(NearByServices.fromJson(json['results'][i]));
+  }
+  return details;
+}
+
+Future<List<NearByServices>> getLodgeLocations(LatLng location) async {
+  var rawData = await http.get(
+    Uri.parse(
+      'https://api.foursquare.com/v3/places/search?ll=${location.latitude},${location.longitude}&categories=19016&sort=DISTANCE',
+    ),
+    headers: {
+      'Authorization': 'fsq3T7SKdVMGwe+IQk+L/A1uyXQgk+w0ILNgWBUGmoeyld8=',
+      'accept': 'application/json'
+    },
+  );
+  Map json = jsonDecode(rawData.body);
+  List<NearByServices> details = [];
+  // json['results'].map((e) => NearByServices.fromJson(e)).toList();
+  for (int i = 0; i < json['results'].length; i++) {
+    details.add(NearByServices.fromJson(json['results'][i]));
+  }
   return details;
 }
 
 class NearByServices {
   LatLng? place;
   String? name;
+  String? address;
+  String? distance;
+
   NearByServices.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    distance = '${(json['distance'] / 1000).toStringAsFixed(2)}km' ?? '';
     var temp = json['geocodes']['main'];
     place = LatLng(temp['latitude'], temp['longitude']);
+    address = json['location']['formatted_address'] ?? '';
   }
+}
+
+sendStatus(LatLng point, String token, String id) async {
+  print(token);
+  print(id);
+  print(point);
+  print(token);
+  final http.Response response = await http.post(
+    Uri.parse(
+        "https://riding-application.herokuapp.com/api/v1/trip/currentLocation"),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'BEARER $token'
+    },
+    body: json.encode({
+      '_id': id,
+      'currentLocation': [
+        {'latitude': point.latitude, 'longitude': point.longitude}
+      ],
+    }),
+  );
+  print('.....');
+
+  print(jsonDecode(response.body));
+  return jsonDecode(response.body);
+}
+
+endTrip(String token, String id) async {
+  print(id);
+  print(token);
+  final http.Response response = await http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/trip/updateTripStatus"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+      body: json.encode({"_id": id}));
+  print('.....');
+
+  print(jsonDecode(response.body));
+  return jsonDecode(response.body);
 }

@@ -76,6 +76,7 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                 ),
               ),
+              Column(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],

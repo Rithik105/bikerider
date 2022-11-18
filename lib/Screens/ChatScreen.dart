@@ -1,14 +1,12 @@
 import 'dart:async';
 
-import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Http/UserHttp.dart';
-import '../bloc/BikeCubit.dart';
 import '../custom/widgets/bubble.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -29,7 +27,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   ScrollController chatListController = ScrollController();
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
   Timer? timer1;
@@ -39,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
     print(widget.chatList);
     // TODO: implement initState
     super.initState();
-    timer1 = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer1 = Timer.periodic(const Duration(milliseconds: 1250), (timer) {
       print(widget.groupId);
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
         widget.chatList = value;
@@ -106,8 +104,11 @@ class _ChatScreenState extends State<ChatScreen> {
             color: Colors.white, padding: const EdgeInsets.all(0),
           ),
         ],
-        leading: const BackButton(
+        leading: BackButton(
           color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: WillPopScope(
