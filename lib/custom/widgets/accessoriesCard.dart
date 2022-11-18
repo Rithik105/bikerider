@@ -1,3 +1,4 @@
+import 'package:bikerider/Http/UserHttp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,10 +11,13 @@ class AccessoriesCard extends StatefulWidget {
       required this.productImage,
       required this.productName,
       required this.productPrice,
-      required this.createdDate})
+      required this.createdDate,
+      required this.productLike,
+      required this.productId})
       : super(key: key);
-  String productName, category, productImage;
+  String productName, category, productImage, productId;
   int productPrice;
+  bool productLike;
   DateTime createdDate;
 
   @override
@@ -21,7 +25,6 @@ class AccessoriesCard extends StatefulWidget {
 }
 
 class _AccessoriesCardState extends State<AccessoriesCard> {
-  bool _isSlelected = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,12 +45,12 @@ class _AccessoriesCardState extends State<AccessoriesCard> {
               ),
               IconButton(
                 onPressed: () {
-                  setState(() {
-                    _isSlelected = !_isSlelected;
-                  });
+                  widget.productLike = !widget.productLike;
+                  UserHttp.accLike(widget.productId, widget.productLike);
+                  setState(() {});
                 },
                 icon: Icon(
-                  _isSlelected
+                  widget.productLike
                       ? Icons.thumb_up_alt
                       : Icons.thumb_up_alt_outlined,
                   color: Color(0x99664700),

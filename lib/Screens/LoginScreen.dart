@@ -155,7 +155,16 @@ class LoginScreen extends StatelessWidget {
                               if (value["message"] == "Signin Success !!") {
                                 print(value["token"]);
                                 UserSecureStorage.setToken(value["token"])
-                                    .then((value) {
+                                    .then((value1) {
+                                  UserSecureStorage.setDetails(
+                                      key: "name", value: value["userName"]);
+                                  UserSecureStorage.setDetails(
+                                      key: "mobile", value: value["mobile"]);
+                                  UserSecureStorage.setDetails(
+                                      key: "email", value: value["email"]);
+                                  UserSecureStorage.setDetails(
+                                      key: "profileImage",
+                                      value: value["profileImage"]);
                                   Navigator.pushNamed(context, "/HomeScreen");
                                   showToast(msg: "Login Successful");
                                 });

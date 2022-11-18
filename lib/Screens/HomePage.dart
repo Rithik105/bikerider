@@ -8,7 +8,9 @@ import '../Http/AddBikeHttp.dart';
 import '../Models/bike_list_model.dart';
 import '../bloc/BikeCubit.dart';
 import 'GarageCard.dart';
-import 'ProfileScreen.dart';
+import 'Intermediate/activityInter.dart';
+import 'Intermediate/profileinter.dart';
+import 'MyProfileScreen.dart';
 import 'ServiceRecods/add_bike.dart';
 import 'TripCard.dart';
 
@@ -26,8 +28,8 @@ List<BikeListModel> bikeList=[];
   int previousIndex = 0;
   final _pageOptions = [
     TripCard(),
-
     GarageCard(),
+
     BlocProvider(
       create: (context) => BikeCubit()..getTripDetails(),
       child: ActivityCard(),
@@ -36,7 +38,6 @@ List<BikeListModel> bikeList=[];
     ProfileHeader(),
     // ActivityPage(),
     // MyProfilePage(),
-
   ];
 
   @override

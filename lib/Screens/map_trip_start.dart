@@ -1,11 +1,20 @@
+import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../Http/UserHttp.dart';
+import '../Utility/Secure_storeage.dart';
 import '../custom/constants.dart';
+import 'ChatScreen.dart';
 import 'maps_provider.dart';
+
+//  Lodge:      19016
+//  Restaurant: 13000
+//  ATM:        11044
+//  Petrol:     19007
 
 class MapStart extends StatefulWidget {
   MapStart({
@@ -330,6 +339,31 @@ class _MapStartState extends State<MapStart> {
             alignment: Alignment.bottomRight,
             child: GestureDetector(
               onTap: () {
+                UserSecureStorage.getToken().then(
+                  (value) {
+                    UserHttp.getNumber(value!).then(
+                      (value1) {
+                        UserHttp.getChats(widget.getTripModel.id!, value).then(
+                          (value2) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ChatScreen(
+                                    token: value,
+                                    chatList: value2,
+                                    number: value1["mobile"],
+                                    groupId: widget.getTripModel.id!,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
                 // getDirections(widget.getTripModel.source!,
                 //         widget.getTripModel.destination!)
                 //     .then(
@@ -350,6 +384,12 @@ class _MapStartState extends State<MapStart> {
               width: 40,
               child: FloatingActionButton(
                 onPressed: () {
+                  print('Current Location');
+                  getCurrentLocationData().then((value) {
+                    myController.animateCamera(
+                      CameraUpdate.newLatLngZoom(value, 15),
+                    );
+                  });
                   // myController.animateCamera(
                   //   CameraUpdate.newCameraPosition(_initialCameraPosition),
                   // );

@@ -18,7 +18,7 @@ class ActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BikeCubit, BikeState>(builder: (context, state) {
-      if (state is BikeTripFetchState) {
+      if (state is BikeFetchingState) {
         return Center(
           child: const CircularProgressIndicator(
             color: Colors.orange,

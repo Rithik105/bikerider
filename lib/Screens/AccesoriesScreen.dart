@@ -38,7 +38,7 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
         children: [
           BlocBuilder<BikeCubit, BikeState>(
             builder: (context, state) {
-              if (state is BikeAccFetchingState)
+              if (state is BikeFetchingState)
                 return Center(
                     child: CircularProgressIndicator(
                   color: Colors.orange,
@@ -60,6 +60,8 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                       color: Color(0XFFFFEDC2),
                       padding: EdgeInsets.all(1),
                       child: AccessoriesCard(
+                        productId: state.accessories[index]["_id"],
+                        productLike: state.accessories[index]["likes"],
                         productImage: state.accessories[index]["productImage"],
                         productName: state.accessories[index]["productName"],
                         productPrice: state.accessories[index]["productPrice"],

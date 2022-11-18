@@ -24,6 +24,7 @@ class _SelectBikeState extends State<SelectBike> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
+            widget.bikeCategories = [];
             Navigator.pop(context);
           },
         ),

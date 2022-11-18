@@ -256,33 +256,6 @@ class _TripSummaryGoState extends State<TripSummaryGo> {
                             ),
                           ),
                         );
-                        // UserSecureStorage.getToken().then(
-                        //   (value) {
-                        //     UserHttp.getNumber(value!).then(
-                        //       (value1) {
-                        //         UserHttp.getChats(
-                        //                 widget.getTripModel.id!, value)
-                        //             .then(
-                        //           (value2) {
-                        //             Navigator.push(
-                        //               context,
-                        //               MaterialPageRoute(
-                        //                 builder: (context) {
-                        //                   return ChatScreen(
-                        //                     token: value,
-                        //                     chatList: value2,
-                        //                     number: value1["mobile"],
-                        //                     groupId: widget.getTripModel.id!,
-                        //                   );
-                        //                 },
-                        //               ),
-                        //             );
-                        //           },
-                        //         );
-                        //       },
-                        //     );
-                        //   },
-                        // );
                       },
                       child: Padding(
                         padding: EdgeInsets.only(top: checkEmpty()),

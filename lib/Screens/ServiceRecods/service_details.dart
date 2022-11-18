@@ -160,7 +160,9 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                               .serviceRecordList.dealerRating!
                                               .toDouble()
                                           : _rating,
+
                                       itemBuilder: (context, index) => const Icon(
+
                                         Icons.star,
                                         color: Color(0xffF3DA3B),
                                       ),
@@ -228,22 +230,26 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                     decoration: kServiceCardTagDecoration,
                                     height: 25,
                                     width: 65,
+
                                     child: const Center(
                                         child: Text(
                                       "New",
                                       style: TextStyle(color: Colors.white),
                                     ),),
+
                                   )
                                 : Container(
                                     decoration: kBookingDetailsTagDecoration,
                                     height: 25,
                                     width: 65,
+
                                     child: const Center(
                                         child: Text(
                                       "Past",
                                       style: TextStyle(color: Colors.white),
                                     ),),
                                   ),),
+
                   ],
                 ),
               ),

@@ -1,4 +1,4 @@
-import 'package:bikerider/Screens/manual/servieces.dart';
+import 'package:bikerider/Screens/manual/services.dart';
 import 'package:flutter/material.dart';
 import 'manual_model.dart';
 import 'package:google_fonts/google_fonts.dart';
