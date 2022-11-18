@@ -38,7 +38,7 @@ class BikeNonEmptyTripState extends BikeState {
 }
 
 class BikeAccFetchedState extends BikeState {
-  List accessories;
+  Map accessories;
   BikeAccFetchedState(this.accessories);
 }
 
@@ -53,11 +53,6 @@ class BikeTimerExpiredState extends BikeState {}
 
 class BikeCubit extends Cubit<BikeState> {
   BikeCubit() : super(BikeInitialState());
-  @override
-  Future<void> close() {
-    // TODO: implement close
-    return super.close();
-  }
 
   @override
   void firtsLogin() {
@@ -125,15 +120,17 @@ class BikeCubit extends Cubit<BikeState> {
   }
 
   void getAcc(String item) {
-    List accessories;
+    Map accessories;
     emit(BikeFetchingState());
-    UserHttp.getAccessories(item).then((value) {
-      if (value.isEmpty) {
-        emit(BikeAccEmptyFetchedState());
-      } else {
-        accessories = value;
-        emit(BikeAccFetchedState(accessories));
-      }
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.getAccessories(item, value!).then((value2) {
+        if (value2.isEmpty) {
+          emit(BikeAccEmptyFetchedState());
+        } else {
+          accessories = value2;
+          emit(BikeAccFetchedState(accessories));
+        }
+      });
     });
   }
 

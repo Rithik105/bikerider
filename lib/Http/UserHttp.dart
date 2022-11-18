@@ -183,12 +183,13 @@ class UserHttp {
     return jsonDecode(response.body);
   }
 
-  static Future<List> getAccessories(String item) async {
+  static Future<Map> getAccessories(String item, String token) async {
     final http.Response response = await http.post(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'text': item}));
     return jsonDecode(response.body);
@@ -205,12 +206,13 @@ class UserHttp {
     return jsonDecode(response.body);
   }
 
-  static Future accLike(String id, bool like) async {
+  static Future accLike(String id, bool like, String token) async {
     final http.Response response = await http.post(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/product/addLike"),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
         },
         body: jsonEncode({"_id": id, "likes": like}));
     print(id);

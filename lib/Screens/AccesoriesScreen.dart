@@ -14,6 +14,16 @@ class AccessoriesScreen extends StatefulWidget {
 }
 
 class _AccessoriesScreenState extends State<AccessoriesScreen> {
+  bool checkLike(Map liked, String id) {
+    for (int i = 0; i < liked["liked"].length; i++) {
+      if (liked["liked"][i]["_id"] == id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,19 +65,24 @@ class _AccessoriesScreenState extends State<AccessoriesScreen> {
                       mainAxisExtent: 230,
                       crossAxisCount: 2,
                     ),
-                    itemCount: state.accessories.length,
+                    itemCount: state.accessories["products"].length,
                     itemBuilder: (context, index) => Container(
                       color: Color(0XFFFFEDC2),
                       padding: EdgeInsets.all(1),
                       child: AccessoriesCard(
-                        productId: state.accessories[index]["_id"],
-                        productLike: state.accessories[index]["likes"],
-                        productImage: state.accessories[index]["productImage"],
-                        productName: state.accessories[index]["productName"],
-                        productPrice: state.accessories[index]["productPrice"],
-                        createdDate:
-                            DateTime.parse(state.accessories[index]["created"]),
-                        category: state.accessories[index]["category"],
+                        productId: state.accessories["products"][index]["_id"],
+                        productLike: checkLike(state.accessories,
+                            state.accessories["products"][index]["_id"]),
+                        productImage: state.accessories["products"][index]
+                            ["productImage"],
+                        productName: state.accessories["products"][index]
+                            ["productName"],
+                        productPrice: state.accessories["products"][index]
+                            ["productPrice"],
+                        createdDate: DateTime.parse(
+                            state.accessories["products"][index]["created"]),
+                        category: state.accessories["products"][index]
+                            ["category"],
                       ),
                     ),
                   ),

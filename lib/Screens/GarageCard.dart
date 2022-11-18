@@ -41,6 +41,7 @@ class _GarageCardState extends State<GarageCard> {
 
   List<BikeDetailsModel> bikes = [];
   PersonalDetailsModel? personalDetails;
+  double top = 0.025;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -76,6 +77,7 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                 ),
               ),
+              Column(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],
@@ -111,8 +113,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: (MediaQuery.of(context).size.height * top),
+                              bottom: MediaQuery.of(context).size.height * top),
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,8 +197,10 @@ class _GarageCardState extends State<GarageCard> {
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 20, top: 15, bottom: 15),
+                        padding: EdgeInsets.only(
+                            left: 20,
+                            top: MediaQuery.of(context).size.height * top,
+                            bottom: MediaQuery.of(context).size.height * top),
                         width: double.infinity,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -237,7 +243,7 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                   const Divider(
                     color: Color(0xff979797),
-                    thickness: 0.5,
+                    thickness: 0.8,
                     height: 0,
                   ),
                   IgnorePointer(
@@ -253,6 +259,7 @@ class _GarageCardState extends State<GarageCard> {
                                   PersonalDetailsModel.fromJson(value[0]);
                               GetBikeDetails.getBikes().then(
                                 (value) {
+                                  bikes = [];
                                   value.forEach(
                                     (e) {
                                       bikes.add(BikeDetailsModel.fromJson(e));
@@ -278,8 +285,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,8 +347,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
                           // color: Colors.red,
                           width: double.infinity,
                           child: Row(
@@ -397,8 +408,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
                           width: double.infinity,
                           child: Row(
                             children: [
