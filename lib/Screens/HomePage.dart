@@ -23,19 +23,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchCardController = TextEditingController();
-List<BikeListModel> bikeList=[];
+  List<BikeListModel> bikeList = [];
   int bottomIndex = 0;
   int previousIndex = 0;
   final _pageOptions = [
     TripCard(),
     GarageCard(),
+    ActivityInter(),
+    ProfileInter()
 
-    BlocProvider(
-      create: (context) => BikeCubit()..getTripDetails(),
-      child: ActivityCard(),
-    ),
     // ActivitiesCard(),
-    ProfileHeader(),
     // ActivityPage(),
     // MyProfilePage(),
   ];
@@ -55,7 +52,6 @@ List<BikeListModel> bikeList=[];
           onTap: (index) {
             setState(() {
               // previousIndex = index == 4 ? previousIndex : bottomIndex;
-
 
               if (index != 4) {
                 bottomIndex = index;
@@ -162,9 +158,9 @@ List<BikeListModel> bikeList=[];
               title: const Text('Enter a bike'),
               onTap: () {
                 AddBikeHttp.addBikeList().then(
-                      (value) {
-                        bikeList.clear();
-                    for(var e in value){
+                  (value) {
+                    bikeList.clear();
+                    for (var e in value) {
                       bikeList.add(BikeListModel.fromJson(e));
                     }
 

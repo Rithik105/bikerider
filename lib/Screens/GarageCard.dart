@@ -9,7 +9,6 @@ import '../Http/AddBikeHttp.dart';
 import '../Models/service_records_model.dart';
 import 'manual/manual_model.dart';
 import 'manual/select_vehicle.dart';
-import 'manual/servieces.dart';
 
 import '../Http/BookService.dart';
 import 'BookService/BookServiceScreen.dart';
@@ -54,19 +53,22 @@ class _GarageCardState extends State<GarageCard> {
   // List<ServiceRecordModel> sortedFutureList = [];
   List<String> sortedDates = [];
   String diffInDays = "";
+  double top = 0.03;
 
   @override
   void initState() {
     // TODO: implement initState
-    BookServiceHttp.getSortedServiceList().then((value) {
-      print(value);
-      // sortedList.clear();
-      for (var e in value["serviceDetails"]) {
-        //sortedList.clear();
-        sortedAllList.add(ServiceRecordModel.fetchSortedServices(e));
-      }
-      sortFunction(sortedAllList);
-    },);
+    BookServiceHttp.getSortedServiceList().then(
+      (value) {
+        print(value);
+        // sortedList.clear();
+        for (var e in value["serviceDetails"]) {
+          //sortedList.clear();
+          sortedAllList.add(ServiceRecordModel.fetchSortedServices(e));
+        }
+        sortFunction(sortedAllList);
+      },
+    );
     super.initState();
   }
 
@@ -112,33 +114,44 @@ class _GarageCardState extends State<GarageCard> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
- Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // diffInDays!>0?  Text("service"):
-                Text(
-                  "$diffInDays",
-                  style: GoogleFonts.roboto(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xffE08B4D)),
-                ),
-                // diffInDays!>0? Text("service"):
-                Text(
-                  "Next Service due",
-                  style: GoogleFonts.roboto(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xffE08B4D)),
+        child: Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // diffInDays!>0?  Text("service"):
+              Text(
+                "$diffInDays",
+                style: GoogleFonts.roboto(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xffE08B4D)),
+              ),
+              // diffInDays!>0? Text("service"):
+              Text(
+                "Next Service due",
+                style: GoogleFonts.roboto(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xffE08B4D)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Image.asset(
+                    "assets/images/homePage/garage_images/indicator.png",
+                  ),
                 ),
               ),
- Row(
+
+              Column(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],
@@ -153,11 +166,22 @@ class _GarageCardState extends State<GarageCard> {
                             if (value.prefill.isEmpty) {
                               showToast(msg: 'Please add Bike details');
                               print('Please add your bike');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddBike(),
-                                ),
+                              AddBikeHttp.addBikeList().then(
+                                (value) {
+                                  bikeList.clear();
+                                  for (var e in value) {
+                                    bikeList.add(BikeListModel.fromJson(e));
+                                  }
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddBike(
+                                        bikeList: bikeList,
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             } else {
                               enableAll(0);
@@ -174,8 +198,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: (MediaQuery.of(context).size.height * top),
+                              bottom: MediaQuery.of(context).size.height * top),
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -232,14 +258,26 @@ class _GarageCardState extends State<GarageCard> {
                         BookServiceHttp.prefillDetails().then(
                           (value) {
                             enableAll(1);
-
+                            print(value.prefill);
                             if (value.prefill.isEmpty) {
+                              showToast(msg: "Add a bike");
                               print('Please add your bike');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddBike(),
-                                ),
+                              AddBikeHttp.addBikeList().then(
+                                (value) {
+                                  bikeList.clear();
+                                  for (var e in value) {
+                                    bikeList.add(BikeListModel.fromJson(e));
+                                  }
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddBike(
+                                        bikeList: bikeList,
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             } else {
                               enableAll(1);
@@ -256,8 +294,10 @@ class _GarageCardState extends State<GarageCard> {
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 20, top: 15, bottom: 15),
+                        padding: EdgeInsets.only(
+                            left: 20,
+                            top: MediaQuery.of(context).size.height * top,
+                            bottom: MediaQuery.of(context).size.height * top),
                         width: double.infinity,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -300,7 +340,7 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                   const Divider(
                     color: Color(0xff979797),
-                    thickness: 0.5,
+                    thickness: 0.8,
                     height: 0,
                   ),
                   IgnorePointer(
@@ -316,6 +356,7 @@ class _GarageCardState extends State<GarageCard> {
                                   PersonalDetailsModel.fromJson(value[0]);
                               GetBikeDetails.getBikes().then(
                                 (value) {
+                                  bikes = [];
                                   value.forEach(
                                     (e) {
                                       bikes.add(BikeDetailsModel.fromJson(e));
@@ -336,14 +377,15 @@ class _GarageCardState extends State<GarageCard> {
                               showToast(msg: 'No bike found');
                               enableAll(2);
                             }
-
                           },
                         );
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -402,8 +444,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
                           // color: Colors.red,
                           width: double.infinity,
                           child: Row(
@@ -446,7 +490,6 @@ class _GarageCardState extends State<GarageCard> {
                       ),
                     ),
                   ),
-
                   const Divider(
                     color: Color(0xff979797),
                     thickness: 0.5,
@@ -462,8 +505,10 @@ class _GarageCardState extends State<GarageCard> {
                       },
                       child: Ink(
                         child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 15, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
                           width: double.infinity,
                           child: Row(
                             children: [
@@ -493,13 +538,12 @@ class _GarageCardState extends State<GarageCard> {
                     thickness: 0.5,
                     height: 0,
                   ),
-
                 ],
               )
             ],
           ),
-        ),
+        ]),
       ),
-    );
+    ));
   }
 }

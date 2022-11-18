@@ -72,381 +72,377 @@ class _AddBikeState extends State<AddBike> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        child: Text(
-                          "Vehicle Type",
-                          style: kGeneralTextStyle,
-                        ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        "Vehicle Type",
+                        style: kGeneralTextStyle,
                       ),
-                      const Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 210,
-                        child: DropdownButtonFormField(
-
-                          isExpanded: true,
-                          icon: Image.asset(
-                              "assets/images/book_service/drop_down.png",
-                              width: 10),
-                          decoration: const InputDecoration(
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
+                    ),
+                    const Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 175,
+                      child: DropdownButtonFormField(
+                        isExpanded: true,
+                        icon: Image.asset(
+                            "assets/images/book_service/drop_down.png",
+                            width: 10),
+                        decoration: const InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
                           ),
-                          items: [
-                            ...widget.bikeList
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e.bikeType,
-                                    child: Text(
-                                      e.bikeType,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black87,
-                                      ),
+                        ),
+                        items: [
+                          ...widget.bikeList
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e.bikeType,
+                                  child: Text(
+                                    e.bikeType,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black87,
                                     ),
                                   ),
-                                )
-                                .toList(),
-                          ],
-                          onChanged: (value) {
-                            print(widget.bikeList.length);
-                            print(value.runtimeType);
-                            vehicleType = value!;
-                            // setState(() {
-                            //   vehicleType = value!;
-                            //   print("service type ${vehicleType}");
-                            // });
-                            //vehicleType = value as String;
-                          },
-                          itemHeight: 60,
-                        ),
-                        // TextField(
-                        //   controller: vehicleTypeController,
-                        //   textInputAction: TextInputAction.next,
-                        //   decoration: const InputDecoration(
-                        //     focusedBorder: UnderlineInputBorder(
-                        //       borderSide: BorderSide(
-                        //         color: Color(0xffB4B3B3),
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   // style: kDetailsTextStyle,
-                        // ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Engine",
-                            style: kGeneralTextStyle,
-                          )),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            textInputAction: TextInputAction.next,
-                            controller: engineController,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
                                 ),
-                              ),
-                            ),
-                            //style: kDetailsTextStyle,
-                          ),
-                        ),
+                              )
+                              .toList(),
+                        ],
+                        onChanged: (value) {
+                          print(widget.bikeList.length);
+                          print(value.runtimeType);
+                          vehicleType = value!;
+                          // setState(() {
+                          //   vehicleType = value!;
+                          //   print("service type ${vehicleType}");
+                          // });
+                          //vehicleType = value as String;
+                        },
+                        itemHeight: 60,
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
+                      // TextField(
+                      //   controller: vehicleTypeController,
+                      //   textInputAction: TextInputAction.next,
+                      //   decoration: const InputDecoration(
+                      //     focusedBorder: UnderlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //         color: Color(0xffB4B3B3),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   // style: kDetailsTextStyle,
+                      // ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
                         width: 100,
                         child: Text(
-                          "Frame No",
+                          "Engine",
                           style: kGeneralTextStyle,
-                        ),
-                      ),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            controller: frameController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
+                        )),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          controller: engineController,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
                               ),
                             ),
-                            //  style: kDetailsTextStyle,
                           ),
+                          //style: kDetailsTextStyle,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Battery make",
-                            style: kGeneralTextStyle,
-                          )),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        "Frame No",
+                        style: kGeneralTextStyle,
                       ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            controller: batteryController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
+                    ),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: frameController,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
                               ),
                             ),
-                            // style: kDetailsTextStyle,
                           ),
+                          //  style: kDetailsTextStyle,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
                         width: 100,
                         child: Text(
-                          "Reg No.",
+                          "Battery make",
                           style: kGeneralTextStyle,
-                        ),
-                      ),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            controller: regController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
-                              ),
-                            ),
-                            // style: kDetailsTextStyle,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Model",
-                            style: kGeneralTextStyle,
-                          )),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                            controller: modelController,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
-                              ),
-                            ),
-                            // style: kDetailsTextStyle,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Dealer code",
-                            style: kGeneralTextStyle,
-                          )),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            controller: dealerCodeController,
-                            textInputAction: TextInputAction.next,
-                            //style: kDetailsTextStyle,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
+                        )),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: batteryController,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
                               ),
                             ),
                           ),
+                          // style: kDetailsTextStyle,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: Text(
-                            "vehicle number",
-                            style: kGeneralTextStyle,
-                          )),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        "Reg No.",
+                        style: kGeneralTextStyle,
                       ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            controller: vehicleNoController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
+                    ),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: regController,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
                               ),
                             ),
-                            // style: kDetailsTextStyle,
+                          ),
+                          // style: kDetailsTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        child: Text(
+                          "Model",
+                          style: kGeneralTextStyle,
+                        )),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          controller: modelController,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
+                              ),
+                            ),
+                          ),
+                          // style: kDetailsTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        child: Text(
+                          "Dealer code",
+                          style: kGeneralTextStyle,
+                        )),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: dealerCodeController,
+                          textInputAction: TextInputAction.next,
+                          //style: kDetailsTextStyle,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Color",
-                            style: kGeneralTextStyle,
-                          )),
-                      Text(':'),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            controller: colorController,
-                            textInputAction: TextInputAction.done,
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
-                                ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        child: Text(
+                          "vehicle number",
+                          style: kGeneralTextStyle,
+                        )),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: vehicleNoController,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
                               ),
                             ),
-                            //style: kDetailsTextStyle,
                           ),
+                          // style: kDetailsTextStyle,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        child: Text(
+                          "Color",
+                          style: kGeneralTextStyle,
+                        )),
+                    Text(':'),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: colorController,
+                          textInputAction: TextInputAction.done,
+                          decoration: const InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffB4B3B3),
+                              ),
+                            ),
+                          ),
+                          //style: kDetailsTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
             ),
             SizedBox(
               width: double.infinity,

@@ -1,4 +1,5 @@
 import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,7 +47,10 @@ class _AccessoriesCardState extends State<AccessoriesCard> {
               IconButton(
                 onPressed: () {
                   widget.productLike = !widget.productLike;
-                  UserHttp.accLike(widget.productId, widget.productLike);
+                  UserSecureStorage.getToken().then((value) {
+                    UserHttp.accLike(
+                        widget.productId, widget.productLike, value!);
+                  });
                   setState(() {});
                 },
                 icon: Icon(
@@ -76,10 +80,10 @@ class _AccessoriesCardState extends State<AccessoriesCard> {
           ),
           Text(
             widget.productName,
-            style: GoogleFonts.roboto(color: Color(0xff664700), fontSize: 16),
+            style: GoogleFonts.roboto(color: Color(0xff664700), fontSize: 12),
           ),
           SizedBox(
-            height: 10,
+            height: 0,
           ),
           Text(
             "Rs${widget.productPrice.toDouble().toString()}",

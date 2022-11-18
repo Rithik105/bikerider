@@ -55,35 +55,37 @@ class _TutorialState extends State<Tutorial> {
           },
           controller: _pageController,
           children: [
-            Column(
-              children: [
-                Center(
-                    child: Image.asset(
-                  "assets/images/tutorial/page1.png",
-                  height: 350,
-                )),
-                Text(
-                  "Ride Free",
-                  style: GoogleFonts.roboto(
-                    color: const Color(0XFF585858),
-                    fontSize: 25,
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                      child: Image.asset(
+                    "assets/images/tutorial/page1.png",
+                    height: 350,
+                  )),
+                  Text(
+                    "Ride Free",
+                    style: GoogleFonts.roboto(
+                      color: const Color(0XFF585858),
+                      fontSize: 25,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  "Create a hassle free ride ",
-                  style: GoogleFonts.roboto(
-                      color: const Color(0XFF717171), fontSize: 17),
-                ),
-                Text(
-                  "anytime and anywhere ",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.roboto(
-                      color: const Color(0XFF717171), fontSize: 17),
-                )
-              ],
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    "Create a hassle free ride ",
+                    style: GoogleFonts.roboto(
+                        color: const Color(0XFF717171), fontSize: 17),
+                  ),
+                  Text(
+                    "anytime and anywhere ",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                        color: const Color(0XFF717171), fontSize: 17),
+                  )
+                ],
+              ),
             ),
             Column(
               children: [

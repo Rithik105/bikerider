@@ -242,7 +242,7 @@ class _CreateTripState extends State<CreateTrip> {
                           // validate: validate(startTime),
                         ),
                         const SizedBox(
-                          width: 150,
+                          width: 0,
                         ),
                       ],
                     ),
