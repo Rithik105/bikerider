@@ -1,5 +1,5 @@
 import 'package:bikerider/Screens/manual/select_vehicle.dart';
-import 'package:bikerider/Screens/manual/servieces.dart';
+import 'package:bikerider/Screens/manual/services.dart';
 import 'package:flutter/material.dart';
 import 'manual_model.dart';
 

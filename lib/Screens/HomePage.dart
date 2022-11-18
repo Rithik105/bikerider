@@ -6,7 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../bloc/BikeCubit.dart';
 import 'GarageCard.dart';
-import 'ProfileScreen.dart';
+import 'Intermediate/activityInter.dart';
+import 'Intermediate/profileinter.dart';
+import 'MyProfileScreen.dart';
 import 'ServiceRecods/add_bike.dart';
 import 'TripCard.dart';
 
@@ -24,16 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int previousIndex = 0;
   final _pageOptions = [
     TripCard(),
-
     GarageCard(),
-    BlocProvider(
-      create: (context) => BikeCubit()..getTripDetails(),
-      child: ActivityCard(),
-    ),
-    // ActivitiesCard(),
-    ProfileHeader(),
-    // ActivityPage(),
-    // MyProfilePage(),
+    ActivityInter(),
+    ProfileInter(),
     AddBike()
   ];
 

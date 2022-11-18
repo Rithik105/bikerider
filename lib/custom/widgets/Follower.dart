@@ -4,7 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../Screens/HomePage.dart';
 
 class Followers extends StatelessWidget {
-  const Followers({Key? key}) : super(key: key);
+  Widget rides, following, followers;
+
+  Followers(
+      {Key? key,
+      required this.followers,
+      required this.following,
+      required this.rides})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,7 @@ class Followers extends StatelessWidget {
                 SizedBox(
                   height: 2,
                 ),
-                Text("6", style: kProfileNumberText)
+                rides
               ],
             ),
             Container(
@@ -55,10 +62,11 @@ class Followers extends StatelessWidget {
                 SizedBox(
                   height: 2,
                 ),
-                Text(
-                  "16",
-                  style: kProfileNumberText,
-                )
+                following
+                // Text(
+                //   "16",
+                //   style: kProfileNumberText,
+                // )
               ],
             ),
             Container(
@@ -76,7 +84,8 @@ class Followers extends StatelessWidget {
                 SizedBox(
                   height: 2,
                 ),
-                Text("5", style: kProfileNumberText),
+                followers
+                // Text("5", style: kProfileNumberText),
               ],
             ),
           ],

@@ -121,6 +121,15 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                               Provider.of<UserData>(context, listen: false)
                                   .setUserData(widget.user);
                               UserSecureStorage.setToken(value2["token"]);
+                              UserSecureStorage.setDetails(
+                                  key: "name", value: value["userName"]);
+                              UserSecureStorage.setDetails(
+                                  key: "mobile", value: value["mobile"]);
+                              UserSecureStorage.setDetails(
+                                  key: "email", value: value["email"]);
+                              UserSecureStorage.setDetails(
+                                  key: "profileImage",
+                                  value: value["profileImage"]);
 
                               Navigator.pushNamed(
                                   context, "/ChooseAvatarScreen",

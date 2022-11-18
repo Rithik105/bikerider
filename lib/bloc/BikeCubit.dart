@@ -20,7 +20,15 @@ class BikeTimerState extends BikeState {
 
 class BikeFetchingState extends BikeState {}
 
-class BikeProfileFetchedState extends BikeState {}
+class BikeMineProfileFetchedState extends BikeState {
+  Map profile;
+  BikeMineProfileFetchedState({required this.profile});
+}
+
+class BikeOtherProfileFetchedState extends BikeState {
+  Map profile;
+  BikeOtherProfileFetchedState({required this.profile});
+}
 
 class BikeEmptyTripState extends BikeState {}
 
@@ -142,14 +150,20 @@ class BikeCubit extends Cubit<BikeState> {
     });
   }
 
-  void getProfile(String item) {
-    List profile;
-    TimeLineModel timeLine;
+  void getProfile() {
+    print("emitted");
     emit(BikeFetchingState());
-    UserHttp.getProfile().then((value) async {
-      profile = value;
-      timeLine = await getTimeline();
-      emit(BikeProfileFetchedState());
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.getProfile(value!).then((value2) {
+        UserSecureStorage.getDetails(key: "mobile").then((value3) {
+          if (value2["userDetails"]["mobile"] == value3) {
+            emit(BikeMineProfileFetchedState(
+              profile: value2,
+            ));
+          } else
+            emit(BikeOtherProfileFetchedState(profile: value2));
+        });
+      });
     });
   }
 }
