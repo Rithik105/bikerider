@@ -1,3 +1,5 @@
+// ignore_for_file: iterable_contains_unrelated_type
+
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
@@ -26,10 +28,10 @@ class MapStart extends StatefulWidget {
 }
 
 class _MapStartState extends State<MapStart> {
-  bool atm = false;
-  bool fuelStations = false;
-  bool restaurants = false;
-  bool lodging = false;
+  bool showAtmMarkers = false;
+  bool showFuelStationMarkers = false;
+  bool showRestaurantMarkers = false;
+  bool showLodgingMarkers = false;
 
   late BitmapDescriptor currentLocationIcon;
   late BitmapDescriptor atmLocationIcon;
@@ -79,8 +81,8 @@ class _MapStartState extends State<MapStart> {
   List<LatLng> polygonLatLngs = <LatLng>[];
   int _polygonIdCounter = 1;
   int _polylineIdCounter = 1;
-  static CameraPosition _initialCameraPosition =
-      CameraPosition(target: LatLng(28.67921234833848, 77.16738359902374));
+  final CameraPosition _initialCameraPosition = const CameraPosition(
+      target: LatLng(28.67921234833848, 77.16738359902374));
 
   // static const _initialCameraPosition = CameraPosition(
   //   target: LatLng(widget.getTripMistance!.points[widget.getTripModel.distance!.points.length~/2],widget.getTripModel.distance!.points[widget.getTripModel.distance!.points.length~/2].),
@@ -263,55 +265,63 @@ class _MapStartState extends State<MapStart> {
             FloatingActionButton(
               heroTag: 'atm',
               onPressed: () {
-                getCurrentLocationData().then(
-                  (value) {
-                    myController.animateCamera(
-                      CameraUpdate.newLatLngZoom(value, 15),
-                    );
-                    bool checkIfExist = _markers.contains((element) =>
-                        element.markerId == const MarkerId('currentLocation'));
-                    if (checkIfExist) {
-                      _markers.removeWhere((element) =>
+                if (showAtmMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 15),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
                           element.markerId ==
                           const MarkerId('currentLocation'));
-                    }
-                    _markers.add(
-                      Marker(
-                        markerId: const MarkerId('currentLocation'),
-                        position: value,
-                        icon: currentLocationIcon,
-                      ),
-                    );
-                    setState(() {});
-                    getAtmLocations(value).then((value) {
-                      print('Atm counts: ${value.length}');
-                      _markers.removeWhere((element) =>
-                          element.markerId.toString().startsWith('ATM'));
-                      int atmId = 0;
-                      for (int i = 0; i < value.length; i++) {
-                        _markers.add(
-                          Marker(
-                            position: LatLng(value[i].place!.latitude,
-                                value[i].place!.longitude),
-                            infoWindow: InfoWindow(
-                              title: '${value[i].name!} [${value[i].distance}]',
-                              snippet: value[i].address,
-                            ),
-                            markerId: MarkerId(
-                              'ATM-$atmId',
-                            ),
-                            icon: atmLocationIcon,
-                          ),
-                        );
-                        atmId++;
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
                       }
-                      _markers.forEach((element) {
-                        print(element.infoWindow.title);
-                      });
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
                       setState(() {});
-                    });
-                  },
-                );
+                      getAtmLocations(value).then((value) {
+                        print('Atm counts: ${value.length}');
+                        _markers.removeWhere((element) =>
+                            element.markerId.toString().startsWith('ATM'));
+                        int atmId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'ATM-$atmId',
+                              ),
+                              icon: atmLocationIcon,
+                            ),
+                          );
+                          atmId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) =>
+                      element.markerId.toString().startsWith('ATM'));
+                }
+                showAtmMarkers = !showAtmMarkers;
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -781,21 +791,21 @@ class _MapStartState extends State<MapStart> {
           ).paddingAll(14, 25, 0, 125),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 50,
-        width: double.infinity,
-        decoration: kLargeMapButtonDecoration,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              buttonController = !buttonController;
-            });
-            print(buttonController);
-            UserSecureStorage.getToken().then((value) async {
-              sendStatus(await getCurrentLocationData(), value!,
-                  widget.getTripModel.id!);
-            });
-          },
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          setState(() {
+            buttonController = !buttonController;
+          });
+          print(buttonController);
+          UserSecureStorage.getToken().then((value) async {
+            sendStatus(await getCurrentLocationData(), value!,
+                widget.getTripModel.id!);
+          });
+        },
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          decoration: kLargeMapButtonDecoration,
           child: Center(
             child: buttonController
                 ? Image.asset(

@@ -11,7 +11,8 @@ class UserSecureStorage {
     return await _secureStorage.read(key: 'token');
   }
 
-  static Future setDetails({required String key, required String value}) async {
+  static Future setDetails(
+      {required String key, required String? value}) async {
     await _secureStorage.write(key: key, value: value);
   }
 

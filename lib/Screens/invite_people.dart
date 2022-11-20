@@ -64,40 +64,45 @@ class _InvitePageState extends State<InvitePage> {
         contactsFiltered = _contacts;
       });
     }
+    print(contacts);
   }
 
   @override
   Widget build(BuildContext context) {
     bool isSearching = searchController.text.isNotEmpty;
     return Scaffold(
-        appBar: AppBar(
-          // toolbarHeight: 80,
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back),
-          //   color: Colors.white,
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          leading: BackButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: const Color(0xFFED863A),
-          centerTitle: true,
-          title: Text(
-            'Invite People',
-            style: GoogleFonts.roboto(
-              fontWeight: FontWeight.w600,
-              fontSize: 22.5,
-            ),
+      appBar: AppBar(
+        // toolbarHeight: 80,
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back),
+        //   color: Colors.white,
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
+        leading: BackButton(
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: const Color(0xFFED863A),
+        centerTitle: true,
+        title: Text(
+          'Invite People',
+          style: GoogleFonts.roboto(
+            fontWeight: FontWeight.w600,
+            fontSize: 22.5,
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-          child: Column(children: [
+      ),
+      body: Padding(
+        // padding: const EdgeInsets.only(left: 20, right: 20, top: 20,),
+        padding: const EdgeInsets.all(
+          20,
+        ),
+        child: Column(
+          children: [
             Material(
               elevation: 3.0,
               shadowColor: const Color.fromRGBO(194, 188, 188, 0.5),
@@ -131,126 +136,129 @@ class _InvitePageState extends State<InvitePage> {
             ),
             Expanded(
               child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: isSearching == true
-                      ? contactsFiltered.length
-                      : contacts.length,
-                  itemBuilder: (context, index) {
-                    Contact contact = isSearching == true
-                        ? contactsFiltered[index]
-                        : contacts[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Provider.of<InviteProvider>(context, listen: false).toggleContact(
-                            ContactDetails(
-                          name: contact.displayName.toString(),
-                          phoneNumber: convertToPhoneNumber(contact),
-                        )
-                            // print(contact.displayName);
-                            // // print(contact.avatar.runtimeType);
-                            // Provider.of<InviteProvider>(context, listen: false)
-                            //     .toggleContact(ContactDetails(
-                            //   name: contact.displayName.toString(),
-                            //   initials: contact.initials().toString(),
-                            //   phoneNumber:
-                            //       (contact.phones?.elementAt(0).value).toString(),
-                            // )
-                            // contact.displayName.toString(),
-                            // (contact.phones?.elementAt(0).value).toString(),
-                            // contact.initials().toString(),
-                            );
-                      },
-                      child: ListTile(
-                        title: Text(
-                          contact.displayName.toString(),
-                          textAlign: TextAlign.left,
-                          style: GoogleFonts.roboto(
-                              fontSize: 15,
-                              color: const Color.fromRGBO(0, 0, 0, 0.87)),
-                        ),
-                        //subtitle: Text((contact.phones?.elementAt(0).value).toString()),
-                        leading: ((contact.avatar != null) &&
-                                (contact.avatar!.isNotEmpty))
-                            ? CircleAvatar(
-                                //backgroundColor: Color.fromRGBO(0, 0, 0, 0.38),
-                                backgroundImage: MemoryImage(contact.avatar!),
-                              )
-                            : CircleAvatar(
-                                backgroundColor:
-                                    const Color.fromRGBO(0, 0, 0, 0.38),
-                                child: Text(
-                                  contact.initials(),
-                                  style: GoogleFonts.robotoFlex(
-                                      color: Colors.white),
-                                ),
-                              ),
-                        trailing: GestureDetector(
-                          onTap: () {
-                            // print(contact.displayName);
-                            // Provider.of<InviteProvider>(context, listen: false)
-                            //     .toggleContact(
-                            //   contact.displayName.toString(),
-                            //   (contact.phones?.elementAt(0).value).toString(),
-                            //   contact.initials().toString(),
-                            // );
-                            // print(
-                            //   convertToPhoneNumber(contact),
-                            // );
-                            // print('---------');
-                            // print(contact.phones?.elementAt(0).value);
-                            // print(
-                            //     '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split('-')[1]}');
-                            // print('---------');
-                            Provider.of<InviteProvider>(context, listen: false)
-                                .toggleContact(ContactDetails(
-                              name: contact.displayName.toString(),
-                              phoneNumber: convertToPhoneNumber(contact),
+                shrinkWrap: true,
+                itemCount: isSearching == true
+                    ? contactsFiltered.length
+                    : contacts.length,
+                itemBuilder: (context, index) {
+                  Contact contact = isSearching == true
+                      ? contactsFiltered[index]
+                      : contacts[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Provider.of<InviteProvider>(context, listen: false).toggleContact(
+                          ContactDetails(
+                        name: contact.displayName.toString(),
+                        phoneNumber: convertToPhoneNumber(contact),
+                      )
+                          // print(contact.displayName);
+                          // // print(contact.avatar.runtimeType);
+                          // Provider.of<InviteProvider>(context, listen: false)
+                          //     .toggleContact(ContactDetails(
+                          //   name: contact.displayName.toString(),
+                          //   initials: contact.initials().toString(),
+                          //   phoneNumber:
+                          //       (contact.phones?.elementAt(0).value).toString(),
+                          // )
+                          // contact.displayName.toString(),
+                          // (contact.phones?.elementAt(0).value).toString(),
+                          // contact.initials().toString(),
+                          );
+                    },
+                    child: ListTile(
+                      title: Text(
+                        contact.displayName.toString(),
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.roboto(
+                            fontSize: 15,
+                            color: const Color.fromRGBO(0, 0, 0, 0.87)),
+                      ),
+                      //subtitle: Text((contact.phones?.elementAt(0).value).toString()),
+                      leading: ((contact.avatar != null) &&
+                              (contact.avatar!.isNotEmpty))
+                          ? CircleAvatar(
+                              //backgroundColor: Color.fromRGBO(0, 0, 0, 0.38),
+                              backgroundImage: MemoryImage(contact.avatar!),
                             )
-                                    // Provider.of<InviteProvider>(context, listen: false)
-                                    //     .toggleContact(ContactDetails(
-                                    //   name: contact.displayName.toString(),
-                                    //   initials: contact.initials().toString(),
-                                    //   phoneNumber: (contact.phones?.elementAt(0).value)
-                                    //       .toString(),
-                                    // )
-                                    // contact.displayName.toString(),
-                                    // (contact.phones?.elementAt(0).value).toString(),
-                                    // contact.initials().toString(),
-                                    );
+                          : CircleAvatar(
+                              backgroundColor:
+                                  const Color.fromRGBO(0, 0, 0, 0.38),
+                              child: Text(
+                                contact.initials(),
+                                style:
+                                    GoogleFonts.robotoFlex(color: Colors.white),
+                              ),
+                            ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          // print(contact.displayName);
+                          // Provider.of<InviteProvider>(context, listen: false)
+                          //     .toggleContact(
+                          //   contact.displayName.toString(),
+                          //   (contact.phones?.elementAt(0).value).toString(),
+                          //   contact.initials().toString(),
+                          // );
+                          // print(
+                          //   convertToPhoneNumber(contact),
+                          // );
+                          // print('---------');
+                          // print(contact.phones?.elementAt(0).value);
+                          // print(
+                          //     '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split('-')[1]}');
+                          // print('---------');
+                          Provider.of<InviteProvider>(context, listen: false)
+                              .toggleContact(ContactDetails(
+                            name: contact.displayName.toString(),
+                            phoneNumber: convertToPhoneNumber(contact),
+                          )
+                                  // Provider.of<InviteProvider>(context, listen: false)
+                                  //     .toggleContact(ContactDetails(
+                                  //   name: contact.displayName.toString(),
+                                  //   initials: contact.initials().toString(),
+                                  //   phoneNumber: (contact.phones?.elementAt(0).value)
+                                  //       .toString(),
+                                  // )
+                                  // contact.displayName.toString(),
+                                  // (contact.phones?.elementAt(0).value).toString(),
+                                  // contact.initials().toString(),
+                                  );
+                        },
+                        child: Consumer<InviteProvider>(
+                          builder:
+                              (BuildContext context, value, Widget? child) {
+                            return
+                                // value.isExists(
+                                //       contact.displayName.toString(),
+                                //       (contact.phones?.elementAt(0).value)
+                                //           .toString())
+                                value.isExist(
+                              ContactDetails(
+                                name: contact.displayName.toString(),
+                                phoneNumber:
+                                    // (contact.phones?.elementAt(0).value)
+                                    //     .toString(),
+                                    convertToPhoneNumber(contact),
+                              ),
+                            )
+                                    ? Image.asset(
+                                        "assets/images/contacts/green_check.png",
+                                        width: 30,
+                                      )
+                                    : Image.asset(
+                                        "assets/images/contacts/white_check.png",
+                                        width: 30,
+                                      );
                           },
-                          child: Consumer<InviteProvider>(
-                            builder:
-                                (BuildContext context, value, Widget? child) {
-                              return
-                                  // value.isExists(
-                                  //       contact.displayName.toString(),
-                                  //       (contact.phones?.elementAt(0).value)
-                                  //           .toString())
-                                  value.isExist(
-                                ContactDetails(
-                                  name: contact.displayName.toString(),
-                                  phoneNumber:
-                                      // (contact.phones?.elementAt(0).value)
-                                      //     .toString(),
-                                      convertToPhoneNumber(contact),
-                                ),
-                              )
-                                      ? Image.asset(
-                                          "assets/images/contacts/green_check.png",
-                                          width: 30,
-                                        )
-                                      : Image.asset(
-                                          "assets/images/contacts/white_check.png",
-                                          width: 30,
-                                        );
-                            },
-                          ),
                         ),
                       ),
-                    );
-                  }),
+                    ),
+                  );
+                },
+              ),
             ),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }
