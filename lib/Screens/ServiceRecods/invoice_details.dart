@@ -14,7 +14,8 @@ import 'invoice_constants.dart';
 import 'invoice_service.dart';
 
 class InvoiceScreen extends StatefulWidget {
-  InvoiceScreen({Key? key, required this.productInvoiceList}) : super(key: key);
+  const InvoiceScreen({Key? key, required this.productInvoiceList})
+      : super(key: key);
   final List<ProductInvoiceModel> productInvoiceList;
 
   @override
@@ -52,8 +53,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          GarageCard(),
+                      builder: (context) => GarageCard(),
                     ),
                   );
                 },
@@ -110,7 +110,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       const SizedBox(
                         height: 40,
                       ),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,8 +150,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
-                                            color: Colors.red,
-                                            width: 1.3)),
+                                            color: Colors.red, width: 1.3)),
                                     child: const Center(
                                       child: Text(
                                         "Not Paid",
@@ -199,7 +198,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: Column(
                           children: [
