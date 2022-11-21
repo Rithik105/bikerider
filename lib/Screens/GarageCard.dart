@@ -176,9 +176,7 @@ class _GarageCardState extends State<GarageCard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AddBike(
-                                        bikeList: bikeList,
-                                      ),
+                                      builder: (context) => AddBike(),
                                     ),
                                   );
                                 },
@@ -272,9 +270,7 @@ class _GarageCardState extends State<GarageCard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AddBike(
-                                        bikeList: bikeList,
-                                      ),
+                                      builder: (context) => AddBike(),
                                     ),
                                   );
                                 },

@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchCardController = TextEditingController();
-  List<BikeListModel> bikeList = [];
+
   int bottomIndex = 0;
   int previousIndex = 0;
   final _pageOptions = [
@@ -164,22 +164,11 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.directions_bike_rounded),
               title: const Text('Enter a bike'),
               onTap: () {
-                AddBikeHttp.addBikeList().then(
-                  (value) {
-                    bikeList.clear();
-                    for (var e in value) {
-                      bikeList.add(BikeListModel.fromJson(e));
-                    }
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddBike(
-                          bikeList: bikeList,
-                        ),
-                      ),
-                    );
-                  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddBike(),
+                  ),
                 );
               },
             ),
