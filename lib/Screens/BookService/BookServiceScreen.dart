@@ -1,8 +1,10 @@
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../Http/BookService.dart';
 import '../../Models/book_service_model.dart';
 import '../../Models/prefill_model.dart';
 import '../../custom/constants.dart';
@@ -20,12 +22,15 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   TextEditingController vehicleNumberController = TextEditingController();
   TextEditingController commentsController = TextEditingController();
   String serviceType = 'General Service';
+  String myError = "You will have only two attempts to change your number";
   TextEditingController vehicleTypeTextfield = TextEditingController();
   String vehicleType = 'Classic 350-black';
   bool textFieldDropdown = false;
   bool submit = false;
-  bool isServiceFilled = true;
+  bool isEdit = false;
   bool comments = false;
+  bool visibility = false;
+  int attempts = 3;
   List<String> categories = [
     "Free service",
     "General service",
@@ -78,7 +83,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
           },
         ),
         backgroundColor: const Color(0xFFED863A),
-
         title: Text(
           'Book a Service',
           style: GoogleFonts.roboto(
@@ -91,80 +95,190 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              enabled: false,
-              controller: mobileNumberController,
-              decoration: InputDecoration(
-                labelText: 'Mobile number',
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                labelStyle: GoogleFonts.robotoFlex(
-                    color: const Color(0xff9F9F9F), fontSize: 18),
-                suffixIcon:  GestureDetector(
-                  child: Icon(
-                    Icons.edit,
-                    color: Color(0xffA6A4A3),
-                  ),
+            Stack(alignment: Alignment.centerRight, children: [
+              TextField(
+                keyboardType: TextInputType.number,
+                enabled: isEdit,
+                controller: mobileNumberController,
+                decoration: InputDecoration(
+                  labelText: 'Mobile number',
+                  focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  labelStyle: GoogleFonts.robotoFlex(
+                      color: const Color(0xff9F9F9F), fontSize: 18),
+                  // suffixIcon: GestureDetector(
+                  //   onTap: () {
+                  //     isEdit = true;
+                  //     print("gokcfb");
+                  //     mobileNumberController.text != widget.prefill.mobile
+                  //         ? BookServiceHttp.updatePhoneNumber(
+                  //                 mobileNumberController.text)
+                  //             .then((value) {})
+                  //         : null;
+                  //     setState(() {});
+                  //   },
+                  //   child: Icon(
+                  //     Icons.edit,
+                  //     color: Color(0xffA6A4A3),
+                  //   ),
+                  // ),
+                ),
+                onChanged: (value) {
+                  //callWarning();
+                  //  myError;
+                  //  mobileNumberController.text=value;
+
+                  mobileNumberController.text != widget.prefill.mobile &&
+                          value.length == 10
+                      ? showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                              'Are you sure to change the mobile number?',
+                              style: TextStyle(color: Colors.grey.shade700),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  mobileNumberController.text =
+                                      widget.prefill.mobile!;
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'NO',
+                                  style: TextStyle(
+                                      color: Colors.orangeAccent, fontSize: 21),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  BookServiceHttp.updatePhoneNumber(
+                                          mobileNumberController.text)
+                                      .then((value)  {
+                                        print(value);
+                                    print("call warning");
+                                    isEdit = false;
+                                    visibility = true;
+                                    showToast(msg: "Phone number changed successfully");
+                                    attempts = value["attempts_left"];
+                                    setState(() {});
+                                  });
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('YES',
+                                    style: TextStyle(
+                                        color: Colors.orangeAccent,
+                                        fontSize: 21)),
+                              ),
+                            ],
+                          ),
+                        )
+                      : null;
+                  setState(() {});
+                },
+              ),
+              GestureDetector(
+                onTap: () {
+                  if((widget.prefill.attemptsLeft!)<=0){
+                    print("less than zero");
+                    showToast(msg: "You have exceeded the attempts to change the number");
+                    isEdit = false;
+                  }
+                  else{
+                    isEdit = !isEdit;
+
+                    // mobileNumberController.text = "";
+                  }
+
+                  // attempts <= 0 ? isEdit = false : isEdit = true;
+                  // attempts <= 0 ?null:mobileNumberController.text = "";
+
+                  setState(() {});
+
+                },
+                child: Icon(
+                  isEdit?Icons.done: Icons.edit,
+                  color: Color(0xffA6A4A3),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            ]),
+
+            visibility == false
+                ? SizedBox(
+                    height: 10,
+                  )
+                : Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FittedBox(
+                            child: Text(
+                                "You will have only ${attempts} attempts to change your number",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ))),
+                        Text(
+                          "The new number will be your login id",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
             textFieldDropdown
                 ? DropdownButtonFormField(
-              icon: Image.asset("assets/images/book_service/drop_down.png", width: 10),
-              decoration: InputDecoration(
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                labelText: 'Select vehicle',
-                labelStyle: GoogleFonts.roboto(
-                    color: const Color(0xff9F9F9F), fontSize: 18),
-              ),
-              items: [
-                ...widget.prefill.prefill.map(
-                      (VehicleDetails item) =>
-                      DropdownMenuItem<String>(
-                        value: item.vehicleName,
-                        child: Text(
-                          item.vehicleName!,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
+                    icon: Image.asset(
+                        "assets/images/book_service/drop_down.png",
+                        width: 10),
+                    decoration: InputDecoration(
+                      focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey)),
+                      labelText: 'Select vehicle',
+                      labelStyle: GoogleFonts.roboto(
+                          color: const Color(0xff9F9F9F), fontSize: 18),
+                    ),
+                    items: [
+                      ...widget.prefill.prefill.map(
+                        (VehicleDetails item) => DropdownMenuItem<String>(
+                          value: item.vehicleName,
+                          child: Text(
+                            item.vehicleName!,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                       ),
-                ),
-              ],
-              // value: vehicleType,
-              onChanged: (value) {
-
-                vehicleType = value!;
-                setState(() {
-                  vehicleNumberController.text = widget.prefill.prefill
-                      .where((element) => element.vehicleName == value)
-                      .toList()[0]
-                      .vehicleNumber!;
-                  // vehicleType = value as String;
-                  // vehicleNumberController.text=value;
-                  print("vehicle type${vehicleType}");
-                  print("vehicle no ${vehicleNumberController.text}");
-                });
-
-              },
-              itemHeight: 50,
-            )
+                    ],
+                    // value: vehicleType,
+                    onChanged: (value) {
+                      vehicleType = value!;
+                      setState(() {
+                        vehicleNumberController.text = widget.prefill.prefill
+                            .where((element) => element.vehicleName == value)
+                            .toList()[0]
+                            .vehicleNumber!;
+                        // vehicleType = value as String;
+                        // vehicleNumberController.text=value;
+                        print("vehicle type${vehicleType}");
+                        print("vehicle no ${vehicleNumberController.text}");
+                      });
+                    },
+                    itemHeight: 50,
+                  )
                 : TextField(
-              enabled: false,
-              controller: vehicleTypeTextfield,
-              decoration: InputDecoration(
-                labelText: 'Vehicle type',
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),),
-                labelStyle: GoogleFonts.robotoFlex(
-                    color: Color(0xff9F9F9F), fontSize: 18),
-              ),
-            ),
+                    enabled: false,
+                    controller: vehicleTypeTextfield,
+                    decoration: InputDecoration(
+                      labelText: 'Vehicle type',
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      labelStyle: GoogleFonts.robotoFlex(
+                          color: Color(0xff9F9F9F), fontSize: 18),
+                    ),
+                  ),
             const SizedBox(
               height: 10,
             ),
@@ -174,7 +288,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               decoration: InputDecoration(
                 labelText: 'Vehicle number',
                 focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
                 labelStyle: GoogleFonts.robotoFlex(
                     color: Color(0xff9F9F9F), fontSize: 18),
               ),
@@ -183,18 +298,19 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               height: 10,
             ),
             DropdownButtonFormField(
-              icon: Image.asset("assets/images/book_service/drop_down.png", width: 10),
+              icon: Image.asset("assets/images/book_service/drop_down.png",
+                  width: 10),
               decoration: InputDecoration(
                 focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
                 labelText: 'Service Type',
                 labelStyle: GoogleFonts.roboto(
                     color: const Color(0xff9F9F9F), fontSize: 18),
               ),
               items: categories
                   .map(
-                    (item) =>
-                    DropdownMenuItem<String>(
+                    (item) => DropdownMenuItem<String>(
                       value: item,
                       child: Text(
                         item,
@@ -202,14 +318,12 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             fontSize: 18, color: Colors.black87),
                       ),
                     ),
-              )
+                  )
                   .toList(),
               onChanged: (value) {
                 setState(() {
                   serviceType = value as String;
                   print("service type ${serviceType}");
-
-
                 });
               },
               itemHeight: 50,
@@ -257,7 +371,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                 textInputAction: TextInputAction.done,
                 decoration: const InputDecoration(
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 3,
@@ -289,7 +404,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Colors.transparent),
+                        MaterialStateProperty.all(Colors.transparent),
                     elevation: MaterialStateProperty.all(0)),
                 onPressed: submit ? () => submitData() : null,
                 child: Text(
@@ -310,8 +425,8 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     BookServiceModel.vehicleNumber = vehicleNumberController.text;
     BookServiceModel.serviceType = serviceType;
     BookServiceModel.comments = commentsController.text;
-print(BookServiceModel.vehicleNumber);
-print(BookServiceModel.serviceType);
+    print(BookServiceModel.vehicleNumber);
+    print(BookServiceModel.serviceType);
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => WorkstationSuggestion()));
   }
