@@ -48,8 +48,7 @@ class _SuccessPageState extends State<SuccessPage> {
                 fontSize: 22,
               ),
             ).paddingAll(0, 0, 40, 20),
-            SizedBox(
-                width: 215,
+            FittedBox(
                 child: Text(
                   widget.title,
                   textAlign: TextAlign.center,
@@ -59,6 +58,17 @@ class _SuccessPageState extends State<SuccessPage> {
                     fontSize: 16,
                   ),
                 )),
+            // SizedBox(
+            //     width: 215,
+            //     child: Text(
+            //       widget.title,
+            //       textAlign: TextAlign.center,
+            //       style: GoogleFonts.roboto(
+            //         height: 1.5,
+            //         color: Color(0xff5F5D5D),
+            //         fontSize: 16,
+            //       ),
+            //     )),
             SizedBox(
               height: 25,
             ),
