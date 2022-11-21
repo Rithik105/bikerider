@@ -15,7 +15,7 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({
-          "text": search,
+          "text": search
         }));
 
     return response;
@@ -28,7 +28,7 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/prefilledService"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         });
     print(jsonDecode(response.body));
     return PrefillModel.fromJson(jsonDecode(response.body));
@@ -96,7 +96,7 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/bookService"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: json.encode({
           "vehicleNumber":BookServiceModel.vehicleNumber,
@@ -121,11 +121,11 @@ class BookServiceHttp {
               "https://riding-application.herokuapp.com/api/v1/service/getServiceDetails"),
           headers: {
             'Authorization': 'BEARER $token',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: json.encode({
             "vehicleType": vehicleType,
-            "serviceType": serviceType,
+            "serviceType": serviceType
           }));
       print(jsonDecode(response.body));
       return jsonDecode(response.body);
@@ -138,10 +138,10 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/getInvoice"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: json.encode({
-          "serviceId": id,
+          "serviceId": id
         }));
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
@@ -154,7 +154,7 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/getAllService"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
       );
     // print(jsonDecode(response.body));
@@ -168,29 +168,15 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/updateMobileNumber"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: json.encode({
           "mobile": phone,
-          "token":token,
+          "token":token
         }));
+    await UserSecureStorage.setToken(jsonDecode(response.body)["accessToken"]);
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
-  static Future getAccessOnChangedPhoneNumber(String phone) async{
 
-    final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/getAccessOnChange"),
-        headers: {
-
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          "mobile": phone,
-        }));
-     //await UserSecureStorage.setToken(jsonDecode(response.body[0]));
-    print(jsonDecode(response.body[0]));
-    return jsonDecode(response.body);
-  }
 }
