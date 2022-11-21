@@ -156,12 +156,12 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                     print("call warning");
                                     visibility = true;
                                     attempts = value["attempts_left"];
-                                    // await BookServiceHttp
-                                    //         .getAccessOnChangedPhoneNumber(
-                                    //             mobileNumberController.text)
-                                    //     .then((value) => isEdit = false);
+                                    setState(() {
+
+                                    });
+
                                   });
-                                  setState(() {});
+
                                   Navigator.pop(context, 'yes');
                                 },
                                 child: const Text('YES',
