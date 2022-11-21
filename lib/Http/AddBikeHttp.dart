@@ -39,11 +39,14 @@ class AddBikeHttp {
   }
 
   static Future addBikeList() async {
+    String? token = await UserSecureStorage.getToken();
+
     final http.Response response = await http.get(
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/company/getVehicle"),
+          "https://riding-application.herokuapp.com/api/v1/bike/getVehicleType"),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
       },
     );
     print(jsonDecode(response.body));

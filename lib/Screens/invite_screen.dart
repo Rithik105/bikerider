@@ -36,8 +36,6 @@ class _InviteScreenState extends State<InviteScreen> {
       //     return e;
       //   }
       // }).toList();
-      print("contact");
-      print("hello ${contacts[10].phones![0].value}");
       setState(() {});
     });
   }

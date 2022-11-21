@@ -15,7 +15,7 @@ import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
   String startDate, id, tripName;
-  String url;
+  String? url;
   Function ontap;
   CustomCard(
       {required this.startDate,
@@ -37,7 +37,8 @@ class _CustomCardState extends State<CustomCard> {
       decoration: BoxDecoration(
         image: DecorationImage(
             image: NetworkImage(
-              widget.url,
+              widget.url ??
+                  "https://femina.wwmindia.com/content/2021/apr/nature-thumb1619426250.jpg",
             ),
             fit: BoxFit.fill),
         borderRadius: BorderRadius.circular(4),
