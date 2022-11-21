@@ -52,9 +52,6 @@ class BookServiceModel {
     };
   }
 
-// toList(){
-//     return [mobileNumber,vehicleType,vehicleNumber,serviceType,comments,slotDate,slotTime];
-// }
   BookServiceModel.fromJson(Map json) {
     mobileNumber = json['mobile'];
     vehicleNumber = json['vehicleNumber'];
