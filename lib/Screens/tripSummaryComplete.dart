@@ -1,4 +1,5 @@
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,15 +27,15 @@ class TripSummaryComplete extends StatefulWidget {
 
 class _TripSummaryCompleteState extends State<TripSummaryComplete> {
   double checkEmpty() {
-    if (widget.getTripModel.milestones.length == 0) {
-      if (widget.getTripModel.recommendations.length == 0) {
-        if (widget.getTripModel.riders.length == 0) {
+    if (widget.getTripModel.milestones.isEmpty) {
+      if (widget.getTripModel.recommendations.isEmpty) {
+        if (widget.getTripModel.riders.isEmpty) {
           return 70;
         } else
           return 90;
       } else
         return 105;
-    } else if (widget.getTripModel.recommendations.length == 0) {
+    } else if (widget.getTripModel.recommendations.isEmpty) {
       return 0;
     } else {
       return 0;
@@ -42,7 +43,7 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
   }
 
   String checkRecommendations() {
-    if (widget.getTripModel.recommendations.length == 0) {
+    if (widget.getTripModel.recommendations.isEmpty) {
       return "No Recommendations";
     } else {
       return "Recommendation";
@@ -240,6 +241,8 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
                               ],
                             ),
                           ),
+                          GalleryPreviewScreen(
+                              getTripModel: widget.getTripModel)
                         ],
                       ),
                     ),
