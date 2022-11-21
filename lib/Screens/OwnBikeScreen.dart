@@ -16,7 +16,7 @@ class OwnBikeScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 60, right: 60, top: 70),
+              padding: const EdgeInsets.only(left: 60, right: 60, top: 70),
               child: Image.asset("assets/images/ownbike/Illustration 4@2x.png"),
             ),
             Padding(
@@ -47,10 +47,13 @@ class OwnBikeScreen extends StatelessWidget {
                   LargeSubmitButton(
                     style: kNoButtonDecoration,
                     text: "NO",
-                    ontap: () {},
+                    ontap: () {
+                      //Warning
+                      // Popup here
+                    },
                     width: 120,
                     height: 50,
-                  )
+                  ),
                 ],
               ),
             ),

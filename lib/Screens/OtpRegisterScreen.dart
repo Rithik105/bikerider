@@ -28,10 +28,10 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("hi");
+    print("initState OTP registration");
     UserHttp.sendOtp(widget.user.mobile!).then((value) {
       showToast(msg: value.toString());
-      print("Hi");
+      print("response for send otp");
     });
   }
 
@@ -121,15 +121,16 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                               Provider.of<UserData>(context, listen: false)
                                   .setUserData(widget.user);
                               UserSecureStorage.setToken(value2["token"]);
-                              // UserSecureStorage.setDetails(
-                              //     key: "name", value: value["userName"]);
-                              // UserSecureStorage.setDetails(
-                              //     key: "mobile", value: value["mobile"]);
-                              // UserSecureStorage.setDetails(
-                              //     key: "email", value: value["email"]);
-                              // UserSecureStorage.setDetails(
-                              //     key: "profileImage",
-                              //     value: value["profileImage"]);
+
+                              UserSecureStorage.setDetails(
+                                  key: "name", value: value2["userName"]);
+                              UserSecureStorage.setDetails(
+                                  key: "mobile", value: value2["mobile"]);
+                              UserSecureStorage.setDetails(
+                                  key: "email", value: value2["email"]);
+                              UserSecureStorage.setDetails(
+                                  key: "profileImage",
+                                  value: value["profileImage"]);
 
                               Navigator.pushNamed(
                                   context, "/ChooseAvatarScreen",
