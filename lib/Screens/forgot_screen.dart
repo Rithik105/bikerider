@@ -1,13 +1,12 @@
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Screens/LoginScreen.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/Material.dart';
 
-import '../custom/widgets/button.dart';
-import '../custom/widgets/text_form_fields.dart';
-import 'SuccessPage.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:bikerider/custom/widgets/text_form_fields.dart';
+import 'package:bikerider/custom/widgets/padding.dart';
+import 'package:bikerider/Http/UserHttp.dart';
 
+// ignore: must_be_immutable
 class ForgotScreen extends StatefulWidget {
   ForgotScreen({Key? key, required this.mobile}) : super(key: key);
   String mobile;
@@ -90,17 +89,11 @@ class _ForgotScreenState extends State<ForgotScreen> {
                               UserHttp.changePassword(widget.mobile,
                                       _confirmPasswordController.text)
                                   .then((value) {
+                                showToast(msg: "Password changed successfully");
                                 Navigator.pop(context);
                                 Navigator.pop(context);
-                                // Navigator.popUntil(context, (route) {
-                                //   if (route ==
-                                //       MaterialPageRoute(
-                                //           builder: (context) =>
-                                //               LoginScreen())) {
-                                //     return true;
-                                //   } else
-                                //     return false;
-                                // });
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, "/LoginScreen");
                               });
                             }
                           })).paddingAll(10, 10, 0, 0)

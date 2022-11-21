@@ -11,7 +11,7 @@ class ProfileInter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BikeCubit()..getProfile(),
+      create: (context) => BikeCubit()..getMyProfile(),
       child: ProfileHeader(),
     );
   }

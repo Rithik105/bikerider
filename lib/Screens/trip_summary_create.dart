@@ -1,43 +1,44 @@
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Screens/HomePage.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
-import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../Models/create_trip_modal.dart';
-import '../Providers/invite_provider.dart';
-import '../Utility/enums.dart';
-import '../custom/widgets/CustomCard.dart';
-import '../custom/widgets/ShowToast.dart';
-import '../custom/widgets/button.dart';
-import 'google_maps_preview.dart';
-import 'milestone_card.dart';
+import 'package:bikerider/Screens/google_maps_preview.dart';
+import 'package:bikerider/Screens/milestone_card.dart';
+import 'package:bikerider/Screens/home_screen.dart';
+import 'package:bikerider/custom/widgets/CustomCard.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/custom/constants.dart';
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/create_trip_modal.dart';
+import 'package:bikerider/Providers/invite_provider.dart';
+import 'package:bikerider/Utility/enums.dart';
 
-class TripSummaryCreate extends StatefulWidget {
-  TripSummaryCreate({
+class TripSummaryCreateScreen extends StatefulWidget {
+  const TripSummaryCreateScreen({
     Key? key,
   }) : super(key: key);
 
-  // final List points = CreateTripModal.distance!.points;
-
   @override
-  State<TripSummaryCreate> createState() => _TripSummaryCreateState();
+  State<TripSummaryCreateScreen> createState() =>
+      _TripSummaryCreateScreenState();
 }
 
-class _TripSummaryCreateState extends State<TripSummaryCreate> {
+class _TripSummaryCreateScreenState extends State<TripSummaryCreateScreen> {
   double checkEmpty() {
-    if (CreateTripModal.milestone.length == 0) {
-      if (CreateTripModal.recommendations.length == 0) {
-        if (CreateTripModal.contacts.length == 0) {
+    if (CreateTripModal.milestone.isEmpty) {
+      if (CreateTripModal.recommendations.isEmpty) {
+        if (CreateTripModal.contacts.isEmpty) {
           return 40;
         }
         return 70;
-      } else
+      } else {
         return 45;
-    } else if (CreateTripModal.recommendations.length == 0) {
+      }
+    } else if (CreateTripModal.recommendations.isEmpty) {
       return 0;
     } else {
       return 0;
@@ -45,7 +46,7 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
   }
 
   String checkRecommendations() {
-    if (CreateTripModal.recommendations.length == 0) {
+    if (CreateTripModal.recommendations.isEmpty) {
       return "No Recommendations";
     } else {
       return "Recommendation";
@@ -114,33 +115,22 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
             }
             if (snapshot.connectionState == ConnectionState.done &&
                 CreateTripModal.distance!.points.isNotEmpty) {
-              print(
-                  'Points length: ${CreateTripModal.distance!.points.length}');
               return SingleChildScrollView(
                 child: Column(
                   children: [
                     Stack(
                       children: [
-                        Container(
-                          // color: Colors.greenAccent,
-                          child: Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 250,
-                                // color: Colors.red,
-                                // child: const Center(
-                                //   child: Text('HI'),
-                                // ),
-                                child: const MapCard(
-                                    // points: widget.points,
-                                    ),
-                              ),
-                              const SizedBox(
-                                height: 100,
-                              ),
-                            ],
-                          ),
+                        Column(
+                          children: const [
+                            SizedBox(
+                              width: double.infinity,
+                              height: 250,
+                              child: MapCard(),
+                            ),
+                            SizedBox(
+                              height: 100,
+                            ),
+                          ],
                         ),
                         const Positioned(
                           left: 20,
@@ -153,8 +143,6 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                     const SizedBox(
                       height: 40,
                     ),
-
-                    //If only one present
                     CreateTripModal.milestone.length == 1
                         ? TimeLine(
                             details: CreateTripModal.milestone.first,
@@ -162,8 +150,6 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                             last: true,
                           )
                         : Container(),
-
-                    //If only two present
                     CreateTripModal.milestone.length == 2
                         ? TimeLine(
                             details: CreateTripModal.milestone.first,
@@ -200,7 +186,6 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                             last: true,
                           )
                         : Container(),
-                    //Milestone card ends here
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 25),
                       width: double.infinity,
@@ -250,13 +235,6 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                                       debugPrint('Add a invite button pressed');
                                       Navigator.pushNamed(
                                           context, '/InvitePage');
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) =>
-                                      //         const InvitePage(),
-                                      //   ),
-                                      // );
                                     },
                                   ),
                                 ),
@@ -285,7 +263,6 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                         ],
                       ),
                     ),
-
                     const SizedBox(
                       height: 20,
                     ),
@@ -306,7 +283,7 @@ class _TripSummaryCreateState extends State<TripSummaryCreate> {
                             MaterialPageRoute(
                               builder: (context) => BlocProvider(
                                 create: (context) => BikeCubit()..getTrips(),
-                                child: HomeScreen(),
+                                child: const HomeScreen(),
                               ),
                             ),
                           );

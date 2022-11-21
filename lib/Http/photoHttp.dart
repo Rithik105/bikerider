@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PhotosHttp {
-  static Future getGallery(String tripId, String token) async {
-    int _page = 1;
-    int _limit = 8;
+  static Future getGallery(
+      String tripId, String token, int page, int limit) async {
     //String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
-      body: jsonEncode({'tripId': tripId}),
+      body: jsonEncode({'groupId': tripId}),
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/getImagePreview?page=$_page&limit=$_limit"),
+          "https://riding-application.herokuapp.com/api/v1/chat/getImagePreview?page=$page&limit=$limit"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',
@@ -41,13 +40,13 @@ class PhotosHttp {
     final http.Response response = await http.post(
       body: jsonEncode({'_id': id}),
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/getTripPhotos"),
+          "https://riding-application.herokuapp.com/api/v1/chat/getParticularPhoto"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',
       },
     );
-    //  print(response.body);
+    print(response.body);
     // return response;
     return jsonDecode(response.body);
   }

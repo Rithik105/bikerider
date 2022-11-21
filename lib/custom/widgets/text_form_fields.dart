@@ -111,6 +111,18 @@ String getPreffixIcon({required TextFieldType textFieldType}) {
     case TextFieldType.name:
       returnValue = 'assets/images/login/person.png';
       break;
+    case TextFieldType.custom:
+      // TODO: Handle this case.
+      break;
+    case TextFieldType.date:
+      // TODO: Handle this case.
+      break;
+    case TextFieldType.clock:
+      // TODO: Handle this case.
+      break;
+    case TextFieldType.location:
+      // TODO: Handle this case.
+      break;
   }
   return returnValue;
 }
@@ -133,6 +145,18 @@ getValidator({required TextFieldType textFieldType, String? data}) {
     case TextFieldType.name:
       returnValue =
           data!.length < 2 ? 'Minimum of 3 characters required' : null;
+      break;
+    case TextFieldType.custom:
+      // TODO: Handle this case.
+      break;
+    case TextFieldType.date:
+      // TODO: Handle this case.
+      break;
+    case TextFieldType.clock:
+      // TODO: Handle this case.
+      break;
+    case TextFieldType.location:
+      // TODO: Handle this case.
       break;
   }
   return returnValue;

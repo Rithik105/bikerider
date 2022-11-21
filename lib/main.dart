@@ -1,15 +1,17 @@
-import 'package:bikerider/Providers/Data.dart';
-import 'package:bikerider/Providers/VisibiltyProvider.dart';
-import 'package:bikerider/Utility/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'Providers/OwnBikeProvider.dart';
-import 'Providers/invite_provider.dart';
-import 'Screens/maps_provider.dart';
-import 'bloc/BikeCubit.dart';
+import 'package:bikerider/Screens/maps_provider.dart';
+
+import 'package:bikerider/Providers/invite_provider.dart';
+import 'package:bikerider/Providers/Data.dart';
+import 'package:bikerider/Providers/VisibiltyProvider.dart';
+
+import 'package:bikerider/Utility/routes.dart';
+
+import 'package:bikerider/bloc/BikeCubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,10 +36,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(create: (context) => InviteProvider()),
           ChangeNotifierProvider(create: (context) => MapProvider()),
-          ChangeNotifierProvider(create: (context) => OwnBike()),
           ChangeNotifierProvider(create: (context) => UserData())
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Routes.onGenerateRoute,
           initialRoute: "/Splash",

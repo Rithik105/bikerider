@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bikerider/Models/timeLineModel.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import "package:http/http.dart" as http;
 import 'package:path/path.dart';
 
@@ -33,20 +34,16 @@ class UserHttp {
         },
         body: jsonEncode({"email": user.email, "password": user.password}));
 
-    print(response.body);
     return jsonDecode(response.body);
   }
 
   static Future loginUserNumber(User user) async {
-    print(user.mobile);
     final http.Response response = await http.post(
         Uri.parse("https://riding-application.herokuapp.com/api/v1/loginPhone"),
         headers: {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({"mobile": user.mobile, "password": user.password}));
-    print("hi");
-    print(jsonDecode(response.body)["token"]);
 
     return jsonDecode(response.body);
   }
@@ -69,8 +66,10 @@ class UserHttp {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({"destination": "+91$number"}));
-    print('sendotp');
-    return jsonDecode(response.body);
+    if (jsonDecode(response.body)["messages"][0]["status"] == "29") {
+      showToast(msg: "Please whitelist the number");
+    } else
+      showToast(msg: "OTP sent");
   }
 
   static Future verifyOtp(String pin) async {
@@ -94,14 +93,15 @@ class UserHttp {
     return jsonDecode(secret.body);
   }
 
-  static Future getToken(String pin) async {
+  static Future getToken(String token) async {
     final http.Response secret = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({"otp": pin}));
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    );
     return jsonDecode(secret.body);
   }
 
@@ -143,7 +143,6 @@ class UserHttp {
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
 
-    print(" hello world ${jsonDecode(response.body)}");
     return jsonDecode(response.body);
   }
 
@@ -166,7 +165,6 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'chat': message, 'groupId': groupId}));
-    print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 
@@ -192,6 +190,17 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'text': item}));
+    return jsonDecode(response.body);
+  }
+
+  static Future<Map> userLogOut(String token) async {
+    final http.Response response = await http.post(
+      Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    );
     return jsonDecode(response.body);
   }
 

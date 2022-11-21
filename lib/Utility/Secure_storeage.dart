@@ -3,6 +3,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class UserSecureStorage {
   static final _secureStorage = FlutterSecureStorage();
 
+  static Future clear() async {
+    await _secureStorage.deleteAll();
+  }
+
   static Future setToken(String token) async {
     await _secureStorage.write(key: 'token', value: token);
   }

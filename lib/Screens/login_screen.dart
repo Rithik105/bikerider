@@ -1,27 +1,33 @@
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Models/UserModel.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/Material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../Utility/enums.dart';
-import '../custom/widgets/button.dart';
-import '../custom/widgets/text_form_fields.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:bikerider/custom/widgets/text_form_fields.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/Utility/enums.dart';
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-  TextEditingController _numberOrEmail = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  final TextEditingController _numberOrEmail = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
-  void _setBool() async {
+  void _setNoTutorial() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool("firstLogin", false);
-    print(prefs.get("firstLogin"));
+  }
+
+  void _setLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("loggedIn", true);
+    print("loog ${prefs.getBool("loggedIn").toString()}");
   }
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -89,16 +95,7 @@ class LoginScreen extends StatelessWidget {
                           onTap: () {
                             if (numberKey.currentState!.validate()) {
                               if (EmailOrPhone.email) {
-                                showToast(msg: "Enter a mobile number");
-                                // print("enter number");
-                                // Fluttertoast.showToast(
-                                //   msg: "Enter a mobile number",
-                                //   toastLength: Toast.LENGTH_SHORT,
-                                //   gravity: ToastGravity.BOTTOM,
-                                //   backgroundColor:
-                                //       Colors.black.withOpacity(0.75),
-                                //   textColor: Colors.white,
-                                // );
+                                showToast(msg: "Enter your mobile number");
                               } else {
                                 BlocProvider.of<BikeCubit>(context).timer(40);
 
@@ -107,6 +104,8 @@ class LoginScreen extends StatelessWidget {
                                       "mobile": _numberOrEmail,
                                     });
                               }
+                            } else {
+                              showToast(msg: "Enter your mobile number");
                             }
                           },
                           child: Text(
@@ -137,8 +136,22 @@ class LoginScreen extends StatelessWidget {
                                 .then((value) {
                               if (value["message"] == "Signin Success !!") {
                                 UserSecureStorage.setToken(value["token"])
-                                    .then((value) {
-                                  _setBool();
+                                    .then((value1) {
+                                  print(value1);
+                                  UserSecureStorage.setDetails(
+                                      key: "name", value: value["userName"]);
+                                  UserSecureStorage.setDetails(
+                                      key: "mobile", value: value["mobile"]);
+                                  UserSecureStorage.setDetails(
+                                      key: "email", value: value["email"]);
+                                  UserSecureStorage.setDetails(
+                                      key: "haveBike",
+                                      value: value["haveBike"].toString());
+                                  UserSecureStorage.setDetails(
+                                      key: "profileImage",
+                                      value: value["profileImage"]);
+                                  _setLogin();
+                                  _setNoTutorial();
                                   Navigator.pushNamed(context, "/HomeScreen");
                                   showToast(msg: "Login Successful");
                                 });
@@ -147,13 +160,12 @@ class LoginScreen extends StatelessWidget {
                               }
                             });
                           } else {
-                            print(_numberOrEmail.text);
                             UserHttp.loginUserNumber(User(
                                     mobile: _numberOrEmail.text,
                                     password: _password.text))
                                 .then((value) {
+                              print(value);
                               if (value["message"] == "Signin Success !!") {
-                                print(value["token"]);
                                 UserSecureStorage.setToken(value["token"])
                                     .then((value1) {
                                   UserSecureStorage.setDetails(
@@ -163,8 +175,13 @@ class LoginScreen extends StatelessWidget {
                                   UserSecureStorage.setDetails(
                                       key: "email", value: value["email"]);
                                   UserSecureStorage.setDetails(
+                                      key: "haveBike",
+                                      value: value["haveBike"].toString());
+                                  UserSecureStorage.setDetails(
                                       key: "profileImage",
                                       value: value["profileImage"]);
+                                  _setLogin();
+                                  _setNoTutorial();
                                   Navigator.pushNamed(context, "/HomeScreen");
                                   showToast(msg: "Login Successful");
                                 });
@@ -184,15 +201,13 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            print('FaceBook login');
-
                             const String url = 'https://www.facebook.com';
                             canLaunchUrl(Uri.parse(url)).then(
                               (value) {
                                 if (value) {
                                   launchUrl(Uri.parse(url));
                                 } else {
-                                  print('Could not launch $url');
+                                  showToast(msg: 'Could not launch $url');
                                 }
                               },
                             );
@@ -207,14 +222,13 @@ class LoginScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            print('Google login');
                             const String url = 'https://accounts.google.com';
                             canLaunchUrl(Uri.parse(url)).then(
                               (value) {
                                 if (value) {
                                   launchUrl(Uri.parse(url));
                                 } else {
-                                  print('Could not launch $url');
+                                  showToast(msg: 'Could not launch $url');
                                 }
                               },
                             );
@@ -231,7 +245,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print('Register login');
                         Navigator.pushNamed(context, "/RegisterScreen");
                       },
                       child: RichText(

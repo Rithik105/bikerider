@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/button.dart';
-import 'create_trip.dart';
+import 'create_trip_screen.dart';
 
 class ActivityCard extends StatelessWidget {
   ActivityCard({Key? key}) : super(key: key);

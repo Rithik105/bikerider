@@ -2,8 +2,11 @@ import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:bikerider/Http/photoHttp.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../bloc/BikeCubit.dart';
+import '../MyProfileScreen.dart';
 import 'comment_card.dart';
 import 'galary_constants.dart';
 import 'gallery_model.dart';
@@ -79,7 +82,19 @@ class _ImageViewState extends State<ImageView> {
                                                   title: Text(
                                                       e.likedName.toString()),
                                                   onTap: () {
-                                                    Navigator.pop(context);
+                                                    print(e.likedNumber);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                BlocProvider(
+                                                                  create: (context) =>
+                                                                      BikeCubit()
+                                                                        ..getProfile(
+                                                                            e.likedNumber!),
+                                                                  child:
+                                                                      ProfileHeader(),
+                                                                )));
                                                   },
                                                 );
                                               },

@@ -247,10 +247,6 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
                     const SizedBox(
                       height: 20,
                     ),
-
-                    Stagger(
-                      photos: [],
-                    )
                   ],
                 ),
               );

@@ -1,23 +1,37 @@
 import 'dart:async';
 
 import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Http/photoHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Models/timeLineModel.dart';
-import 'package:bikerider/Screens/milestone_card.dart';
+import 'package:bikerider/Providers/invite_provider.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter/Material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class BikeState {}
 
-class BikeInitialState extends BikeState {}
+class BikeInitialState extends BikeState {} //
 
-class BikeFirstLoginState extends BikeState {}
+class BikeLoggedInState extends BikeState {} //
+
+class BikeLoggedOutState extends BikeState {} //
+
+class BikeFirstLoginState extends BikeState {} //
 
 class BikeTimerState extends BikeState {
+  //
   int time;
   BikeTimerState(this.time);
 }
+
+class BikeContactSelectedState extends BikeState {}
+
+class BikeContactNotSelectedState extends BikeState {}
+
+class BikeTimerExpiredState extends BikeState {} //
 
 class BikeGalleryFetchingState extends BikeState {}
 
@@ -54,17 +68,50 @@ class BikeToolKitFetchedState extends BikeState {
 
 class BikeAccEmptyFetchedState extends BikeState {}
 
-class BikeTimerExpiredState extends BikeState {}
-
 class BikeCubit extends Cubit<BikeState> {
   BikeCubit() : super(BikeInitialState());
 
   @override
-  void firtsLogin() {
-    emit(BikeFirstLoginState());
+  Timer? _timer;
+
+  void checkLogin() {
+    _loadFirst().then((value) {
+      if (value) {
+        emit(BikeFirstLoginState());
+      } else {
+        _loadLogin().then((value) {
+          print(value);
+          if (value) {
+            UserSecureStorage.getToken().then((value1) {
+              UserHttp.getToken(value1!).then((value2) {
+                if (value2["message"] == "refresh token expired") {
+                  showToast(msg: "You have been logged out");
+                  print("hiii");
+                  emit(BikeLoggedOutState());
+                } else {
+                  UserSecureStorage.setToken(value2["access_token"]);
+                  print(value2["access_token"]);
+                  emit(BikeLoggedInState());
+                }
+              });
+            });
+          } else {
+            emit(BikeLoggedOutState());
+          }
+        });
+      }
+    });
   }
 
-  Timer? _timer;
+  Future<bool> _loadFirst() async {
+    final prefs = await SharedPreferences.getInstance();
+    return (prefs.getBool("firstLogin") ?? true);
+  }
+
+  Future<bool> _loadLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    return (prefs.getBool("loggedIn") ?? false);
+  }
 
   void timer(int start) {
     if (_timer == null) {
@@ -72,7 +119,7 @@ class BikeCubit extends Cubit<BikeState> {
       _timer!.cancel();
     }
     emit(BikeTimerState(start));
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -152,31 +199,40 @@ class BikeCubit extends Cubit<BikeState> {
     });
   }
 
-  void getProfile() {
+  void getMyProfile() {
+    UserSecureStorage.getDetails(key: "mobile").then(
+      (value) => getProfile(value!),
+    );
+  }
+
+  void getProfile(String number) {
     print("emitted");
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
-      UserSecureStorage.getDetails(key: "mobile").then((value2) {
-        UserHttp.getProfile(value!, value2!).then((value2) {
-          UserSecureStorage.getDetails(key: "mobile").then((value3) {
-            if (value2["userDetails"]["mobile"] == value3) {
-              emit(BikeMineProfileFetchedState(
-                profile: value2,
-              ));
-            } else
-              emit(BikeOtherProfileFetchedState(profile: value2));
-          });
+      UserSecureStorage.getDetails(key: "mobile").then((value3) {
+        UserHttp.getProfile(value!, number).then((value2) {
+          print(value3);
+          if (value3 == number) {
+            emit(BikeMineProfileFetchedState(
+              profile: value2,
+            ));
+          } else
+            emit(BikeOtherProfileFetchedState(profile: value2));
         });
       });
     });
   }
 
-  void initialGetGallery(String groupId) {
-    emit(BikeGalleryFetchingState());
-    UserSecureStorage.getToken().then((value) {
-      PhotosHttp.getGallery(groupId, value!).then((value) {
-        emit(BikeGalleryFetchedState());
-      });
-    });
+  convertToPhoneNumber(Contact contact) {
+    String number;
+    number = contact.phones![0].value!.trim().replaceAll(' ', '');
+    number = number.replaceAll('-', '');
+    if (number[0] == "+") {
+      return number.substring(1, 12);
+    } else if (number.length == 10) {
+      return number;
+    } else {
+      return number;
+    }
   }
 }

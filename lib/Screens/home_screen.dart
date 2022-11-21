@@ -1,22 +1,22 @@
-import 'package:bikerider/Screens/ActivitiesCard.dart';
-import 'package:bikerider/custom/constants.dart';
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:bikerider/custom/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Http/AddBikeHttp.dart';
-import '../Models/bike_list_model.dart';
-import '../bloc/BikeCubit.dart';
-import 'GarageCard.dart';
-import 'Intermediate/activityInter.dart';
-import 'Intermediate/profileinter.dart';
-import 'Intermediate/tripcardinter.dart';
-import 'MyProfileScreen.dart';
-import 'ServiceRecods/add_bike.dart';
-import 'TripCard.dart';
+import 'package:bikerider/Screens/GarageCard.dart';
+import 'package:bikerider/Screens/Intermediate/activityInter.dart';
+import 'package:bikerider/Screens/Intermediate/profileinter.dart';
+import 'package:bikerider/Screens/Intermediate/trip_intermediate_card.dart';
+import 'package:bikerider/Screens/ServiceRecods/add_bike.dart';
+import 'package:bikerider/Http/AddBikeHttp.dart';
+import 'package:bikerider/Models/bike_list_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -28,15 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   int bottomIndex = 0;
   int previousIndex = 0;
   final _pageOptions = [
-    TripCardInter(),
+    TripintermediateCard(),
     GarageCard(),
     ActivityInter(),
-    ProfileInter()
-
-    // ActivitiesCard(),
-    // ActivityPage(),
-    // MyProfilePage(),
+    const ProfileInter()
   ];
+  void _setLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("loggedIn", false);
+    print("loog ${prefs.getBool("loggedIn").toString()}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: bottomIndex,
           onTap: (index) {
             setState(() {
-              // previousIndex = index == 4 ? previousIndex : bottomIndex;
-
               if (index != 4) {
                 bottomIndex = index;
               }
             });
             if (index == 4) {
-              print('Call Bottom Sheet');
               bottomSheetCall(context);
             }
           },
@@ -151,7 +149,15 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                Navigator.pop(context);
+                UserSecureStorage.getToken().then((value1) {
+                  UserHttp.userLogOut(value1!).then((value2) {
+                    UserSecureStorage.clear();
+                    showToast(msg: value2["message"]);
+                    _setLogin();
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, "/LoginScreen");
+                  });
+                });
               },
             ),
             ListTile(
@@ -177,27 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            // ListTile(
-            //   leading: const Icon(Icons.videocam),
-            //   title: const Text('Video'),
-            //   onTap: () {
-            //     //  Navigator.pop(context);
-            //   },
-            // ),
-            // ListTile(
-            //   leading: const Icon(Icons.share),
-            //   title: const Text('Share'),
-            //   onTap: () {
-            //     // Navigator.pop(context);
-            //   },
-            // ),
-            // ListTile(
-            //   leading: const Icon(Icons.file_copy_rounded),
-            //   title: const Text('Files'),
-            //   onTap: () {
-            //     // Navigator.pop(context);
-            //   },
-            // ),
           ],
         );
       },
@@ -206,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 TextStyle kProfileNumberText = GoogleFonts.roboto(
-    color: Color(0xffEE8431), fontSize: 25, fontWeight: FontWeight.w600);
+    color: const Color(0xffEE8431), fontSize: 25, fontWeight: FontWeight.w600);
 
 TextStyle kProfileTitleTextStyle = GoogleFonts.roboto(
-    color: Color(0x79000000), fontSize: 16, fontWeight: FontWeight.w600);
+    color: const Color(0x79000000), fontSize: 16, fontWeight: FontWeight.w600);

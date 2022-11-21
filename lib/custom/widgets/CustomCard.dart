@@ -14,7 +14,8 @@ import '../../Models/milestone.dart';
 import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
-  String startDate, id, tripName, url;
+  String startDate, id, tripName;
+  String url;
   Function ontap;
   CustomCard(
       {required this.startDate,
@@ -31,7 +32,7 @@ class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       height: 155,
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -57,7 +58,7 @@ class _CustomCardState extends State<CustomCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -68,7 +69,7 @@ class _CustomCardState extends State<CustomCard> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
@@ -77,15 +78,16 @@ class _CustomCardState extends State<CustomCard> {
                       .toString(),
                   style: GoogleFonts.roboto(color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.white, width: 1)),
-                  child: Text(
+                  child: const Text(
                     "Upcoming",
                     style: TextStyle(color: Colors.white),
                   ),
@@ -101,7 +103,7 @@ class _CustomCardState extends State<CustomCard> {
               });
             },
             child: Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               height: 45,
               child: Image.asset(
                 "assets/images/homePage/cancel.png",

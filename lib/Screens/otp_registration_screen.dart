@@ -1,33 +1,42 @@
-import 'dart:async';
-
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Models/UserModel.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class OtpForgotScreen extends StatefulWidget {
-  TextEditingController mobile = TextEditingController();
-  OtpForgotScreen({Key? key, required this.mobile}) : super(key: key);
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/padding.dart';
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+
+// ignore: must_be_immutable
+class OtpRegisterScreen extends StatefulWidget {
+  User user;
+  OtpRegisterScreen({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<OtpForgotScreen> createState() => _OtpForgotScreenState();
+  State<OtpRegisterScreen> createState() => _OtpRegisterScreenState();
 }
 
-class _OtpForgotScreenState extends State<OtpForgotScreen> {
-  String? secret;
+class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
   @override
   void initState() {
     super.initState();
-    UserHttp.sendOtp(widget.mobile.text).then((value) {
-      showToast(msg: value.toString());
-      print("Hi");
-    });
+    UserHttp.sendOtp(widget.user.mobile!);
+  }
+
+  void _setNoTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("firstLogin", false);
+  }
+
+  void _setLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("loggedIn", true);
   }
 
   final OtpFieldController _otpController = OtpFieldController();
@@ -71,7 +80,7 @@ class _OtpForgotScreenState extends State<OtpForgotScreen> {
               height: 10,
             ),
             Text(
-              "+91-${widget.mobile.text}",
+              "+91-${widget.user.mobile}",
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Color(0xff777777),
@@ -95,14 +104,40 @@ class _OtpForgotScreenState extends State<OtpForgotScreen> {
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
                   UserHttp.verifyOtp(pin).then((value) {
-                    print(value["message"]);
                     if (value["message"] == false) {
-                      print("verified");
-                      showToast(msg: "Verified");
-                      Navigator.pushNamed(context, "/ForgotScreen",
-                          arguments: {"mobile": widget.mobile.text});
-                    } else {
-                      print("failed");
+                      showToast(msg: "OTP Verified");
+                      UserHttp.registerUser(User(
+                              email: widget.user.email,
+                              name: widget.user.name,
+                              password: widget.user.password,
+                              mobile: widget.user.mobile))
+                          .then((value1) {
+                        if (value1["message"] == "successfully registered..") {
+                          UserHttp.loginUserEmail(widget.user).then((value2) {
+                            if (value2["message"] == "Signin Success !!") {
+                              UserSecureStorage.setToken(value2["token"]);
+                              UserSecureStorage.setDetails(
+                                  key: "name", value: value2["userName"]);
+                              UserSecureStorage.setDetails(
+                                  key: "mobile", value: value2["mobile"]);
+                              UserSecureStorage.setDetails(
+                                  key: "email", value: value2["email"]);
+                              UserSecureStorage.setDetails(
+                                  key: "haveBike",
+                                  value: value2["haveBike"].toString());
+                              _setLogin();
+                              _setNoTutorial();
+                              Navigator.pushNamed(
+                                  context, "/ChooseAvatarScreen",
+                                  arguments: {"name": widget.user.name});
+
+                              showToast(msg: "Registered succefully");
+                            }
+                          });
+                        } else {
+                          showToast(msg: value1["message"]);
+                        }
+                      });
                     }
                   });
                 },
@@ -136,23 +171,23 @@ class _OtpForgotScreenState extends State<OtpForgotScreen> {
                 } else {
                   return Column(children: [
                     GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<BikeCubit>(context).timer(40);
+                      },
+                      child: GestureDetector(
                         onTap: () {
-                          BlocProvider.of<BikeCubit>(context).timer(40);
+                          UserHttp.sendOtp(widget.user.mobile!);
                         },
-                        child: GestureDetector(
-                          onTap: () {
-                            _otpController.clear();
-                            UserHttp.sendOtp(widget.mobile.text);
-                          },
-                          child: Text(
-                            "Re-send Again",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.roboto(
-                              color: const Color(0xffF7931E),
-                              fontSize: 18,
-                            ),
+                        child: Text(
+                          "Re-send Again",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.roboto(
+                            color: const Color(0xffF7931E),
+                            fontSize: 18,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 50,
                     ),

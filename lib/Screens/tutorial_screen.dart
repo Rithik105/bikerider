@@ -1,16 +1,18 @@
-import 'package:bikerider/custom/widgets/button.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/Material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class Tutorial extends StatefulWidget {
-  Tutorial({super.key});
+import 'package:bikerider/custom/widgets/button.dart';
+
+class TutorialScreen extends StatefulWidget {
+  const TutorialScreen({super.key});
 
   @override
-  State<Tutorial> createState() => _TutorialState();
+  State<TutorialScreen> createState() => _TutorialScreenState();
 }
 
-class _TutorialState extends State<Tutorial> {
+class _TutorialScreenState extends State<TutorialScreen> {
   final _pageController = PageController();
 
   int pagenumber = 0;
@@ -172,4 +174,3 @@ class _TutorialState extends State<Tutorial> {
     );
   }
 }
-//  Navigator.pushNamed(context, "/OwnBikeScreen");

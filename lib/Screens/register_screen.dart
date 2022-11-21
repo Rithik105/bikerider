@@ -1,23 +1,22 @@
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Models/UserModel.dart';
-import 'package:bikerider/custom/widgets/text_form_fields.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Utility/enums.dart';
-import '../bloc/BikeCubit.dart';
-import '../custom/widgets/ShowToast.dart';
-import '../custom/widgets/button.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:bikerider/custom/widgets/text_form_fields.dart';
+import 'package:bikerider/Utility/enums.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/Models/UserModel.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController _name = TextEditingController();
-  TextEditingController _password = TextEditingController();
-  TextEditingController _email = TextEditingController();
-  TextEditingController _phone = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

@@ -425,7 +425,8 @@ class _MapStartState extends State<MapStart> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GalleryPreviewScreen(),
+                      builder: (context) => GalleryPreviewScreen(
+                          getTripModel: widget.getTripModel),
                     ));
                 Provider.of<MapProvider>(context, listen: false).toggleIcon();
               },
