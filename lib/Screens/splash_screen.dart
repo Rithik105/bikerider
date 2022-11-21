@@ -61,11 +61,12 @@ class _SplashScreenState extends State<SplashScreen> {
               splash: "assets/images/splash/splash.png",
               splashIconSize: 250,
               backgroundColor: Colors.transparent,
-              nextScreen: HomeScreen(),
+              nextScreen: const HomeScreen(),
             ),
           );
-        } else
+        } else {
           return Container();
+        }
       },
     );
   }
