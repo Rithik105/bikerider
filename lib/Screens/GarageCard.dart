@@ -150,19 +150,17 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                 ),
               ),
-
               Column(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(0);
                         BookServiceHttp.prefillDetails().then(
                           (value) {
                             enableAll(0);
-
                             if (value.prefill.isEmpty) {
                               showToast(msg: 'Please add Bike details');
                               print('Please add your bike');
@@ -252,7 +250,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[1],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(1);
                         BookServiceHttp.prefillDetails().then(
@@ -346,7 +344,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[2],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(2);
                         GetOwnerDetails.getOwner().then(
@@ -435,7 +433,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[3],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(3);
                         print('test');
@@ -498,7 +496,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[4],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         print('test');
                         Navigator.pushNamed(context, "/AccessoriesScreen");

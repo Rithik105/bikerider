@@ -1,15 +1,15 @@
+// ignore_for_file: iterable_contains_unrelated_type
+
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 
 import '../Http/UserHttp.dart';
 import '../Utility/Secure_storeage.dart';
 import '../custom/constants.dart';
 import 'ChatScreen.dart';
-import 'maps_provider.dart';
 
 //  Lodge:      19016
 //  Restaurant: 13000
@@ -21,14 +21,57 @@ class MapStart extends StatefulWidget {
     Key? key,
     required this.getTripModel,
   }) : super(key: key);
+
   @override
   State<MapStart> createState() => _MapStartState();
   final GetTripModel getTripModel;
 }
 
 class _MapStartState extends State<MapStart> {
+  bool showAtmMarkers = true;
+  bool showFuelStationMarkers = true;
+  bool showRestaurantMarkers = true;
+  bool showLodgingMarkers = true;
+
+  late BitmapDescriptor currentLocationIcon;
+  late BitmapDescriptor atmLocationIcon;
+  late BitmapDescriptor fuelStationLocationIcon;
+  late BitmapDescriptor restaurantLocationIcon;
+  late BitmapDescriptor lodgeLocationIcon;
+
+  setCustomIcons() async {
+    BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      'assets/images/google_maps/fab.png',
+    ).then((value) => currentLocationIcon = value);
+    BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      'assets/images/google_maps/atmMachine.png',
+    ).then((value) => atmLocationIcon = value);
+    BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      'assets/images/google_maps/bed.png',
+    ).then((value) => lodgeLocationIcon = value);
+    BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      'assets/images/google_maps/restaurant.png',
+    ).then((value) => restaurantLocationIcon = value);
+    BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      'assets/images/google_maps/gas-station.png',
+    ).then((value) => fuelStationLocationIcon = value);
+    // await BitmapDescriptor.fromAssetImage(
+    //   const ImageConfiguration(),
+    //   'assets/images/google_maps/fab.png',
+    // ).then((value) => currentLocationIcon = value);
+    // await BitmapDescriptor.fromAssetImage(
+    //   const ImageConfiguration(),
+    //   'assets/images/google_maps/fab.png',
+    // ).then((value) => currentLocationIcon = value);
+  }
+
   late GoogleMapController myController;
-  bool pauseButton = false;
+  bool buttonController = false;
   Marker? origin;
   Marker? destination;
   Set<Marker> _markers = Set<Marker>();
@@ -38,8 +81,8 @@ class _MapStartState extends State<MapStart> {
   List<LatLng> polygonLatLngs = <LatLng>[];
   int _polygonIdCounter = 1;
   int _polylineIdCounter = 1;
-  static CameraPosition _initialCameraPosition =
-      CameraPosition(target: LatLng(28.67921234833848, 77.16738359902374));
+  final CameraPosition _initialCameraPosition = const CameraPosition(
+      target: LatLng(28.67921234833848, 77.16738359902374));
 
   // static const _initialCameraPosition = CameraPosition(
   //   target: LatLng(widget.getTripMistance!.points[widget.getTripModel.distance!.points.length~/2],widget.getTripModel.distance!.points[widget.getTripModel.distance!.points.length~/2].),
@@ -141,6 +184,7 @@ class _MapStartState extends State<MapStart> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setCustomIcons();
     _setMarker(LatLng(widget.getTripModel.source!.latitude,
         widget.getTripModel.source!.longitude));
     _setMarker(LatLng(widget.getTripModel.destination!.latitude,
@@ -220,7 +264,69 @@ class _MapStartState extends State<MapStart> {
           children: [
             FloatingActionButton(
               heroTag: 'atm',
-              onPressed: () {},
+              onPressed: () {
+                if (showAtmMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
+                          element.markerId ==
+                          const MarkerId('currentLocation'));
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
+                      }
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
+                      setState(() {});
+                      getAtmLocations(value).then((value) {
+                        print('Atm counts: ${value.length}');
+                        _markers.removeWhere((element) =>
+                            element.markerId.toString().startsWith('ATM'));
+                        int atmId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'ATM-$atmId',
+                              ),
+                              icon: atmLocationIcon,
+                            ),
+                          );
+                          atmId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) =>
+                      element.markerId.value.toString().startsWith('ATM'));
+                  _markers.forEach((element) => print(
+                      element.markerId.value.toString().startsWith('ATM')));
+                  print('removed atm');
+                }
+                showAtmMarkers = !showAtmMarkers;
+                setState(() {});
+              },
               backgroundColor: Colors.transparent,
               elevation: 0,
               hoverColor: Colors.transparent,
@@ -237,8 +343,73 @@ class _MapStartState extends State<MapStart> {
               ),
             ),
             FloatingActionButton(
-              heroTag: 'pump',
-              onPressed: () {},
+              heroTag: 'fuel',
+              onPressed: () {
+                if (showFuelStationMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
+                          element.markerId ==
+                          const MarkerId('currentLocation'));
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
+                      }
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
+                      setState(() {});
+                      getFuelStationsLocations(value).then((value) {
+                        print('Fuel counts: ${value.length}');
+                        _markers.removeWhere((element) => element.markerId
+                            .toString()
+                            .startsWith('FuelStations'));
+                        int fuelId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'FuelStations-$fuelId',
+                              ),
+                              icon: fuelStationLocationIcon,
+                            ),
+                          );
+                          fuelId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) => element.markerId.value
+                      .toString()
+                      .startsWith('FuelStations'));
+                  _markers.forEach((element) => print(element.markerId.value
+                      .toString()
+                      .startsWith('FuelStations')));
+                  print('removed FuelStations');
+                }
+                showFuelStationMarkers = !showFuelStationMarkers;
+                setState(() {});
+              },
               backgroundColor: Colors.transparent,
               elevation: 0,
               hoverColor: Colors.transparent,
@@ -256,7 +427,69 @@ class _MapStartState extends State<MapStart> {
             ),
             FloatingActionButton(
               heroTag: 'lodge',
-              onPressed: () {},
+              onPressed: () {
+                if (showLodgingMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
+                          element.markerId ==
+                          const MarkerId('currentLocation'));
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
+                      }
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
+                      setState(() {});
+                      getLodgeLocations(value).then((value) {
+                        print('Lodge counts: ${value.length}');
+                        _markers.removeWhere((element) =>
+                            element.markerId.toString().startsWith('Lodge'));
+                        int lodgeId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'Lodge-$lodgeId',
+                              ),
+                              icon: lodgeLocationIcon,
+                            ),
+                          );
+                          lodgeId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) =>
+                      element.markerId.value.toString().startsWith('Lodge'));
+                  _markers.forEach((element) => print(
+                      element.markerId.value.toString().startsWith('Lodge')));
+                  print('removed Lodge');
+                }
+                showLodgingMarkers = !showLodgingMarkers;
+                setState(() {});
+              },
               backgroundColor: Colors.transparent,
               elevation: 0,
               hoverColor: Colors.transparent,
@@ -273,8 +506,73 @@ class _MapStartState extends State<MapStart> {
               ),
             ),
             FloatingActionButton(
-              heroTag: 'hotel',
-              onPressed: () {},
+              heroTag: 'Restaurant',
+              onPressed: () {
+                if (showRestaurantMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
+                          element.markerId ==
+                          const MarkerId('currentLocation'));
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
+                      }
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
+                      setState(() {});
+                      getRestaurantLocations(value).then((value) {
+                        print('Restaurant counts: ${value.length}');
+                        _markers.removeWhere((element) => element.markerId
+                            .toString()
+                            .startsWith('Restaurant'));
+                        int restaurantId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'Restaurant-$restaurantId',
+                              ),
+                              icon: restaurantLocationIcon,
+                            ),
+                          );
+                          restaurantId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) => element.markerId.value
+                      .toString()
+                      .startsWith('Restaurant'));
+                  _markers.forEach((element) => print(element.markerId.value
+                      .toString()
+                      .startsWith('Restaurant')));
+                  print('removed Restaurant');
+                }
+                showRestaurantMarkers = !showRestaurantMarkers;
+                setState(() {});
+              },
               backgroundColor: Colors.transparent,
               elevation: 0,
               hoverColor: Colors.transparent,
@@ -288,6 +586,117 @@ class _MapStartState extends State<MapStart> {
               child: Image.asset(
                 "assets/images/trip_start/restaurant.png",
                 width: 20,
+              ),
+            ),
+            PopupMenuButton<int>(
+              onSelected: (value) {
+                print(value);
+                if (value == 2) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Are you sure?',
+                        ),
+                        content: const Text(
+                          'Do you want to End the trip?',
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              textStyle: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            child: const Text('Yes'),
+                            onPressed: () {
+                              UserSecureStorage.getToken().then((value) async {
+                                endTrip(value!, widget.getTripModel.id!);
+                              });
+                              print('clear');
+
+                              setState(() {
+                                _markers.removeWhere((element) =>
+                                    element.markerId.value.startsWith('ATM') ||
+                                    element.markerId.value
+                                        .startsWith('Restaurant') ||
+                                    element.markerId.value
+                                        .startsWith('Lodge') ||
+                                    element.markerId.value.startsWith('Fuel') ||
+                                    element.markerId.value
+                                        .startsWith('currentLocation'));
+                                // _markers.forEach((element) {
+                                //   element.markerId.value.startsWith('ATM');
+                                //   element.markerId.value
+                                //       .startsWith('Restaurant');
+                                //   element.markerId.value.startsWith('Lodge');
+                                //   element.markerId.value
+                                //       .startsWith('currentLocation');
+                                //   element.markerId.value.startsWith('Fuel');
+                                // });
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              textStyle: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            child: const Text('No'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  //Complete Trip
+                  setState(() {
+                    _markers.removeWhere((element) =>
+                        element.markerId.value.startsWith('ATM') ||
+                        element.markerId.value.startsWith('Restaurant') ||
+                        element.markerId.value.startsWith('Lodge') ||
+                        element.markerId.value.startsWith('Fuel') ||
+                        element.markerId.value.startsWith('currentLocation'));
+                    // _markers.forEach((element) {
+                    //   element.markerId.value.startsWith('ATM');
+                    //   element.markerId.value
+                    //       .startsWith('Restaurant');
+                    //   element.markerId.value.startsWith('Lodge');
+                    //   element.markerId.value
+                    //       .startsWith('currentLocation');
+                    //   element.markerId.value.startsWith('Fuel');
+                    // });
+                  });
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 1,
+                  child: Text(
+                    "Clear",
+                    style: TextStyle(
+                      color: Color(0xdd4E4E4E),
+                    ),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 2,
+                  child: Text(
+                    "End Trip",
+                    style: TextStyle(
+                      color: Color(0xdd4E4E4E),
+                    ),
+                  ),
+                ),
+                // popupmenu item 2
+              ],
+              color: Colors.white,
+              padding: const EdgeInsets.all(0),
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.orangeAccent,
               ),
             ),
           ],
@@ -329,10 +738,10 @@ class _MapStartState extends State<MapStart> {
             //   if (destination != null) destination!
             // },
             onTap: (point) {
-              setState(() {
-                polygonLatLngs.add(point);
-                _setPolygon();
-              });
+              // setState(() {
+              //   polygonLatLngs.add(point);
+              //   _setPolygon();
+              // });
             },
           ),
           Align(
@@ -387,8 +796,23 @@ class _MapStartState extends State<MapStart> {
                   print('Current Location');
                   getCurrentLocationData().then((value) {
                     myController.animateCamera(
-                      CameraUpdate.newLatLngZoom(value, 15),
+                      CameraUpdate.newLatLngZoom(value, 12),
                     );
+                    bool checkIfExist = _markers.contains((element) =>
+                        element.markerId == const MarkerId('currentLocation'));
+                    if (checkIfExist) {
+                      _markers.removeWhere((element) =>
+                          element.markerId ==
+                          const MarkerId('currentLocation'));
+                    }
+                    _markers.add(
+                      Marker(
+                        markerId: const MarkerId('currentLocation'),
+                        position: value,
+                        icon: currentLocationIcon,
+                      ),
+                    );
+                    setState(() {});
                   });
                   // myController.animateCamera(
                   //   CameraUpdate.newCameraPosition(_initialCameraPosition),
@@ -412,22 +836,34 @@ class _MapStartState extends State<MapStart> {
           ).paddingAll(14, 25, 0, 125),
         ],
       ),
-      bottomNavigationBar: Consumer<MapProvider>(
-        builder: (BuildContext context, value, Widget? child) {
-          return Container(
-            height: 50,
-            width: double.infinity,
-            decoration: kLargeMapButtonDecoration,
-            child: GestureDetector(
-              onTap: () {
-                Provider.of<MapProvider>(context, listen: false).toggleIcon();
-              },
-              child: Center(
-                child: value.playIcon,
-              ),
-            ),
-          );
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          setState(() {
+            buttonController = !buttonController;
+          });
+          print(buttonController);
+          UserSecureStorage.getToken().then((value) async {
+            sendStatus(await getCurrentLocationData(), value!,
+                widget.getTripModel.id!);
+          });
         },
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          decoration: kLargeMapButtonDecoration,
+          child: Center(
+            child: buttonController
+                ? Image.asset(
+                    "assets/images/google_maps/pause.png",
+                    width: 20,
+                  )
+                : Image.asset(
+                    "assets/images/google_maps/play.png",
+                    width: 20,
+                    color: Colors.white,
+                  ),
+          ),
+        ),
       ),
     );
   }

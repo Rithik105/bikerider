@@ -11,6 +11,7 @@ import '../Utility/enums.dart';
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/button.dart';
 import '../custom/widgets/text_form_fields.dart';
+import 'invite_people_test.dart';
 
 class CreateTrip extends StatefulWidget {
   const CreateTrip({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class _CreateTripState extends State<CreateTrip> {
     // TODO: implement initState
     super.initState();
     CreateTripModal.clearAll();
+    clearTripContacts();
     //  Provider.of<InviteProvider>(context, listen: true).selectedContact.clear();
   }
 
@@ -48,6 +50,10 @@ class _CreateTripState extends State<CreateTrip> {
     } else {
       return null;
     }
+  }
+
+  clearTripContacts() {
+    Provider.of<InviteProvider>(context, listen: false).selectedContact.clear();
   }
 
   TextEditingController startDate = TextEditingController();
@@ -91,8 +97,8 @@ class _CreateTripState extends State<CreateTrip> {
           child: Column(
             children: [
               Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 40),
+                width: MediaQuery.of(context).size.width * 0.8,
+                // margin: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -209,9 +215,7 @@ class _CreateTripState extends State<CreateTrip> {
                           label: 'Start Date',
                           controller: startDate,
                           enable: false,
-                          width: MediaQuery.of(context).size.width > 200
-                              ? MediaQuery.of(context).size.width * 0.36
-                              : null,
+                          width: MediaQuery.of(context).size.width * 0.36,
                         ),
                         // SizedBox(width: 10,),
                         CustomSmallTextFormField(
@@ -219,9 +223,7 @@ class _CreateTripState extends State<CreateTrip> {
                           label: 'End Date',
                           controller: endDate,
                           enable: false,
-                          width: MediaQuery.of(context).size.width > 200
-                              ? MediaQuery.of(context).size.width * 0.35
-                              : null,
+                          width: MediaQuery.of(context).size.width * 0.36,
                         ),
                       ],
                     ),
@@ -236,9 +238,7 @@ class _CreateTripState extends State<CreateTrip> {
                           label: 'Start Time',
                           controller: startTime,
                           enable: false,
-                          width: MediaQuery.of(context).size.width > 200
-                              ? MediaQuery.of(context).size.width * 0.4
-                              : null,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           // validate: validate(startTime),
                         ),
                         const SizedBox(
@@ -360,7 +360,13 @@ class _CreateTripState extends State<CreateTrip> {
                   debugPrint('Add a invite button pressed');
                   // print('encrypt');
                   // encryptTest();
-                  Navigator.pushNamed(context, '/InvitePage');
+                  // Navigator.pushNamed(context, '/InvitePage');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const InvitePageTest(),
+                    ),
+                  );
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
@@ -378,7 +384,7 @@ class _CreateTripState extends State<CreateTrip> {
                             type: CircularButtonType.invite,
                             callBack: () {
                               debugPrint('Add a invite button pressed');
-                              Navigator.pushNamed(context, '/InvitePage');
+                              // Navigator.pushNamed(context, '/InvitePage');
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
