@@ -61,11 +61,12 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     });
   }
   Widget callWarning(){
+    print("inside call warning");
     return Positioned(
-      top: 200,
-      left: 50,
-      right: 80,
-      bottom: 40,
+     top: 80,
+      left: 40,
+      right: 40,
+      bottom: 20,
       child: Column(
         children: [
           Text("You will have only two attempts to change your number",style: TextStyle(color: Colors.red),),
@@ -133,65 +134,68 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   //   ),
                   // ),
                 ),
-                onChanged: (value){setState(() {
-                 //callWarning();
-                  myError;
-                  mobileNumberController.text=value;
+                onChanged: (value){
 
-                });
+                 //callWarning();
+                 //  myError;
+                 //  mobileNumberController.text=value;
+                  mobileNumberController.text!=
+                  widget.prefill.mobile&&value.length==10
+                      ? showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      content: Text(
+                        'Are you sure to change the mobile number?',
+                        style: TextStyle(color: Colors.grey.shade700),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            mobileNumberController.text =
+                            widget.prefill.mobile!;
+                            Navigator.pop(context, 'NO');
+                          },
+                          child: const Text(
+                            'NO',
+                            style: TextStyle(
+                                color: Color(0xff673AB7), fontSize: 21),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            BookServiceHttp.updatePhoneNumber(
+                                mobileNumberController.text)
+                                .then((value) async {
+                                  print("call warning");
+
+                              // await BookServiceHttp
+                              //         .getAccessOnChangedPhoneNumber(
+                              //             mobileNumberController.text)
+                              //     .then((value) => isEdit = false);
+                            });
+                            setState(() {});
+                            Navigator.pop(context, 'yes');
+                          },
+                          child: const Text('YES',
+                              style: TextStyle(
+                                  color: Color(0xff673AB7),
+                                  fontSize: 21)),
+                        ),
+                      ],
+                    ),
+                  )
+                      : null;
+                  setState(() {});
 
                 },
               ),
               GestureDetector(
                 onTap: () {
                   isEdit = true;
-                //  callWarning();
+                  mobileNumberController.text="";
                   setState(() {});
                   print("gokcfb");
-                  mobileNumberController.text != widget.prefill.mobile
-                      ? showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            content: Text(
-                              'Are you sure to change the mobile number?',
-                              style: TextStyle(color: Colors.grey.shade700),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  mobileNumberController.text =
-                                      widget.prefill.mobile!;
-                                  Navigator.pop(context, 'NO');
-                                },
-                                child: const Text(
-                                  'NO',
-                                  style: TextStyle(
-                                      color: Color(0xff673AB7), fontSize: 21),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  BookServiceHttp.updatePhoneNumber(
-                                          mobileNumberController.text)
-                                      .then((value) async {
-                                    // await BookServiceHttp
-                                    //         .getAccessOnChangedPhoneNumber(
-                                    //             mobileNumberController.text)
-                                    //     .then((value) => isEdit = false);
-                                  });
-                                  setState(() {});
-                                  Navigator.pop(context, 'yes');
-                                },
-                                child: const Text('YES',
-                                    style: TextStyle(
-                                        color: Color(0xff673AB7),
-                                        fontSize: 21)),
-                              ),
-                            ],
-                          ),
-                        )
-                      : null;
-                  setState(() {});
+
                 },
                 child: Icon(
                   Icons.edit,
