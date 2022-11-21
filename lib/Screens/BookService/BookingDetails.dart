@@ -154,14 +154,16 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                         ),
                       ),
                       Text(":"),
-                      Container(
-                        width: 130,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          e.value,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: Color(0xff4F504F),
+                      Expanded(
+                        child: Container(
+                          width: 130,
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            e.value,
+                            style: GoogleFonts.roboto(
+                              fontSize: 18,
+                              color: Color(0xff4F504F),
+                            ),
                           ),
                         ),
                       ),
