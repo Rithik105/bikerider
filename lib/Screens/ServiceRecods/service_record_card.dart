@@ -14,15 +14,16 @@ class ServiceRecordsCard extends StatefulWidget {
   ServiceRecordsCard({
     Key? key,
     required this.serviceRecordList,
+    required this.callBack,
     // required this.serviceRecordList,
   }) : super(key: key);
-
+  Function() callBack;
   @override
   State<ServiceRecordsCard> createState() => _ServiceRecordsCardState();
 }
 
 class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
-  List<InvoiceModel> invoiceList = [];
+  List<ProductInvoiceModel> invoiceList = [];
   IconData? _selectedIcon;
   //double _userRating = widget.serviceRecordList.dealerRating!.toDouble();
   bool _isVertical = false;
@@ -36,7 +37,9 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
 
             for (var e in value) {
               print("value of e is ${e}");
-              invoiceList.add(InvoiceModel.fromJson(e));
+              invoiceList.add(
+                ProductInvoiceModel.fromJson(e),
+              );
             }
             //   serviceRecordList.add(value);
             print("invoice list is${invoiceList}");
@@ -46,7 +49,8 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
               MaterialPageRoute(
                 builder: (context) => ServiceDetails(
                     serviceRecordList: widget.serviceRecordList,
-                    invoiceList: invoiceList),
+                    callBack: widget.callBack,
+                    invoiceModelList: invoiceList),
               ),
             );
           },
@@ -82,7 +86,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       decoration: kServiceCardTagDecoration,
                       height: 25,
                       width: 60,
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "New",
                           style: TextStyle(color: Colors.white),
@@ -93,11 +97,12 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       decoration: kBookingDetailsTagDecoration,
                       height: 25,
                       width: 60,
-                      child: Center(
-                          child: Text(
-                        "Past",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                      child: const Center(
+                        child: Text(
+                          "Past",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
             ),
             Container(
@@ -112,8 +117,10 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                            DateFormat('dd').format(DateTime.parse(
-                                widget.serviceRecordList.slotDate!)),
+                            DateFormat('dd').format(
+                              DateTime.parse(
+                                  widget.serviceRecordList.slotDate!),
+                            ),
                             style: DateTime.parse(
                                         widget.serviceRecordList.slotDate!)
                                     .isAfter(
@@ -121,15 +128,17 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                             )
                                 ? kServiceRecordCardDateTextStyle
                                 : kServicePastRecordCardDateTextStyle),
-                        SizedBox(
+                        const SizedBox(
                           width: 3,
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              DateFormat('MMM').format(DateTime.parse(
-                                  widget.serviceRecordList.slotDate!)),
+                              DateFormat('MMM').format(
+                                DateTime.parse(
+                                    widget.serviceRecordList.slotDate!),
+                              ),
                               style: DateTime.parse(
                                           widget.serviceRecordList.slotDate!)
                                       .isAfter(
@@ -148,7 +157,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                               )
                                   ? kServiceRecordCardYearTextStyle
                                   : kServicePastRecordCardYearTextStyle,
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -179,7 +188,7 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                             _isVertical ? Axis.vertical : Axis.horizontal,
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

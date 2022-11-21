@@ -4,10 +4,11 @@ class PrefillModel {
   PrefillModel({required this.mobile, required this.prefill});
   PrefillModel.fromJson(Map json) {
     mobile = json['mobile'];
-    json['prefilles'] == null
-        ? null
-        : json['prefilled']
-            .forEach((e) => prefill.add(VehicleDetails.fromJson(e)));
+    // json['prefilles'] == null
+    //     ? null
+    //     :
+    print(json['prefilled'].length);
+    json['prefilled'].forEach((e) => prefill.add(VehicleDetails.fromJson(e)));
   }
 // toJson(){
 //   return{'mobile':mobile,'to':vehicleType,'distance':vehicleNumber};

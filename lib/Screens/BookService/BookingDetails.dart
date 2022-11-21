@@ -155,7 +155,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                       ),
                       Text(":"),
                       Container(
-                        width: 150,
+                        width: 130,
                         alignment: Alignment.centerRight,
                         child: Text(
                           e.value,

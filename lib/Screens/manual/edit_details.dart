@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'manual_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'owners_manual.dart';
+
 class EditDetails extends StatefulWidget {
   PersonalDetailsModel person;
   BikeDetailsModel bike;
@@ -89,6 +91,14 @@ class _EditDetailsState extends State<EditDetails> {
                               UpdateOwnerDetails.updateOwner(
                                   widget.person.toJson());
                               Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OwnersManual(
+                                        bikeDetails: widget.bike,
+                                        personalDetails: widget.person),
+                                  ));
                             },
                             child: Image.asset(
                               "assets/images/manual/save.png",
@@ -101,8 +111,11 @@ class _EditDetailsState extends State<EditDetails> {
                         height: 20,
                       ),
                       TextField(
+                        enabled: false,
                         controller: widget.person.licenceNumberController,
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
                           label: Text(
                             "Licence No",
                             style: GoogleFonts.roboto(
@@ -114,6 +127,8 @@ class _EditDetailsState extends State<EditDetails> {
                         enabled: false,
                         controller: widget.person.nameController,
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
                           label: Text(
                             "Name",
                             style: GoogleFonts.roboto(
@@ -165,6 +180,8 @@ class _EditDetailsState extends State<EditDetails> {
                         enabled: false,
                         controller: widget.person.mobileController,
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
                           label: Text(
                             "Mobile",
                             style: GoogleFonts.roboto(
@@ -176,6 +193,8 @@ class _EditDetailsState extends State<EditDetails> {
                         enabled: false,
                         controller: widget.person.emailController,
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
                           label: Text(
                             "Email",
                             style: GoogleFonts.roboto(

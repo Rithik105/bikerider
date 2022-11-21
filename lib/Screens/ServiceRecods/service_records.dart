@@ -1,4 +1,3 @@
-
 import 'package:bikerider/Screens/ServiceRecods/service_record_card.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +17,7 @@ class ServiceRecords extends StatefulWidget {
 }
 
 class _ServiceRecordsState extends State<ServiceRecords> {
+  bool initialValue = false;
   String serviceType = 'General Service';
   TextEditingController vehicleTypeTextfield = TextEditingController();
   String vehicleType = 'Classic 350-black';
@@ -28,6 +28,43 @@ class _ServiceRecordsState extends State<ServiceRecords> {
     "Breakdown assistance"
   ];
   List<ServiceRecordModel> serviceRecordList = [];
+  List<DropdownMenuItem>? item;
+  callBack() {
+    serviceRecordList.clear();
+    BookServiceHttp.getBookingDetails(vehicleType, serviceType).then((value) {
+      // serviceRecordList=[];
+      var test = value["serviceDetails"];
+      for (var e in test) {
+        print("value of e is ${e}");
+        serviceRecordList.add(ServiceRecordModel.fromJson(e));
+        print(serviceRecordList.length);
+        //  print(serviceRecordList.toString());
+      }
+      //   serviceRecordList.add(value);
+      print(serviceRecordList);
+      setState(() {});
+    });
+  }
+
+  List<DropdownMenuItem> addService() {
+    item = categories
+        .map(
+          (item) => DropdownMenuItem<String>(
+            value: item,
+            child: Text(
+              item,
+              style: const TextStyle(fontSize: 18, color: Colors.black87),
+            ),
+          ),
+        )
+        .toList();
+    return item!;
+  }
+
+  List<DropdownMenuItem>? removeService() {
+    item = null;
+    return item;
+  }
 
   // Map<String,dynamic> serviceRecordList={};
 
@@ -66,10 +103,13 @@ class _ServiceRecordsState extends State<ServiceRecords> {
             children: [
               textFieldDropdown
                   ? DropdownButtonFormField(
-                      icon: Image.asset("assets/drop_down.png", width: 10),
+                      icon: Image.asset(
+                          "assets/images/book_service/drop_down.png",
+                          width: 10),
                       decoration: InputDecoration(
                         focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey)),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
                         labelText: 'Select vehicle',
                         labelStyle: GoogleFonts.roboto(
                             color: const Color(0xff9F9F9F), fontSize: 18),
@@ -90,6 +130,9 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                       ],
                       // value: vehicleType,
                       onChanged: (value) {
+                        removeService();
+                        setState(() {});
+                        addService();
                         print(value);
                         vehicleType = value!;
                         setState(() {});
@@ -112,6 +155,7 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                 height: 10,
               ),
               DropdownButtonFormField(
+                // value: initialValue,
                 icon: Image.asset("assets/images/book_service/drop_down.png",
                     width: 10),
                 decoration: InputDecoration(
@@ -122,27 +166,16 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                   labelStyle: GoogleFonts.roboto(
                       color: const Color(0xff9F9F9F), fontSize: 18),
                 ),
-                items: categories
-                    .map(
-                      (item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: const TextStyle(
-                              fontSize: 18, color: Colors.black87),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                items: item,
                 onChanged: (value) {
                   setState(() {
                     serviceType = value as String;
                   });
-                  serviceRecordList=[];
+                  serviceRecordList = [];
                   //API call
                   BookServiceHttp.getBookingDetails(vehicleType, serviceType)
                       .then((value) {
-                        // serviceRecordList=[];
+                    // serviceRecordList=[];
                     var test = value["serviceDetails"];
                     for (var e in test) {
                       print("value of e is ${e}");
@@ -165,9 +198,10 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                   print(e);
                   return ServiceRecordsCard(
                     serviceRecordList: e,
+                    callBack: callBack,
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

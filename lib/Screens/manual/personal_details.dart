@@ -45,6 +45,32 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     SizedBox(
                       width: 100,
                       child: Text(
+                        "Licence No",
+                        style: kGeneralTextStyle,
+                      ),
+                    ),
+                    Text(':'),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        width: 200,
+                        height: 40,
+                        child: Text(
+                          "${widget.personalDetails.licenceNumberController.text}",
+                          style: kDetailsTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(
+                  thickness: 1,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Text(
                         "Name",
                         style: kGeneralTextStyle,
                       ),

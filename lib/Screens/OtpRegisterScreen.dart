@@ -121,6 +121,7 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                               Provider.of<UserData>(context, listen: false)
                                   .setUserData(widget.user);
                               UserSecureStorage.setToken(value2["token"]);
+
                               UserSecureStorage.setDetails(
                                   key: "name", value: value2["userName"]);
                               UserSecureStorage.setDetails(
