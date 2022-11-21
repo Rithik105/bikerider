@@ -7,12 +7,10 @@ import 'package:bikerider/Screens/OwnBikeScreen.dart';
 import 'package:bikerider/Screens/RegisterScreen.dart';
 import 'package:bikerider/Screens/SuccessPage.dart';
 import 'package:bikerider/Screens/create_trip.dart';
-import 'package:bikerider/Screens/invite_people.dart';
 import 'package:bikerider/Screens/took_kit_screen.dart';
 import 'package:bikerider/Screens/trip_summary_create.dart';
 import 'package:bikerider/Screens/trip_summary_go.dart';
 import 'package:bikerider/Utility/PageTransition.dart';
-import 'package:bikerider/custom/widgets/CustomCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,8 +36,8 @@ class Routes {
                   mobile: arguments["mobile"],
                 ));
       //---------------------------------------------------------
-      case "/InvitePage":
-        return LeftTransitions(child: InvitePage());
+      // case "/InvitePage":
+      //   return LeftTransitions(child: InvitePage());
 
       //---------------------------------------------------------
       case "/Tutorial":

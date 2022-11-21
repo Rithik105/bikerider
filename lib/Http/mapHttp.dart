@@ -171,22 +171,32 @@ sendStatus(LatLng point, String token, String id) async {
   print(id);
   print(point);
   print(token);
-  final http.Response response = await http.post(
-    Uri.parse(
-        "https://riding-application.herokuapp.com/api/v1/trip/currentLocation"),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'BEARER $token'
-    },
-    body: json.encode({
-      '_id': id,
-      'currentLocation': [
-        {'latitude': point.latitude, 'longitude': point.longitude}
-      ],
-    }),
-  );
+  final http.Response response = await http.patch(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/trip/currentLocation"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+      body: json.encode({
+        "_id": id,
+        "currentLocation": [
+          {
+            "latitude": point.latitude.toString(),
+            "longitude": point.longitude.toString()
+          }
+        ]
+      }));
   print('.....');
-
+  // body: json.encode({
+  //   "_id": id,
+  //   "currentLocation": [
+  //     {
+  //       "latitude": point.latitude.toString(),
+  //       "longitude": point.longitude.toString()
+  //     }
+  //   ]
+  // }),
   print(jsonDecode(response.body));
   return jsonDecode(response.body);
 }
@@ -194,7 +204,7 @@ sendStatus(LatLng point, String token, String id) async {
 endTrip(String token, String id) async {
   print(id);
   print(token);
-  final http.Response response = await http.post(
+  final http.Response response = await http.patch(
       Uri.parse(
           "https://riding-application.herokuapp.com/api/v1/trip/updateTripStatus"),
       headers: {

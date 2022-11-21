@@ -35,6 +35,19 @@ class _InvitePageTestState extends State<InvitePageTest> {
     // return '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split('-')[1]}';
     // print(
     //     '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split(' ')[1]}');
+    if (contact.phones?.elementAt(0).value.toString().length == 12) {
+      print(contact.phones?.elementAt(0).value);
+      List<String>? temp =
+          contact.phones?.elementAt(0).value.toString().split(' ');
+      return '${temp![1]}${temp[2]}';
+    }
+    if (contact.phones?.elementAt(0).value.toString()[0] == '(') {
+      print(
+          '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split('-')[1]}');
+      return '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split('-')[1]}';
+    }
+    print(
+        '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split(' ')[1]}');
     return '${contact.phones?.elementAt(0).value.toString().substring(1, 4)}${contact.phones?.elementAt(0).value.toString().substring(6, 9)}${contact.phones?.elementAt(0).value.toString().split(' ')[1]}';
   }
 
@@ -65,9 +78,9 @@ class _InvitePageTestState extends State<InvitePageTest> {
     print(contacts);
   }
 
+  // bool isSearching = searchController.text.isNotEmpty;
   @override
   Widget build(BuildContext context) {
-    bool isSearching = searchController.text.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -122,90 +135,64 @@ class _InvitePageTestState extends State<InvitePageTest> {
             const SizedBox(
               height: 30,
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ...contacts.map(
-                      (e) => GestureDetector(
-                        onTap: () {
-                          Provider.of<InviteProvider>(context, listen: false)
-                              .toggleContact(ContactDetails(
-                            name: e.displayName.toString(),
-                            phoneNumber: convertToPhoneNumber(e),
-                          ));
-                        },
-                        child: ListTile(
-                          title: Text(
-                            e.displayName.toString(),
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.roboto(
-                                fontSize: 15,
-                                color: const Color.fromRGBO(0, 0, 0, 0.87)),
-                          ),
-                          leading:
-                              ((e.avatar != null) && (e.avatar!.isNotEmpty))
-                                  ? CircleAvatar(
-                                      backgroundImage: MemoryImage(e.avatar!),
-                                    )
-                                  : CircleAvatar(
-                                      backgroundColor:
-                                          const Color.fromRGBO(0, 0, 0, 0.38),
-                                      child: Text(
-                                        e.initials(),
-                                        style: GoogleFonts.robotoFlex(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                          trailing: GestureDetector(
-                            onTap: () {
-                              Provider.of<InviteProvider>(context,
-                                      listen: false)
-                                  .toggleContact(ContactDetails(
+            Column(
+              children: [
+                ...contacts.map(
+                  (e) => GestureDetector(
+                    onTap: () {
+                      Provider.of<InviteProvider>(context, listen: false)
+                          .toggleContact(ContactDetails(
+                        name: e.displayName.toString(),
+                        phoneNumber: convertToPhoneNumber(e),
+                      ));
+                    },
+                    child: Container(
+                      height: 30,
+                      child: ListTile(
+                        title: Text(
+                          e.displayName.toString(),
+                          textAlign: TextAlign.left,
+                          style: GoogleFonts.roboto(
+                              fontSize: 15,
+                              color: const Color.fromRGBO(0, 0, 0, 0.87)),
+                        ),
+                        leading: ((e.avatar != null) && (e.avatar!.isNotEmpty))
+                            ? CircleAvatar(
+                                backgroundImage: MemoryImage(e.avatar!),
+                              )
+                            : CircleAvatar(
+                                backgroundColor:
+                                    const Color.fromRGBO(0, 0, 0, 0.38),
+                                child: Text(
+                                  e.initials(),
+                                  style: GoogleFonts.robotoFlex(
+                                      color: Colors.white),
+                                ),
+                              ),
+                        trailing: Consumer<InviteProvider>(
+                          builder:
+                              (BuildContext context, value, Widget? child) {
+                            return value.isExist(
+                              ContactDetails(
                                 name: e.displayName.toString(),
                                 phoneNumber: convertToPhoneNumber(e),
-                              ));
-                            },
-                            // child: Consumer<InviteProvider>(
-                            //   builder:
-                            //       (BuildContext context, value, Widget? child) {
-                            //     return value.isExist(
-                            //       ContactDetails(
-                            //         name: e.displayName.toString(),
-                            //         phoneNumber: convertToPhoneNumber(e),
-                            //       ),
-                            //     )
-                            // ignore: iterable_contains_unrelated_type
-                            // child: Provider.of<InviteProvider>(context,
-                            //             listen: true)
-                            //         .selectedContact
-                            //         .contains(e)
-                            child: Consumer<InviteProvider>(
-                              builder:
-                                  (BuildContext context, value, Widget? child) {
-                                return value.isExist(
-                                  ContactDetails(
-                                    name: e.displayName.toString(),
-                                    phoneNumber: convertToPhoneNumber(e),
-                                  ),
-                                )
-                                    ? Image.asset(
-                                        "assets/images/contacts/green_check.png",
-                                        width: 30,
-                                      )
-                                    : Image.asset(
-                                        "assets/images/contacts/white_check.png",
-                                        width: 30,
-                                      );
-                              },
-                            ),
-                          ),
+                              ),
+                            )
+                                ? Image.asset(
+                                    "assets/images/contacts/green_check.png",
+                                    width: 30,
+                                  )
+                                : Image.asset(
+                                    "assets/images/contacts/white_check.png",
+                                    width: 30,
+                                  );
+                          },
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

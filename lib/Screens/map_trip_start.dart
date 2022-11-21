@@ -28,10 +28,10 @@ class MapStart extends StatefulWidget {
 }
 
 class _MapStartState extends State<MapStart> {
-  bool showAtmMarkers = false;
-  bool showFuelStationMarkers = false;
-  bool showRestaurantMarkers = false;
-  bool showLodgingMarkers = false;
+  bool showAtmMarkers = true;
+  bool showFuelStationMarkers = true;
+  bool showRestaurantMarkers = true;
+  bool showLodgingMarkers = true;
 
   late BitmapDescriptor currentLocationIcon;
   late BitmapDescriptor atmLocationIcon;
@@ -269,7 +269,7 @@ class _MapStartState extends State<MapStart> {
                   getCurrentLocationData().then(
                     (value) {
                       myController.animateCamera(
-                        CameraUpdate.newLatLngZoom(value, 15),
+                        CameraUpdate.newLatLngZoom(value, 12),
                       );
                       bool checkIfExist = _markers.contains((element) =>
                           element.markerId ==
@@ -319,9 +319,13 @@ class _MapStartState extends State<MapStart> {
                   );
                 } else {
                   _markers.removeWhere((element) =>
-                      element.markerId.toString().startsWith('ATM'));
+                      element.markerId.value.toString().startsWith('ATM'));
+                  _markers.forEach((element) => print(
+                      element.markerId.value.toString().startsWith('ATM')));
+                  print('removed atm');
                 }
                 showAtmMarkers = !showAtmMarkers;
+                setState(() {});
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -341,56 +345,70 @@ class _MapStartState extends State<MapStart> {
             FloatingActionButton(
               heroTag: 'fuel',
               onPressed: () {
-                getCurrentLocationData().then(
-                  (value) {
-                    myController.animateCamera(
-                      CameraUpdate.newLatLngZoom(value, 15),
-                    );
-                    bool checkIfExist = _markers.contains((element) =>
-                        element.markerId == const MarkerId('currentLocation'));
-                    if (checkIfExist) {
-                      _markers.removeWhere((element) =>
+                if (showFuelStationMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
                           element.markerId ==
                           const MarkerId('currentLocation'));
-                    }
-                    _markers.add(
-                      Marker(
-                        markerId: const MarkerId('currentLocation'),
-                        position: value,
-                        icon: currentLocationIcon,
-                      ),
-                    );
-                    setState(() {});
-                    getFuelStationsLocations(value).then((value) {
-                      print('Fuel counts: ${value.length}');
-                      _markers.removeWhere((element) => element.markerId
-                          .toString()
-                          .startsWith('FuelStations'));
-                      int fuelId = 0;
-                      for (int i = 0; i < value.length; i++) {
-                        _markers.add(
-                          Marker(
-                            position: LatLng(value[i].place!.latitude,
-                                value[i].place!.longitude),
-                            infoWindow: InfoWindow(
-                              title: '${value[i].name!} [${value[i].distance}]',
-                              snippet: value[i].address,
-                            ),
-                            markerId: MarkerId(
-                              'FuelStations-$fuelId',
-                            ),
-                            icon: fuelStationLocationIcon,
-                          ),
-                        );
-                        fuelId++;
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
                       }
-                      _markers.forEach((element) {
-                        print(element.infoWindow.title);
-                      });
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
                       setState(() {});
-                    });
-                  },
-                );
+                      getFuelStationsLocations(value).then((value) {
+                        print('Fuel counts: ${value.length}');
+                        _markers.removeWhere((element) => element.markerId
+                            .toString()
+                            .startsWith('FuelStations'));
+                        int fuelId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'FuelStations-$fuelId',
+                              ),
+                              icon: fuelStationLocationIcon,
+                            ),
+                          );
+                          fuelId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) => element.markerId.value
+                      .toString()
+                      .startsWith('FuelStations'));
+                  _markers.forEach((element) => print(element.markerId.value
+                      .toString()
+                      .startsWith('FuelStations')));
+                  print('removed FuelStations');
+                }
+                showFuelStationMarkers = !showFuelStationMarkers;
+                setState(() {});
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -410,55 +428,67 @@ class _MapStartState extends State<MapStart> {
             FloatingActionButton(
               heroTag: 'lodge',
               onPressed: () {
-                getCurrentLocationData().then(
-                  (value) {
-                    myController.animateCamera(
-                      CameraUpdate.newLatLngZoom(value, 15),
-                    );
-                    bool checkIfExist = _markers.contains((element) =>
-                        element.markerId == const MarkerId('currentLocation'));
-                    if (checkIfExist) {
-                      _markers.removeWhere((element) =>
+                if (showLodgingMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
                           element.markerId ==
                           const MarkerId('currentLocation'));
-                    }
-                    _markers.add(
-                      Marker(
-                        markerId: const MarkerId('currentLocation'),
-                        position: value,
-                        icon: currentLocationIcon,
-                      ),
-                    );
-                    setState(() {});
-                    getLodgeLocations(value).then((value) {
-                      print('Lodge counts: ${value.length}');
-                      _markers.removeWhere((element) =>
-                          element.markerId.toString().startsWith('Lodge'));
-                      int lodgeId = 0;
-                      for (int i = 0; i < value.length; i++) {
-                        _markers.add(
-                          Marker(
-                            position: LatLng(value[i].place!.latitude,
-                                value[i].place!.longitude),
-                            infoWindow: InfoWindow(
-                              title: '${value[i].name!} [${value[i].distance}]',
-                              snippet: value[i].address,
-                            ),
-                            markerId: MarkerId(
-                              'Lodge-$lodgeId',
-                            ),
-                            icon: lodgeLocationIcon,
-                          ),
-                        );
-                        lodgeId++;
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
                       }
-                      _markers.forEach((element) {
-                        print(element.infoWindow.title);
-                      });
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
                       setState(() {});
-                    });
-                  },
-                );
+                      getLodgeLocations(value).then((value) {
+                        print('Lodge counts: ${value.length}');
+                        _markers.removeWhere((element) =>
+                            element.markerId.toString().startsWith('Lodge'));
+                        int lodgeId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'Lodge-$lodgeId',
+                              ),
+                              icon: lodgeLocationIcon,
+                            ),
+                          );
+                          lodgeId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) =>
+                      element.markerId.value.toString().startsWith('Lodge'));
+                  _markers.forEach((element) => print(
+                      element.markerId.value.toString().startsWith('Lodge')));
+                  print('removed Lodge');
+                }
+                showLodgingMarkers = !showLodgingMarkers;
+                setState(() {});
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -478,55 +508,70 @@ class _MapStartState extends State<MapStart> {
             FloatingActionButton(
               heroTag: 'Restaurant',
               onPressed: () {
-                getCurrentLocationData().then(
-                  (value) {
-                    myController.animateCamera(
-                      CameraUpdate.newLatLngZoom(value, 15),
-                    );
-                    bool checkIfExist = _markers.contains((element) =>
-                        element.markerId == const MarkerId('currentLocation'));
-                    if (checkIfExist) {
-                      _markers.removeWhere((element) =>
+                if (showRestaurantMarkers) {
+                  getCurrentLocationData().then(
+                    (value) {
+                      myController.animateCamera(
+                        CameraUpdate.newLatLngZoom(value, 12),
+                      );
+                      bool checkIfExist = _markers.contains((element) =>
                           element.markerId ==
                           const MarkerId('currentLocation'));
-                    }
-                    _markers.add(
-                      Marker(
-                        markerId: const MarkerId('currentLocation'),
-                        position: value,
-                        icon: currentLocationIcon,
-                      ),
-                    );
-                    setState(() {});
-                    getRestaurantLocations(value).then((value) {
-                      print('Restaurant counts: ${value.length}');
-                      _markers.removeWhere((element) =>
-                          element.markerId.toString().startsWith('Restaurant'));
-                      int restaurantId = 0;
-                      for (int i = 0; i < value.length; i++) {
-                        _markers.add(
-                          Marker(
-                            position: LatLng(value[i].place!.latitude,
-                                value[i].place!.longitude),
-                            infoWindow: InfoWindow(
-                              title: '${value[i].name!} [${value[i].distance}]',
-                              snippet: value[i].address,
-                            ),
-                            markerId: MarkerId(
-                              'Restaurant-$restaurantId',
-                            ),
-                            icon: restaurantLocationIcon,
-                          ),
-                        );
-                        restaurantId++;
+                      if (checkIfExist) {
+                        _markers.removeWhere((element) =>
+                            element.markerId ==
+                            const MarkerId('currentLocation'));
                       }
-                      _markers.forEach((element) {
-                        print(element.infoWindow.title);
-                      });
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position: value,
+                          icon: currentLocationIcon,
+                        ),
+                      );
                       setState(() {});
-                    });
-                  },
-                );
+                      getRestaurantLocations(value).then((value) {
+                        print('Restaurant counts: ${value.length}');
+                        _markers.removeWhere((element) => element.markerId
+                            .toString()
+                            .startsWith('Restaurant'));
+                        int restaurantId = 0;
+                        for (int i = 0; i < value.length; i++) {
+                          _markers.add(
+                            Marker(
+                              position: LatLng(value[i].place!.latitude,
+                                  value[i].place!.longitude),
+                              infoWindow: InfoWindow(
+                                title:
+                                    '${value[i].name!} [${value[i].distance}]',
+                                snippet: value[i].address,
+                              ),
+                              markerId: MarkerId(
+                                'Restaurant-$restaurantId',
+                              ),
+                              icon: restaurantLocationIcon,
+                            ),
+                          );
+                          restaurantId++;
+                        }
+                        _markers.forEach((element) {
+                          print(element.infoWindow.title);
+                        });
+                        setState(() {});
+                      });
+                    },
+                  );
+                } else {
+                  _markers.removeWhere((element) => element.markerId.value
+                      .toString()
+                      .startsWith('Restaurant'));
+                  _markers.forEach((element) => print(element.markerId.value
+                      .toString()
+                      .startsWith('Restaurant')));
+                  print('removed Restaurant');
+                }
+                showRestaurantMarkers = !showRestaurantMarkers;
+                setState(() {});
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -751,7 +796,7 @@ class _MapStartState extends State<MapStart> {
                   print('Current Location');
                   getCurrentLocationData().then((value) {
                     myController.animateCamera(
-                      CameraUpdate.newLatLngZoom(value, 15),
+                      CameraUpdate.newLatLngZoom(value, 12),
                     );
                     bool checkIfExist = _markers.contains((element) =>
                         element.markerId == const MarkerId('currentLocation'));

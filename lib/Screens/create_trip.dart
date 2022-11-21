@@ -384,7 +384,7 @@ class _CreateTripState extends State<CreateTrip> {
                             type: CircularButtonType.invite,
                             callBack: () {
                               debugPrint('Add a invite button pressed');
-                              Navigator.pushNamed(context, '/InvitePage');
+                              // Navigator.pushNamed(context, '/InvitePage');
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
