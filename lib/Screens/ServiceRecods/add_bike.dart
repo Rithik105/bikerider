@@ -31,12 +31,23 @@ class _AddBikeState extends State<AddBike> {
   TextEditingController dealerCodeController = TextEditingController();
   String vehicleType = "Royal Enfield Himalayan";
   List<BikeListModel> bikeList = [];
-
+  final PageController _pageController = PageController();
+  int i = 0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print('InitState');
+    AddBikeHttp.addBikeList().then(
+      (value) {
+        print(value);
+        bikeList.clear();
+        for (var e in value) {
+          bikeList.add(BikeListModel.fromJson(e));
+        }
+        setState(() {});
+      },
+    );
   }
 
   @override
@@ -56,7 +67,9 @@ class _AddBikeState extends State<AddBike> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Color(0xffed863a),
         leading: BackButton(
           onPressed: () {
@@ -72,22 +85,35 @@ class _AddBikeState extends State<AddBike> {
           ),
         ),
       ),
-      body: FutureBuilder(
-          future: AddBikeHttp.addBikeList().then(
-            (value) {
-              print(value);
-              bikeList.clear();
-              for (var e in value) {
-                bikeList.add(BikeListModel.fromJson(e));
-              }
-            },
-          ),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
+      body: Center(
+        child: bikeList.isEmpty
+            ? const CircularProgressIndicator(
+                color: Colors.orange,
+              )
+            : SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
+                    Container(
+                      height: 150,
+                      child: PageView(
+                        onPageChanged: (value) {
+                          bikeList.forEach((element) {
+                            print(element.vehicleImage);
+                          });
+                          print(value);
+                          setState(() {
+                            i = value;
+                          });
+                        },
+                        controller: _pageController,
+                        children: [
+                          ...bikeList.map(
+                            (e) => Image.network(e.vehicleImage),
+                          ),
+                        ],
+                      ),
+                    ),
                     Column(
                       children: [
                         Row(
@@ -119,9 +145,9 @@ class _AddBikeState extends State<AddBike> {
                                   ...bikeList
                                       .map(
                                         (e) => DropdownMenuItem(
-                                          value: e.bikeType,
+                                          value: e.vehicleType,
                                           child: Text(
-                                            e.bikeType,
+                                            e.vehicleType,
                                             style: const TextStyle(
                                               fontSize: 18,
                                               color: Colors.black87,
@@ -131,10 +157,14 @@ class _AddBikeState extends State<AddBike> {
                                       )
                                       .toList(),
                                 ],
+                                value: bikeList[i].vehicleType,
                                 onChanged: (value) {
-                                  print(bikeList.length);
+                                  print(bikeList);
                                   print(value.runtimeType);
                                   vehicleType = value!;
+                                  _pageController.jumpToPage(
+                                      bikeList.indexWhere((element) =>
+                                          value == element.vehicleType));
                                   // setState(() {
                                   //   vehicleType = value!;
                                   //   print("service type ${vehicleType}");
@@ -434,7 +464,7 @@ class _AddBikeState extends State<AddBike> {
                                   "Color",
                                   style: kBikeGeneralTextStyle,
                                 )),
-                            Text(':'),
+                            const Text(':'),
                             const SizedBox(
                               width: 8,
                             ),
@@ -491,15 +521,457 @@ class _AddBikeState extends State<AddBike> {
                     )
                   ],
                 ).paddingAll(30, 30, 30, 30),
-              );
-            }
-            // if(snapshot.connectionState==ConnectionState.waiting)
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.orange,
               ),
-            );
-          }),
+      ),
+      // body: FutureBuilder(
+      //     future: AddBikeHttp.addBikeList().then(
+      //       (value) {
+      //         print(value);
+      //         bikeList.clear();
+      //         for (var e in value) {
+      //           bikeList.add(BikeListModel.fromJson(e));
+      //         }
+      //       },
+      //     ),
+      //     builder: (context, snapshot) {
+      //       if (snapshot.connectionState == ConnectionState.done) {
+      //         return SingleChildScrollView(
+      //           scrollDirection: Axis.vertical,
+      //           child: Column(
+      //             children: [
+      //               Container(
+      //                 height: 150,
+      //                 child: PageView(
+      //                   onPageChanged: (value) {
+      //                     print(value);
+      //                     // setState(() {
+      //                     i = value;
+      //                     // });
+      //                   },
+      //                   controller: _pageController,
+      //                   children: [
+      //                     ...bikeList.map(
+      //                       (e) => Image.network(e.vehicleImage),
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ),
+      //               Column(
+      //                 children: [
+      //                   Row(
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Vehicle Type",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Container(
+      //                         width: MediaQuery.of(context).size.width - 200,
+      //                         child: DropdownButtonFormField(
+      //                           isExpanded: true,
+      //                           icon: Image.asset(
+      //                               "assets/images/book_service/drop_down.png",
+      //                               width: 10),
+      //                           decoration: const InputDecoration(
+      //                             focusedBorder: UnderlineInputBorder(
+      //                               borderSide: BorderSide(color: Colors.grey),
+      //                             ),
+      //                           ),
+      //                           items: [
+      //                             ...bikeList
+      //                                 .map(
+      //                                   (e) => DropdownMenuItem(
+      //                                     value: e.bikeType,
+      //                                     child: Text(
+      //                                       e.bikeType,
+      //                                       style: const TextStyle(
+      //                                         fontSize: 18,
+      //                                         color: Colors.black87,
+      //                                       ),
+      //                                     ),
+      //                                   ),
+      //                                 )
+      //                                 .toList(),
+      //                           ],
+      //                           value: bikeList[i].bikeType,
+      //                           onChanged: (value) {
+      //                             print(bikeList);
+      //                             print(value.runtimeType);
+      //                             vehicleType = value!;
+      //                             _pageController.jumpToPage(
+      //                                 bikeList.indexWhere((element) =>
+      //                                     value == element.bikeType));
+      //                             // setState(() {
+      //                             //   vehicleType = value!;
+      //                             //   print("service type ${vehicleType}");
+      //                             // });
+      //                             //vehicleType = value as String;
+      //                           },
+      //                           itemHeight: 60,
+      //                         ),
+      //                         // TextField(
+      //                         //   controller: vehicleTypeController,
+      //                         //   textInputAction: TextInputAction.next,
+      //                         //   decoration: const InputDecoration(
+      //                         //     focusedBorder: UnderlineInputBorder(
+      //                         //       borderSide: BorderSide(
+      //                         //         color: Color(0xffB4B3B3),
+      //                         //       ),
+      //                         //     ),
+      //                         //   ),
+      //                         //   // style: kDetailsTextStyle,
+      //                         // ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       SizedBox(
+      //                           width: 120,
+      //                           child: Text(
+      //                             "Engine",
+      //                             style: kBikeGeneralTextStyle,
+      //                           )),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             textInputAction: TextInputAction.next,
+      //                             controller: engineController,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             //style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Frame No",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             controller: frameController,
+      //                             textInputAction: TextInputAction.next,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             //  style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Battery make",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             controller: batteryController,
+      //                             textInputAction: TextInputAction.next,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             // style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Reg No.",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             controller: regController,
+      //                             textInputAction: TextInputAction.next,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             // style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Model",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             keyboardType: TextInputType.number,
+      //                             textInputAction: TextInputAction.next,
+      //                             controller: modelController,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             // style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Dealer code",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             controller: dealerCodeController,
+      //                             textInputAction: TextInputAction.next,
+      //                             //style: kDetailsTextStyle,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     children: [
+      //                       SizedBox(
+      //                         width: 120,
+      //                         child: Text(
+      //                           "Vehicle Number",
+      //                           style: kBikeGeneralTextStyle,
+      //                         ),
+      //                       ),
+      //                       const Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             controller: vehicleNoController,
+      //                             textInputAction: TextInputAction.next,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             // style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Row(
+      //                     children: [
+      //                       SizedBox(
+      //                           width: 120,
+      //                           child: Text(
+      //                             "Color",
+      //                             style: kBikeGeneralTextStyle,
+      //                           )),
+      //                       Text(':'),
+      //                       const SizedBox(
+      //                         width: 8,
+      //                       ),
+      //                       Expanded(
+      //                         child: Container(
+      //                           alignment: Alignment.centerRight,
+      //                           width: 150,
+      //                           height: 40,
+      //                           child: TextField(
+      //                             controller: colorController,
+      //                             textInputAction: TextInputAction.done,
+      //                             decoration: const InputDecoration(
+      //                               focusedBorder: UnderlineInputBorder(
+      //                                 borderSide: BorderSide(
+      //                                   color: Color(0xffB4B3B3),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                             //style: kDetailsTextStyle,
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 50,
+      //                   ),
+      //                 ],
+      //               ),
+      //               SizedBox(
+      //                 width: double.infinity,
+      //                 child: LargeSubmitButton(
+      //                   text: "Submit",
+      //                   ontap: () {
+      //                     //AddBikeModel(vehicleNumber: vehicleNoController.text, vehicleType: vehicleTypeController.text, engineNumber: engineController.text, batteryMake: batteryController.text, frameNumber: frameController.text, registerNumber: regController.text, model: modelController.text, color: colorController.text, dealerCode: dealerCodeController.text);
+      //
+      //                     AddBikeHttp.addBikeDetails(
+      //                       AddBikeModel(
+      //                         vehicleNumber: vehicleNoController.text,
+      //                         vehicleType: vehicleType,
+      //                         engineNumber: engineController.text,
+      //                         batteryMake: batteryController.text,
+      //                         frameNumber: frameController.text,
+      //                         registerNumber: regController.text,
+      //                         model: modelController.text,
+      //                         color: colorController.text,
+      //                         dealerCode: dealerCodeController.text,
+      //                       ).toJson(),
+      //                     );
+      //
+      //                     Navigator.pop(context);
+      //                   },
+      //                 ),
+      //               )
+      //             ],
+      //           ).paddingAll(30, 30, 30, 30),
+      //         );
+      //       }
+      //       // if(snapshot.connectionState==ConnectionState.waiting)
+      //       return const Center(
+      //         child: CircularProgressIndicator(
+      //           color: Colors.orange,
+      //         ),
+      //       );
+      //     }),
     );
   }
 }
