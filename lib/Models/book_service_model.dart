@@ -44,7 +44,6 @@ class BookServiceModel {
       'Mobile Number': mobileNumber,
       'Vehicle Number': vehicleNumber,
       'Service Type': serviceType,
-      'VehicleType': vehicleType,
       'Slot Date': slotDate,
       'Time': slotTime,
       'Dealer': dealerName,
@@ -53,9 +52,6 @@ class BookServiceModel {
     };
   }
 
-// toList(){
-//     return [mobileNumber,vehicleType,vehicleNumber,serviceType,comments,slotDate,slotTime];
-// }
   BookServiceModel.fromJson(Map json) {
     mobileNumber = json['mobile'];
     vehicleNumber = json['vehicleNumber'];
