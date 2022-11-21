@@ -1,16 +1,10 @@
-import 'package:bikerider/Screens/ActivitiesCard.dart';
 import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Http/AddBikeHttp.dart';
-import '../Models/bike_list_model.dart';
-import '../bloc/BikeCubit.dart';
 import 'GarageCard.dart';
 import 'Intermediate/activityInter.dart';
 import 'Intermediate/profileinter.dart';
-import 'MyProfileScreen.dart';
 import 'ServiceRecods/add_bike.dart';
 import 'TripCard.dart';
 
@@ -23,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchCardController = TextEditingController();
-  List<BikeListModel> bikeList = [];
+  // List<BikeListModel> bikeList = [];
   int bottomIndex = 0;
   int previousIndex = 0;
   final _pageOptions = [
@@ -156,23 +150,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.directions_bike_rounded),
               title: const Text('Enter a bike'),
-              onTap: () {
-                AddBikeHttp.addBikeList().then(
-                  (value) {
-                    bikeList.clear();
-                    for (var e in value) {
-                      bikeList.add(BikeListModel.fromJson(e));
-                    }
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddBike(
-                          bikeList: bikeList,
+              onTap: () async {
+                print('API call');
+                // AddBikeHttp.addBikeList().then(
+                //   (value) {
+                //     print(value);
+                //     bikeList.clear();
+                //     for (var e in value) {
+                //       bikeList.add(BikeListModel.fromJson(e));
+                //     }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddBike(
+                        // bikeList: bikeList,
                         ),
-                      ),
-                    );
-                  },
+                  ),
+                  //     );
+                  //   },
                 );
               },
             ),
@@ -205,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 TextStyle kProfileNumberText = GoogleFonts.roboto(
-    color: Color(0xffEE8431), fontSize: 25, fontWeight: FontWeight.w600);
+    color: const Color(0xffEE8431), fontSize: 25, fontWeight: FontWeight.w600);
 
 TextStyle kProfileTitleTextStyle = GoogleFonts.roboto(
-    color: Color(0x79000000), fontSize: 16, fontWeight: FontWeight.w600);
+    color: const Color(0x79000000), fontSize: 16, fontWeight: FontWeight.w600);
