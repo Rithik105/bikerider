@@ -219,6 +219,7 @@ class _AddBikeState extends State<AddBike> {
                               return null;
                             },
                             decoration: InputDecoration(
+                              hintText: "Ex: 5RE20036798",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -267,6 +268,7 @@ class _AddBikeState extends State<AddBike> {
                               return null;
                             },
                             decoration: InputDecoration(
+                              hintText: "Ex: 5R85F4061",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -315,6 +317,7 @@ class _AddBikeState extends State<AddBike> {
                               return null;
                             },
                             decoration: InputDecoration(
+                              hintText: "Ex: 36V 12AH",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -363,6 +366,7 @@ class _AddBikeState extends State<AddBike> {
                             },
                             textInputAction: TextInputAction.next,
                             decoration:InputDecoration(
+                              hintText: "Ex: DL 5C A 4845",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -412,6 +416,7 @@ class _AddBikeState extends State<AddBike> {
                               return null;
                             },
                             decoration: InputDecoration(
+                              hintText: "Ex: 2022",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -461,6 +466,7 @@ class _AddBikeState extends State<AddBike> {
                             },
 //style: kDetailsTextStyle,
                             decoration: InputDecoration(
+                              hintText: "Ex: TUN5A4300",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -507,6 +513,7 @@ class _AddBikeState extends State<AddBike> {
                               return null;
                             },
                             decoration: InputDecoration(
+                              hintText: "Ex: KA 21 MN 4711",
                               errorStyle: GoogleFonts.roboto(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -516,7 +523,7 @@ class _AddBikeState extends State<AddBike> {
                                 borderSide:
                                 BorderSide(color: Colors.grey),
                               ),
-                              focusedBorder: UnderlineInputBorder(
+                              focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0xffB4B3B3),
                                 ),
