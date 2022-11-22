@@ -98,118 +98,120 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(alignment: Alignment.centerRight, children: [
-              TextField(
-                keyboardType: TextInputType.number,
-                enabled: isEdit,
-                controller: mobileNumberController,
-                decoration: InputDecoration(
-                  labelText: 'Mobile number',
-                  focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  labelStyle: GoogleFonts.robotoFlex(
-                      color: const Color(0xff9F9F9F), fontSize: 18),
-                  // suffixIcon: GestureDetector(
-                  //   onTap: () {
-                  //     isEdit = true;
-                  //     print("gokcfb");
-                  //     mobileNumberController.text != widget.prefill.mobile
-                  //         ? BookServiceHttp.updatePhoneNumber(
-                  //                 mobileNumberController.text)
-                  //             .then((value) {})
-                  //         : null;
-                  //     setState(() {});
-                  //   },
-                  //   child: Icon(
-                  //     Icons.edit,
-                  //     color: Color(0xffA6A4A3),
-                  //   ),
-                  // ),
-                ),
-                onChanged: (value) {
-                  //callWarning();
-                  //  myError;
-                  //  mobileNumberController.text=value;
+            Row(children: [
+             Expanded(
+               child: TextField(
+                 keyboardType: TextInputType.number,
+                 enabled: isEdit,
+                 controller: mobileNumberController,
+                 decoration: InputDecoration(
+                   labelText: 'Mobile number',
+                   focusedBorder: const UnderlineInputBorder(
+                       borderSide: BorderSide(color: Colors.grey)),
+                   labelStyle: GoogleFonts.robotoFlex(
+                       color: const Color(0xff9F9F9F), fontSize: 18),
+                   // suffixIcon: GestureDetector(
+                   //   onTap: () {
+                   //     isEdit = true;
+                   //     print("gokcfb");
+                   //     mobileNumberController.text != widget.prefill.mobile
+                   //         ? BookServiceHttp.updatePhoneNumber(
+                   //                 mobileNumberController.text)
+                   //             .then((value) {})
+                   //         : null;
+                   //     setState(() {});
+                   //   },
+                   //   child: Icon(
+                   //     Icons.edit,
+                   //     color: Color(0xffA6A4A3),
+                   //   ),
+                   // ),
+                 ),
+                 onChanged: (value) {
+                   //callWarning();
+                   //  myError;
+                   //  mobileNumberController.text=value;
 
-                  mobileNumberController.text != widget.prefill.mobile &&
-                          value.length == 10
-                      ? showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            content: Text(
-                              'Are you sure to change the mobile number?',
-                              style: TextStyle(color: Colors.grey.shade700),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  BookServiceHttp.updatePhoneNumber(
-                                      mobileNumberController.text)
-                                      .then((value)  {
-                                    print(value);
-                                    print("call warning");
-                                    visibility = false;
-                                    attempts = value["attempts_left"];
-                                    isEdit = false;
+                   mobileNumberController.text != widget.prefill.mobile &&
+                           value.length == 10
+                       ? showDialog<String>(
+                           context: context,
+                           builder: (BuildContext context) => AlertDialog(
+                             content: Text(
+                               'Are you sure to change the mobile number?',
+                               style: TextStyle(color: Colors.grey.shade700),
+                             ),
+                             actions: <Widget>[
+                               TextButton(
+                                 onPressed: () {
+                                   BookServiceHttp.updatePhoneNumber(
+                                       mobileNumberController.text)
+                                       .then((value)  {
+                                     print(value);
+                                     print("call warning");
+                                     visibility = false;
+                                     attempts = value["attempts_left"];
+                                     isEdit = false;
 
-                                    showToast(msg: "Phone number changed successfully");
+                                     showToast(msg: "Phone number changed successfully");
 
-                                    setState(() {});
-                                  });
+                                     setState(() {});
+                                   });
 
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Yes',
-                                    style: TextStyle(
-                                        color: Colors.orangeAccent,
-                                        fontSize: 21)),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  mobileNumberController.text =
-                                      widget.prefill.mobile!;
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'No',
-                                  style: TextStyle(
-                                      color: Colors.orangeAccent, fontSize: 21),
-                                ),
-                              ),
+                                   Navigator.pop(context);
+                                 },
+                                 child: const Text('Yes',
+                                     style: TextStyle(
+                                         color: Colors.orangeAccent,
+                                         fontSize: 21)),
+                               ),
+                               TextButton(
+                                 onPressed: () {
+                                   mobileNumberController.text =
+                                       widget.prefill.mobile!;
+                                   Navigator.pop(context);
+                                 },
+                                 child: const Text(
+                                   'No',
+                                   style: TextStyle(
+                                       color: Colors.orangeAccent, fontSize: 21),
+                                 ),
+                               ),
 
-                            ],
-                          ),
-                        )
-                      : null;
-                  setState(() {});
-                },
-              ),
-              GestureDetector(
-                onTap: () {
+                             ],
+                           ),
+                         )
+                       : null;
+                   setState(() {});
+                 },
+               ),
+             ),
+             GestureDetector(
+               onTap: () {
 
-                  attempts!>0?visibility = true:visibility=false;
-                  if((widget.prefill.attemptsLeft)!>0&&(attempts!)>0){
-                    isEdit = true;
+                 attempts!>0?visibility = true:visibility=false;
+                 if((widget.prefill.attemptsLeft)!>0&&(attempts!)>0){
+                   isEdit = true;
 
-                  }
-                  else{
-                    isEdit = false;
-                    print("less than zero");
-                    showToast(msg: "You have exceeded the attempts to change the number");
-                    // mobileNumberController.text = "";
-                  }
+                 }
+                 else{
+                   isEdit = false;
+                   print("less than zero");
+                   showToast(msg: "You have exceeded the attempts to change the number");
+                   // mobileNumberController.text = "";
+                 }
 
-                  // attempts <= 0 ? isEdit = false : isEdit = true;
-                  // attempts <= 0 ?null:mobileNumberController.text = "";
+                 // attempts <= 0 ? isEdit = false : isEdit = true;
+                 // attempts <= 0 ?null:mobileNumberController.text = "";
 
-                  setState(() {});
+                 setState(() {});
 
-                },
-                child: Icon(
-                  isEdit?Icons.done: Icons.edit,
-                  color: Color(0xffA6A4A3),
-                ),
-              ),
+               },
+               child: Icon(
+                 isEdit?Icons.done: Icons.edit,
+                 color: Color(0xffA6A4A3),
+               ),
+             ),
             ]),
 
             visibility == false

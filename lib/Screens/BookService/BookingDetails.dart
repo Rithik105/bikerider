@@ -166,6 +166,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                             fontSize: 18,
                             color: Color(0xff4F504F),
                           ),
+                          textAlign: TextAlign.right,
                         ),
                       ):
                       Container(

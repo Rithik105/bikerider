@@ -307,6 +307,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                         e.value,
+                                        textAlign: TextAlign.right,
                                         style: GoogleFonts.roboto(
                                           fontSize: 15,
                                           color: Color(0xff4F504F),
