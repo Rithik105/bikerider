@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:bikerider/Models/timeLineModel.dart';
 import 'package:bikerider/Screens/milestone_card.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:image_picker/image_picker.dart';
+
 import '../Http/UserHttp.dart';
 import '../bloc/BikeCubit.dart';
 import '../custom/widgets/Follower.dart';
@@ -18,11 +25,26 @@ class ProfileHeader extends StatefulWidget {
 }
 
 class _ProfileHeaderState extends State<ProfileHeader> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // getTimeline().then((value) => print('ProfileHeader GetTimeLine:$value'));
+  TextEditingController _editingController1 = TextEditingController();
+  TextEditingController _editingController2 = TextEditingController();
+  File? storeImage;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: source, preferredCameraDevice: CameraDevice.front);
+      if (image == null)
+        return;
+      else {
+        final tempImage = File(image.path);
+
+        this.storeImage = tempImage;
+        return tempImage;
+      }
+    } on PlatformException catch (e) {
+      print("failed to pick image : $e");
+    }
+    ;
   }
 
   @override
@@ -291,6 +313,113 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                 ),
                               ),
                             );
+                          } else if (state is BikeMineProfileEditState) {
+                            _editingController1.text =
+                                state.profile["userDetails"]["userName"];
+                            _editingController2.text =
+                                state.profile["userDetails"]["aboutUser"];
+
+                            return Container(
+                              height: 420,
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  alignment: Alignment.bottomRight,
+                                  image: AssetImage(
+                                      'assets/images/homePage/rider.png'),
+                                  scale: 1.9,
+                                  opacity: 0.1,
+                                ),
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color(0xffED7E2C),
+                                    Color(0xffF7B557),
+                                  ],
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 60),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 75,
+                                      backgroundColor: const Color.fromRGBO(
+                                          233, 176, 129, 1),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          pickImage(ImageSource.gallery)
+                                              .then((value) {
+                                            if (value == null) {
+                                            } else {
+                                              storeImage = value;
+                                            }
+                                          });
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 70,
+                                          backgroundColor: Colors.transparent,
+                                          backgroundImage: NetworkImage(
+                                              state.profile["userDetails"]
+                                                  ["profileImage"]),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: TextField(
+                                          controller: _editingController1,
+                                          style: GoogleFonts.roboto(
+                                              color: const Color(0xffffffff),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600)),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: TextField(
+                                          controller: _editingController2,
+                                          style: GoogleFonts.roboto(
+                                              color: const Color(0xffffffff),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600)),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    // Container(
+                                    //   width: 100,
+                                    //   height: 30,
+                                    //   padding: const EdgeInsets.symmetric(
+                                    //       horizontal: 6, vertical: 3),
+                                    //   decoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.circular(15),
+                                    //       border: Border.all(
+                                    //           color: Colors.white, width: 1)),
+                                    //   child: Center(
+                                    //     child: Text(
+                                    //       "Follow",
+                                    //       style: GoogleFonts.roboto(
+                                    //           color: const Color(0xffffffff),
+                                    //           fontSize: 17,
+                                    //           fontWeight: FontWeight.w500),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           } else {
                             return Container(
                               height: 420,
@@ -387,9 +516,40 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         return Positioned(
                           right: 25,
                           top: 30,
-                          child: Image.asset(
-                            "assets/images/homePage/edit_pencil.png",
-                            scale: 2.2,
+                          child: GestureDetector(
+                            onTap: () {
+                              BlocProvider.of<BikeCubit>(context).emit(
+                                  BikeMineProfileEditState(
+                                      profile: state.profile));
+                            },
+                            child: Image.asset(
+                              "assets/images/homePage/edit_pencil.png",
+                              scale: 2.2,
+                            ),
+                          ),
+                        );
+                      } else if (state is BikeMineProfileEditState) {
+                        return Positioned(
+                          right: 25,
+                          top: 30,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              UserSecureStorage.getToken().then((value) {
+                                UserProfileEditHttp.submitSubscription(
+                                        file: storeImage,
+                                        name: _editingController1.text,
+                                        aboutUser: _editingController2.text,
+                                        token: value!)
+                                    .then((value) {
+                                  BlocProvider.of<BikeCubit>(context)
+                                      .getMyProfile();
+                                });
+                              });
+                            },
                           ),
                         );
                       } else {
@@ -400,6 +560,28 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   BlocBuilder<BikeCubit, BikeState>(
                     builder: (context, state) {
                       if (state is BikeMineProfileFetchedState) {
+                        return Positioned(
+                          top: 380,
+                          left: 10,
+                          child: Container(
+                            child: Followers(
+                              rides: Text(
+                                state.profile["tripCount"].toString(),
+                                style: kProfileNumberText,
+                              ),
+                              followers: Text(
+                                  state.profile['userDetails']["followingCount"]
+                                      .toString(),
+                                  style: kProfileNumberText),
+                              following: Text(
+                                state.profile['userDetails']["followersCount"]
+                                    .toString(),
+                                style: kProfileNumberText,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (state is BikeMineProfileEditState) {
                         return Positioned(
                           top: 380,
                           left: 10,
