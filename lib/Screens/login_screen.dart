@@ -1,18 +1,16 @@
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/Utility/enums.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:bikerider/custom/widgets/text_form_fields.dart';
 import 'package:flutter/Material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:bikerider/custom/widgets/button.dart';
-import 'package:bikerider/custom/widgets/text_form_fields.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:bikerider/Utility/enums.dart';
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Models/UserModel.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -152,7 +150,20 @@ class LoginScreen extends StatelessWidget {
                                       value: value["profileImage"]);
                                   _setLogin();
                                   _setNoTutorial();
-                                  Navigator.pushNamed(context, "/HomeScreen");
+                                  // Navigator.popUntil(context, (route) => false);
+                                  // Navigator.popUntil(context, (route) => false);
+                                  // Navigator.popUntil(context, (route) => false);
+                                  Navigator.pushReplacementNamed(
+                                      context, "/HomeScreen");
+                                  print('Login by email');
+                                  // Navigator.pushNamedAndRemoveUntil(
+                                  //     context,
+                                  //     "/HomeScreen",
+                                  //     ModalRoute.withName('/SplashScreen'));
+                                  print(NavigatorObserver);
+                                  // Navigator.pushNamed(context, "/HomeScreen");
+                                  // Navigator.popUntil(context, (route) => false);
+                                  // Navigator.pushReplacementNamed(context, routeName);
                                   showToast(msg: "Login Successful");
                                 });
                               } else {
@@ -182,7 +193,11 @@ class LoginScreen extends StatelessWidget {
                                       value: value["profileImage"]);
                                   _setLogin();
                                   _setNoTutorial();
-                                  Navigator.pushNamed(context, "/HomeScreen");
+                                  // Navigator.pushNamed(context, "/HomeScreen");
+
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      "/HomeScreen", (context) => false);
+                                  print('Login by mobile number');
                                   showToast(msg: "Login Successful");
                                 });
                               } else {

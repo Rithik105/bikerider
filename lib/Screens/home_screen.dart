@@ -1,18 +1,14 @@
 import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:flutter/material.dart';
-
-import 'package:bikerider/custom/constants.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:bikerider/Screens/GarageCard.dart';
 import 'package:bikerider/Screens/Intermediate/activityInter.dart';
 import 'package:bikerider/Screens/Intermediate/profileinter.dart';
 import 'package:bikerider/Screens/Intermediate/trip_intermediate_card.dart';
 import 'package:bikerider/Screens/ServiceRecods/add_bike.dart';
-import 'package:bikerider/Http/AddBikeHttp.dart';
-import 'package:bikerider/Models/bike_list_model.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/custom/constants.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -149,13 +145,20 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
+                // Navigator.pop(context);
+                showToast(msg: 'Please wait while we log you out');
                 UserSecureStorage.getToken().then((value1) {
                   UserHttp.userLogOut(value1!).then((value2) {
+                    print('response' + value2.toString());
                     UserSecureStorage.clear();
                     showToast(msg: value2["message"]);
                     _setLogin();
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, "/LoginScreen");
+                    Navigator.pushNamedAndRemoveUntil(context, "/LoginScreen",
+                        ModalRoute.withName("/LoginScreen"));
+                    // Future.delayed(Duration(milliseconds: 150)).then((value) =>
+                    //     Navigator.pushReplacementNamed(
+                    //         context, "/LoginScreen"));
+                    // showToast(msg: 'Logged out successfully');
                   });
                 });
               },

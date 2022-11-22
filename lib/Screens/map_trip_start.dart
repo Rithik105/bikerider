@@ -635,6 +635,9 @@ class _MapStartState extends State<MapStart> {
                                 // });
                               });
                               Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              // Navigator.of(context).push(route);
                             },
                           ),
                           TextButton(
