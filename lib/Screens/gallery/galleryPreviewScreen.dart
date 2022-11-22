@@ -20,7 +20,7 @@ class GalleryPreviewScreen extends StatefulWidget {
 
 class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
   int _page = 1;
-  final _limit = 8;
+  final _limit = 4;
   bool _isFirstLoadRun = false;
   bool _hasNextPage = true;
   List _posts = [];
@@ -87,56 +87,42 @@ class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
   Widget build(BuildContext context) {
     if (_isFirstLoadRun) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Colors.orange,
+        ),
       );
     } else {
-      return Column(
-        children: [
-          Expanded(
-            child: MasonryGridView.builder(
-              itemCount: _posts.length,
-              controller: _controller,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              gridDelegate:
-                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      UserSecureStorage.getToken().then((value) {
-                        PhotosHttp.getPhotoDetails(_posts[index]["_id"], value!)
-                            .then((value) {
-                          ImageDetails temp = ImageDetails.fromJson(value);
-                          print(value);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ImageView(imageDetails: temp),
-                            ),
-                          );
-                        });
-                      });
-                    },
-                    child: Image.network("${_posts[index]["imageUrl"]}"),
-                  ),
-                );
+      return MasonryGridView.builder(
+        itemCount: _posts.length,
+        controller: _controller,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: GestureDetector(
+              onTap: () {
+                UserSecureStorage.getToken().then((value) {
+                  PhotosHttp.getPhotoDetails(_posts[index]["_id"], value!)
+                      .then((value) {
+                    ImageDetails temp = ImageDetails.fromJson(value);
+                    print(value);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageView(imageDetails: temp),
+                      ),
+                    );
+                  });
+                });
               },
+              child: Image.network("${_posts[index]["imageUrl"]}"),
             ),
-          ),
-          if (_isMoreRunning == true)
-            const Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          if (_hasNextPage == false) Container(),
-        ],
+          );
+        },
       );
     }
   }
