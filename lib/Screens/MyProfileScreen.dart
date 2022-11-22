@@ -263,9 +263,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                       child: CircleAvatar(
                                         radius: 70,
                                         backgroundColor: Colors.transparent,
-                                        backgroundImage: NetworkImage(
-                                            state.profile["userDetails"]
-                                                ["profileImage"]),
+                                        backgroundImage: NetworkImage(state
+                                                    .profile["userDetails"]
+                                                ["profileImage"] ??
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7-d5qr9WzS926jiHDPlYrCL01Eb0M8C8c4w&usqp=CAU"),
                                       ),
                                     ),
                                     const SizedBox(
@@ -368,9 +369,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             radius: 70,
                                             backgroundColor: Colors.transparent,
                                             backgroundImage: storeImage == null
-                                                ? NetworkImage(
-                                                    state.profile["userDetails"]
-                                                        ["profileImage"])
+                                                ? NetworkImage((state.profile[
+                                                            "userDetails"]
+                                                        ["profileImage"] ??
+                                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7-d5qr9WzS926jiHDPlYrCL01Eb0M8C8c4w&usqp=CAU"))
                                                 : FileImage(storeImage!)
                                                     as ImageProvider),
                                       ),

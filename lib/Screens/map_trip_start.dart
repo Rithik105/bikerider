@@ -617,7 +617,6 @@ class _MapStartState extends State<MapStart> {
                                     getTripModel: widget.getTripModel);
                               }));
 
-
                               setState(() {
                                 _markers.removeWhere((element) =>
                                     element.markerId.value.startsWith('ATM') ||
@@ -638,11 +637,10 @@ class _MapStartState extends State<MapStart> {
                                 //   element.markerId.value.startsWith('Fuel');
                                 // });
                               });
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                               // Navigator.of(context).push(route);
-
                             },
                           ),
                           TextButton(
