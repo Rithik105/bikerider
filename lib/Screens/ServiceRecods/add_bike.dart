@@ -1,5 +1,6 @@
 import 'package:bikerider/Http/AddBikeHttp.dart';
 import 'package:bikerider/Models/bike_list_model.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/Material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -594,6 +595,7 @@ class _AddBikeState extends State<AddBike> {
                           dealerCode: dealerCodeController.text,
                         ).toJson(),
                       );
+                      showToast(msg: "Bike details added successfully");
                       Navigator.pop(context);
                     }
                   },

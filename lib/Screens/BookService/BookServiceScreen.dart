@@ -140,27 +140,16 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
-                                  mobileNumberController.text =
-                                      widget.prefill.mobile!;
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'NO',
-                                  style: TextStyle(
-                                      color: Colors.orangeAccent, fontSize: 21),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
                                   BookServiceHttp.updatePhoneNumber(
-                                          mobileNumberController.text)
+                                      mobileNumberController.text)
                                       .then((value)  {
-                                        print(value);
+                                    print(value);
                                     print("call warning");
+                                    attempts = value["attempts_left"];
                                     isEdit = false;
                                     visibility = true;
                                     showToast(msg: "Phone number changed successfully");
-                                    attempts = value["attempts_left"];
+
                                     setState(() {});
                                   });
 
@@ -171,6 +160,19 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                         color: Colors.orangeAccent,
                                         fontSize: 21)),
                               ),
+                              TextButton(
+                                onPressed: () {
+                                  mobileNumberController.text =
+                                      widget.prefill.mobile!;
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'NO',
+                                  style: TextStyle(
+                                      color: Colors.orangeAccent, fontSize: 21),
+                                ),
+                              ),
+
                             ],
                           ),
                         )
@@ -180,14 +182,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  if((widget.prefill.attemptsLeft!)<=0){
-                    print("less than zero");
-                    showToast(msg: "You have exceeded the attempts to change the number");
-                    isEdit = false;
+                  if((widget.prefill.attemptsLeft)!>0&&attempts>0){
+                    isEdit = true;
+
                   }
                   else{
-                    isEdit = !isEdit;
-
+                    isEdit = false;
+                    print("less than zero");
+                    showToast(msg: "You have exceeded the attempts to change the number");
                     // mobileNumberController.text = "";
                   }
 
