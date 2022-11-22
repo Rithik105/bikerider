@@ -2,7 +2,6 @@
 
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
 import 'package:bikerider/Screens/tripSummaryComplete.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
@@ -611,12 +610,16 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return TripSummaryComplete(
-                                    getTripModel: widget.getTripModel);
-                              }));
 
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return TripSummaryComplete(
+                                        getTripModel: widget.getTripModel);
+                                  },
+                                ),
+                              );
                               setState(() {
                                 _markers.removeWhere((element) =>
                                     element.markerId.value.startsWith('ATM') ||
@@ -649,7 +652,7 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('No'),
                             onPressed: () {
-                              // Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                             },
                           ),
                         ],
