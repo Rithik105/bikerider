@@ -357,17 +357,28 @@ class _GarageCardState extends State<GarageCard> {
                                   bikes = [];
                                   value.forEach(
                                     (e) {
-                                      print(bikes);
                                       bikes.add(BikeDetailsModel.fromJson(e));
                                     },
                                   );
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => SelectBike(
-                                          bikeCategories: bikes,
-                                          personalDetails: personalDetails!),
-                                    ),
-                                  );
+                                  if (bikes.isEmpty) {
+                                    showToast(
+                                        msg: "Please add your bike details");
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddBike(),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => SelectBike(
+                                            bikeCategories: bikes,
+                                            personalDetails: personalDetails!),
+                                      ),
+                                    );
+                                  }
+
                                   enableAll(2);
                                 },
                               );
