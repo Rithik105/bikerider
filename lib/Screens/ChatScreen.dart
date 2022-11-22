@@ -54,6 +54,14 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  String TimeConverter(String time) {
+    DateTime temp = DateTime.parse(time);
+    final _utcTime = DateTime.utc(
+        temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+    final lokalTime = _utcTime.toLocal();
+    return (lokalTime.toString().split(' ')[1].split('.')[0]);
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -156,15 +164,21 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: ((context, index) {
                         if (widget.chatList[index]["memberNumber"] ==
                             widget.number) {
-                          print(widget.number);
+                          //   print(widget.chatList[index]);
+                          // print("time is");
+                          // print(widget.chatList[index]["time"]);
                           return MessageBubble(
                               isMe: true,
+                              time:
+                                  TimeConverter(widget.chatList[index]["time"]),
                               image: widget.chatList[index]["senderImage"],
                               messageText: widget.chatList[index]["chat"],
                               senderName: widget.chatList[index]["senderName"]);
                         } else {
                           return MessageBubble(
                               isMe: false,
+                              time:
+                                  TimeConverter(widget.chatList[index]["time"]),
                               image: widget.chatList[index]["senderImage"],
                               messageText: widget.chatList[index]["chat"],
                               senderName: widget.chatList[index]["senderName"]);

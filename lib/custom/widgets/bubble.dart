@@ -6,8 +6,10 @@ class MessageBubble extends StatelessWidget {
       {required this.isMe,
       required this.messageText,
       required this.senderName,
-      required this.image});
+      required this.image,
+      required this.time});
   String messageText;
+  String time;
   String senderName, image;
   bool isMe;
   @override
@@ -23,6 +25,26 @@ class MessageBubble extends StatelessWidget {
             mainAxisAlignment:
                 isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
+              Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Visibility(
+                  visible: isMe,
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.done_rounded,
+                        size: 13,
+                        color: Colors.green,
+                      ),
+                      Text(
+                        time,
+                        style:
+                            TextStyle(fontSize: 13, color: Color(0x99000000)),
+                      )
+                    ],
+                  ),
+                ),
+              ),
               Visibility(
                 visible: !isMe,
                 child: CircleAvatar(
@@ -48,11 +70,12 @@ class MessageBubble extends StatelessWidget {
                         bottomRight: Radius.circular(30),
                       ),
                 elevation: 5,
-                color: isMe ? const Color(0xffADADAD) : const Color(0xff4EB5F4),
+                color:
+                    !isMe ? const Color(0xffADADAD) : const Color(0xff4EB5F4),
                 child: Container(
                   child: Container(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.7,
+                      maxWidth: MediaQuery.of(context).size.width * 0.62,
                       minWidth: 1,
                     ),
                     padding: const EdgeInsets.symmetric(
@@ -66,6 +89,26 @@ class MessageBubble extends StatelessWidget {
                         fontSize: 17,
                       ),
                     ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 7),
+                child: Visibility(
+                  visible: !isMe,
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.done_rounded,
+                        size: 13,
+                        color: Color(0x99000000),
+                      ),
+                      Text(
+                        time,
+                        style:
+                            TextStyle(fontSize: 13, color: Color(0x99000000)),
+                      )
+                    ],
                   ),
                 ),
               ),
