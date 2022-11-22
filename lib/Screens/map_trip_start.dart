@@ -2,6 +2,8 @@
 
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
+import 'package:bikerider/Screens/tripSummaryComplete.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -609,10 +611,12 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
-                              UserSecureStorage.getToken().then((value) async {
-                                endTrip(value!, widget.getTripModel.id!);
-                              });
-                              print('clear');
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return TripSummaryComplete(
+                                    getTripModel: widget.getTripModel);
+                              }));
+
 
                               setState(() {
                                 _markers.removeWhere((element) =>
@@ -635,6 +639,10 @@ class _MapStartState extends State<MapStart> {
                                 // });
                               });
                               Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              // Navigator.of(context).push(route);
+
                             },
                           ),
                           TextButton(
@@ -643,7 +651,7 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('No'),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                             },
                           ),
                         ],

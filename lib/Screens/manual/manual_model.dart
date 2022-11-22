@@ -17,7 +17,8 @@ class PersonalDetailsModel {
     doorNoController.text = json['doorNumber'] ?? "";
     cityController.text = json['city'] ?? "";
     stateController.text = json['state'] ?? "";
-    pincodeController.text = json['pincode'].toString() ?? "";
+    pincodeController.text =
+        json['pincode'] == null ? "" : json['pincode'].toString();
     mobileController.text = json['mobile'] ?? "";
     emailController.text = json['email'] ?? "";
   }
@@ -44,7 +45,6 @@ class BikeDetailsModel {
   TextEditingController bikeColorController = TextEditingController();
   TextEditingController dealerCodeController = TextEditingController();
   BikeDetailsModel.fromJson(Map json) {
-    //licenseController.text = json['vehicleNumber'];
     vehicleNumberController.text = json['vehicleNumber'] ?? '';
     engineController.text = json['engineNumber'] ?? '';
     frameController.text = json['frameNumber'] ?? '';
@@ -52,12 +52,11 @@ class BikeDetailsModel {
     regNoController.text = json['registerNumber'] ?? '';
     modelController.text = json['model'] ?? '';
     bikeColorController.text = json['color'] ?? '';
-    dealerCodeController.text = json['dealer'] ?? '';
+    dealerCodeController.text = json['dealerCode'] ?? "";
     vehicleType = json['vehicleType'] ?? '';
-    // print(vehicleType);
   }
   @override
   String toString() {
-    return 'License:${vehicleType}';
+    return 'License:$vehicleType';
   }
 }

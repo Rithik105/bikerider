@@ -30,6 +30,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   bool isEdit = false;
   bool comments = false;
   bool visibility = false;
+
   int? attempts;
 
   List<String> categories = [
@@ -98,6 +99,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+<<<<<<< HEAD
             Row(children: [
              Expanded(
                child: TextField(
@@ -131,6 +133,43 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                    //callWarning();
                    //  myError;
                    //  mobileNumberController.text=value;
+=======
+            Stack(alignment: Alignment.centerRight, children: [
+              TextField(
+
+                keyboardType: TextInputType.number,
+
+                enabled: isEdit,
+                controller: mobileNumberController,
+                decoration: InputDecoration(
+                  labelText: 'Mobile number',
+                  focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  labelStyle: GoogleFonts.robotoFlex(
+                      color: const Color(0xff9F9F9F), fontSize: 18),
+                  // suffixIcon: GestureDetector(
+                  //   onTap: () {
+                  //     isEdit = true;
+                  //     print("gokcfb");
+                  //     mobileNumberController.text != widget.prefill.mobile
+                  //         ? BookServiceHttp.updatePhoneNumber(
+                  //                 mobileNumberController.text)
+                  //             .then((value) {})
+                  //         : null;
+                  //     setState(() {});
+                  //   },
+                  //   child: Icon(
+                  //     Icons.edit,
+                  //     color: Color(0xffA6A4A3),
+                  //   ),
+                  // ),
+
+                ),
+                onChanged: (value) {
+                  //callWarning();
+                  //  myError;
+                  //  mobileNumberController.text=value;
+>>>>>>> 3f21a893ff7d6096258238c3c6668bce40622911
 
                    mobileNumberController.text != widget.prefill.mobile &&
                            value.length == 10
@@ -206,12 +245,85 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
                  setState(() {});
 
+<<<<<<< HEAD
                },
                child: Icon(
                  isEdit?Icons.done: Icons.edit,
                  color: Color(0xffA6A4A3),
                ),
              ),
+=======
+                },
+                child: Icon(
+                  isEdit?Icons.done: Icons.edit,
+                  color: Color(0xffA6A4A3),
+
+                ),
+                onChanged: (value) {
+                  //callWarning();
+                  //  myError;
+                  //  mobileNumberController.text=value;
+                  mobileNumberController.text != widget.prefill.mobile &&
+                          value.length == 10
+                      ? showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                              'Are you sure to change the mobile number?',
+                              style: TextStyle(color: Colors.grey.shade700),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  mobileNumberController.text =
+                                      widget.prefill.mobile!;
+                                  Navigator.pop(context, 'NO');
+                                },
+                                child: const Text(
+                                  'NO',
+                                  style: TextStyle(
+                                      color: Color(0xff673AB7), fontSize: 21),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  BookServiceHttp.updatePhoneNumber(
+                                          mobileNumberController.text)
+                                      .then((value) async {
+                                    print("call warning");
+                                    visibility = true;
+                                    attempts = value["attempts_left"];
+                                    setState(() {});
+                                  });
+
+                                  Navigator.pop(context, 'yes');
+                                },
+                                child: const Text('YES',
+                                    style: TextStyle(
+                                        color: Color(0xff673AB7),
+                                        fontSize: 21)),
+                              ),
+                            ],
+                          ),
+                        )
+                      : null;
+                  setState(() {});
+                },
+              ),
+              GestureDetector(
+                onTap: () {
+                  isEdit = true;
+                  mobileNumberController.text = "";
+                  setState(() {});
+                  print("gokcfb");
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: Color(0xffA6A4A3),
+                ),
+              ),
+
+>>>>>>> 3f21a893ff7d6096258238c3c6668bce40622911
             ]),
 
             visibility == false
@@ -223,6 +335,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FittedBox(
+
                             child: attempts==1?Text(
                               "You will have only ${attempts} attempt to change your number",
                               style: TextStyle(
@@ -232,6 +345,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                 style: TextStyle(
                                   color: Colors.red,
                                 ),),),
+
                         Text(
                           "The new number will be your login id",
                           style: TextStyle(color: Colors.red),

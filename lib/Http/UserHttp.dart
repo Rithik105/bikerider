@@ -251,11 +251,7 @@ class UserHttp {
 
     print("${jsonDecode(response.body)}");
     print(
-      'T  ' +
-          TimeLineModel.fromJson(jsonDecode(response.body))
-              .tripList
-              .length
-              .toString(),
+      'T  ${TimeLineModel.fromJson(jsonDecode(response.body)).tripList.length}',
     );
     return TimeLineModel.fromJson(jsonDecode(response.body));
   }
@@ -333,5 +329,56 @@ class UserChatImageHttp {
     };
     request.headers.addAll(headers);
     return request;
+  }
+}
+
+class UserProfileEditHttp {
+  static Future editImage({required File file, required String token}) async {
+    var request = await registerSubscription(token);
+    request.files.add(
+      http.MultipartFile(
+          'image', file.readAsBytes().asStream(), file.lengthSync(),
+          filename: basename(file.path)),
+    );
+    print(request.files.first.filename.toString());
+    var res = request.send().then((value) {
+      print("this is executed");
+      value.stream.transform(utf8.decoder).listen((value) {
+        print(value);
+      });
+      print("hi");
+    });
+  }
+
+  static Future<http.MultipartRequest> registerSubscription(
+      String token) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/editProfileImage"),
+    );
+    Map<String, String> headers = {
+      "Content-type":
+          "multipart/form-data; boundary=<calculated when request is sent>",
+      "Authorization": "BEARER $token",
+    };
+    request.headers.addAll(headers);
+    return request;
+  }
+
+  static Future editInfo(
+      {required String name,
+      required String aboutUser,
+      required String token}) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/editProfile"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"aboutUser": aboutUser, "userName": name}));
+
+    print(jsonDecode(response.body));
   }
 }

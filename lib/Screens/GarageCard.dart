@@ -119,9 +119,11 @@ class _GarageCardState extends State<GarageCard> {
           body: SingleChildScrollView(
             child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
                   // diffInDays!>0?  Text("service"):
                   Text(
                     "$diffInDays",
@@ -186,8 +188,10 @@ class _GarageCardState extends State<GarageCard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
+
                                       builder: (context) =>
                                           BookServiceScreen(prefill: value),
+
                                     ),
                                   );
                                 }
@@ -242,6 +246,7 @@ class _GarageCardState extends State<GarageCard> {
                           ),
                         ),
                       ),
+
                       const Divider(
                         color: Color(0xff979797),
                         thickness: 0.5,
@@ -280,11 +285,14 @@ class _GarageCardState extends State<GarageCard> {
                                 } else {
                                   enableAll(1);
 
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
+
                                       builder: (context) =>
                                           ServiceRecords(prefillDetails: value),
+
                                     ),
                                   );
                                 }
@@ -437,20 +445,52 @@ class _GarageCardState extends State<GarageCard> {
                           ),
                         ),
                       ),
-                      const Divider(
-                        color: Color(0xff979797),
-                        thickness: 0.5,
-                        height: 0,
-                      ),
-                      IgnorePointer(
-                        ignoring: DisableSelection[3],
-                        child: InkWell(
-                          // splashColor: Colors.white,
-                          onTap: () {
-                            disableAll(3);
-                            print('test');
-                            Navigator.pushNamed(context, "/ToolKitScreen");
-                            enableAll(3);
+
+
+                    ),
+                  ),
+                  const Divider(
+                    color: Color(0xff979797),
+                    thickness: 0.8,
+                    height: 0,
+                  ),
+                  IgnorePointer(
+                    ignoring: DisableSelection[2],
+                    child: InkWell(
+                      // splashColor: Colors.white,
+                      onTap: () {
+                        disableAll(2);
+                        GetOwnerDetails.getOwner().then(
+                          (value) {
+                            try {
+                              personalDetails =
+                                  PersonalDetailsModel.fromJson(value[0]);
+                              GetBikeDetails.getBikes().then(
+                                (value) {
+                                  bikes = [];
+                                  value.forEach(
+                                    (e) {
+                                      print(bikes);
+                                      bikes.add(BikeDetailsModel.fromJson(e));
+                                    },
+                                  );
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SelectBike(
+                                          bikeCategories: bikes,
+                                          personalDetails: personalDetails!),
+                                    ),
+                                  );
+                                  enableAll(2);
+                                },
+                              );
+                              enableAll(2);
+                            } catch (e) {
+                              print(e);
+                              showToast(msg: 'No bike found');
+                              enableAll(2);
+                            }
+
                           },
                           child: Ink(
                             child: Container(
@@ -500,27 +540,37 @@ class _GarageCardState extends State<GarageCard> {
                           ),
                         ),
                       ),
-                      const Divider(
-                        color: Color(0xff979797),
-                        thickness: 0.5,
-                        height: 0,
-                      ),
-                      IgnorePointer(
-                        ignoring: DisableSelection[4],
-                        child: InkWell(
-                          // splashColor: Colors.white,
-                          onTap: () {
-                            print('test');
-                            Navigator.pushNamed(context, "/AccessoriesScreen");
-                          },
-                          child: Ink(
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  left: 20,
-                                  top: MediaQuery.of(context).size.height * top,
-                                  bottom: MediaQuery.of(context).size.height * top),
-                              width: double.infinity,
-                              child: Row(
+
+                    ),
+                  ),
+                  const Divider(
+                    color: Color(0xff979797),
+                    thickness: 0.5,
+                    height: 0,
+                  ),
+                  IgnorePointer(
+                    ignoring: DisableSelection[3],
+                    child: InkWell(
+                      // splashColor: Colors.white,
+                      onTap: () {
+                        disableAll(3);
+                        print('test');
+                        Navigator.pushNamed(context, "/ToolKitScreen");
+                        enableAll(3);
+                      },
+                      child: Ink(
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
+                          // color: Colors.red,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+
                                 children: [
                                   Image.asset(
                                       "assets/images/homePage/garage_images/accessories.png",
@@ -543,10 +593,50 @@ class _GarageCardState extends State<GarageCard> {
                           ),
                         ),
                       ),
-                      const Divider(
-                        color: Color(0xff979797),
-                        thickness: 0.5,
-                        height: 0,
+
+                    ),
+                  ),
+                  const Divider(
+                    color: Color(0xff979797),
+                    thickness: 0.5,
+                    height: 0,
+                  ),
+                  IgnorePointer(
+                    ignoring: DisableSelection[4],
+                    child: InkWell(
+                      // splashColor: Colors.white,
+                      onTap: () {
+                        print('test');
+                        Navigator.pushNamed(context, "/AccessoriesScreen");
+                      },
+                      child: Ink(
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              top: MediaQuery.of(context).size.height * top,
+                              bottom: MediaQuery.of(context).size.height * top),
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                  "assets/images/homePage/garage_images/accessories.png",
+                                  width: 30),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Accessories",
+                                style: GoogleFonts.robotoFlex(
+                                  color: const Color(0xff515251),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 1,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+
                       ),
                     ],
                   )
