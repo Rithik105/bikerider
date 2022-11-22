@@ -617,32 +617,32 @@ class _MapStartState extends State<MapStart> {
                                     getTripModel: widget.getTripModel);
                               }));
 
-                              // UserSecureStorage.getToken().then((value) async {
-                              //   endTrip(value!, widget.getTripModel.id!);
-                              // });
-                              // print('clear');
 
-                              // setState(() {
-                              //   _markers.removeWhere((element) =>
-                              //       element.markerId.value.startsWith('ATM') ||
-                              //       element.markerId.value
-                              //           .startsWith('Restaurant') ||
-                              //       element.markerId.value
-                              //           .startsWith('Lodge') ||
-                              //       element.markerId.value.startsWith('Fuel') ||
-                              //       element.markerId.value
-                              //           .startsWith('currentLocation'));
-                              //   // _markers.forEach((element) {
-                              //   //   element.markerId.value.startsWith('ATM');
-                              //   //   element.markerId.value
-                              //   //       .startsWith('Restaurant');
-                              //   //   element.markerId.value.startsWith('Lodge');
-                              //   //   element.markerId.value
-                              //   //       .startsWith('currentLocation');
-                              //   //   element.markerId.value.startsWith('Fuel');
-                              //   // });
-                              // });
-                              // Navigator.of(context).pop();
+                              setState(() {
+                                _markers.removeWhere((element) =>
+                                    element.markerId.value.startsWith('ATM') ||
+                                    element.markerId.value
+                                        .startsWith('Restaurant') ||
+                                    element.markerId.value
+                                        .startsWith('Lodge') ||
+                                    element.markerId.value.startsWith('Fuel') ||
+                                    element.markerId.value
+                                        .startsWith('currentLocation'));
+                                // _markers.forEach((element) {
+                                //   element.markerId.value.startsWith('ATM');
+                                //   element.markerId.value
+                                //       .startsWith('Restaurant');
+                                //   element.markerId.value.startsWith('Lodge');
+                                //   element.markerId.value
+                                //       .startsWith('currentLocation');
+                                //   element.markerId.value.startsWith('Fuel');
+                                // });
+                              });
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              // Navigator.of(context).push(route);
+
                             },
                           ),
                           TextButton(
