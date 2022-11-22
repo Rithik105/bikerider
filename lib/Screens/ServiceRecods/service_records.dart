@@ -1,4 +1,5 @@
 import 'package:bikerider/Screens/ServiceRecods/service_record_card.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,20 +47,20 @@ class _ServiceRecordsState extends State<ServiceRecords> {
     });
   }
 
-  // List<DropdownMenuItem> addService() {
-  //   item = categories
-  //       .map(
-  //         (item) => DropdownMenuItem<String>(
-  //           value: item,
-  //           child: Text(
-  //             item,
-  //             style: const TextStyle(fontSize: 18, color: Colors.black87),
-  //           ),
-  //         ),
-  //       )
-  //       .toList();
-  //   return item!;
-  // }
+  List<DropdownMenuItem> addService() {
+    item = categories
+        .map(
+          (item) => DropdownMenuItem<String>(
+            value: item,
+            child: Text(
+              item,
+              style: const TextStyle(fontSize: 18, color: Colors.black87),
+            ),
+          ),
+        )
+        .toList();
+    return item!;
+  }
   //
   // List<DropdownMenuItem>? removeService() {
   //   item = null;
@@ -75,6 +76,7 @@ class _ServiceRecordsState extends State<ServiceRecords> {
     if (!textFieldDropdown) {
       vehicleTypeTextfield.text = widget.prefillDetails.prefill[0].vehicleName!;
       vehicleType = vehicleTypeTextfield.text;
+      addService();
     }
   }
 
@@ -132,7 +134,7 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                       onChanged: (value) {
                         // removeService();
                         // setState(() {});
-                        // addService();
+                        addService();
                         // print(value);
                         vehicleType = value!;
                         setState(() {});
@@ -184,7 +186,9 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                       //  print(serviceRecordList.toString());
                     }
                     //   serviceRecordList.add(value);
-                    print(serviceRecordList);
+                    serviceRecordList.isEmpty
+                        ? showToast(msg: "No services booked")
+                        : null;
                     setState(() {});
                   });
                 },
