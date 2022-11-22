@@ -357,6 +357,7 @@ class _GarageCardState extends State<GarageCard> {
                                   bikes = [];
                                   value.forEach(
                                     (e) {
+                                      print(bikes);
                                       bikes.add(BikeDetailsModel.fromJson(e));
                                     },
                                   );
@@ -372,6 +373,7 @@ class _GarageCardState extends State<GarageCard> {
                               );
                               enableAll(2);
                             } catch (e) {
+                              print(e);
                               showToast(msg: 'No bike found');
                               enableAll(2);
                             }

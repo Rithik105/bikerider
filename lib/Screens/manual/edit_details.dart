@@ -264,7 +264,7 @@ class _EditDetailsState extends State<EditDetails> {
                       ),
                       TextField(
                         enabled: false,
-                        controller: widget.bike.engineController,
+                        controller: widget.bike.vehicleNumberController,
                         decoration: InputDecoration(
                           label: Text(
                             "Vehicle Number",
@@ -278,7 +278,7 @@ class _EditDetailsState extends State<EditDetails> {
                       ),
                       TextField(
                         enabled: false,
-                        controller: widget.bike.vehicleNumberController,
+                        controller: widget.bike.engineController,
                         decoration: InputDecoration(
                           label: Text(
                             "Engine",
