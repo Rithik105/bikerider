@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     TripintermediateCard(),
     GarageCard(),
     ActivityInter(),
-    const ProfileInter()
+    ProfileInter()
   ];
   void _setLogin() async {
     final prefs = await SharedPreferences.getInstance();

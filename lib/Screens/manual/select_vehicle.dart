@@ -70,7 +70,7 @@ class _SelectBikeState extends State<SelectBike> {
                 onChanged: (value) {
                   setState(() {
                     vehicleType = value as String?;
-                    print(vehicleType);
+                    //    print(vehicleType);
                   });
                   selectedVehicle = widget.bikeCategories
                       .where((element) => element.vehicleType == value)

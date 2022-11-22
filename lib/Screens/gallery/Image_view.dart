@@ -20,6 +20,7 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
+  bool _isDisabled = false;
   void imageDownload() async {
     String? url = widget.imageDetails.photos?.imageUrl;
     print('here');
@@ -57,8 +58,6 @@ class _ImageViewState extends State<ImageView> {
                         margin: EdgeInsets.only(top: 10),
                         width: double.infinity,
                         height: 30,
-                        // color: Colors.red,
-                        // color: Colors.green
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,17 +83,19 @@ class _ImageViewState extends State<ImageView> {
                                                   onTap: () {
                                                     print(e.likedNumber);
                                                     Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                BlocProvider(
-                                                                  create: (context) =>
-                                                                      BikeCubit()
-                                                                        ..getProfile(
-                                                                            e.likedNumber!),
-                                                                  child:
-                                                                      ProfileHeader(),
-                                                                )));
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            BlocProvider(
+                                                          create: (context) =>
+                                                              BikeCubit()
+                                                                ..getProfile(e
+                                                                    .likedNumber!),
+                                                          child:
+                                                              ProfileHeader(),
+                                                        ),
+                                                      ),
+                                                    );
                                                   },
                                                 );
                                               },
@@ -107,33 +108,41 @@ class _ImageViewState extends State<ImageView> {
                               child: Text(
                                   "${widget.imageDetails.photos?.likeCount}"),
                             ),
-                            IconButton(
-                                padding: EdgeInsets.all(0),
-                                onPressed: () {
-                                  setState(
-                                    () {
-                                      UserSecureStorage.getToken()
-                                          .then((value) {
-                                        PhotosHttp.addLike(
-                                            widget.imageDetails.photos!.imageId
-                                                .toString(),
-                                            value!);
-                                        if (widget.imageDetails.liked) {
-                                          widget
-                                              .imageDetails.photos!.likeCount--;
-                                          widget.imageDetails.liked = false;
-                                        } else {
-                                          widget
-                                              .imageDetails.photos!.likeCount++;
-                                          widget.imageDetails.liked = true;
-                                        }
-                                      });
-                                    },
-                                  );
-                                },
-                                icon: widget.imageDetails.liked
-                                    ? kLikedIconStyle
-                                    : kDefaultIconStyle),
+                            IgnorePointer(
+                              ignoring: _isDisabled,
+                              child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  onPressed: () {
+                                    _isDisabled = true;
+                                    setState(
+                                      () {
+                                        UserSecureStorage.getToken()
+                                            .then((value) {
+                                          PhotosHttp.addLike(
+                                                  widget.imageDetails.photos!
+                                                      .imageId
+                                                      .toString(),
+                                                  value!)
+                                              .then((value) {
+                                            _isDisabled = false;
+                                          });
+                                          if (widget.imageDetails.liked) {
+                                            widget.imageDetails.photos!
+                                                .likeCount--;
+                                            widget.imageDetails.liked = false;
+                                          } else {
+                                            widget.imageDetails.photos!
+                                                .likeCount++;
+                                            widget.imageDetails.liked = true;
+                                          }
+                                        });
+                                      },
+                                    );
+                                  },
+                                  icon: widget.imageDetails.liked
+                                      ? kLikedIconStyle
+                                      : kDefaultIconStyle),
+                            ),
                             SizedBox(
                               width: 10,
                             ),

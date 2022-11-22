@@ -150,6 +150,7 @@ class LoginScreen extends StatelessWidget {
                                       value: value["profileImage"]);
                                   _setLogin();
                                   _setNoTutorial();
+
                                   // Navigator.popUntil(context, (route) => false);
                                   // Navigator.popUntil(context, (route) => false);
                                   // Navigator.popUntil(context, (route) => false);
@@ -164,6 +165,7 @@ class LoginScreen extends StatelessWidget {
                                   // Navigator.pushNamed(context, "/HomeScreen");
                                   // Navigator.popUntil(context, (route) => false);
                                   // Navigator.pushReplacementNamed(context, routeName);
+
                                   showToast(msg: "Login Successful");
                                 });
                               } else {
@@ -188,16 +190,18 @@ class LoginScreen extends StatelessWidget {
                                   UserSecureStorage.setDetails(
                                       key: "haveBike",
                                       value: value["haveBike"].toString());
-                                  UserSecureStorage.setDetails(
-                                      key: "profileImage",
-                                      value: value["profileImage"]);
+                                  // UserSecureStorage.setDetails(
+                                  //     key: "profileImage",
+                                  //     value: value["profileImage"]);
                                   _setLogin();
                                   _setNoTutorial();
+
                                   // Navigator.pushNamed(context, "/HomeScreen");
 
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       "/HomeScreen", (context) => false);
                                   print('Login by mobile number');
+
                                   showToast(msg: "Login Successful");
                                 });
                               } else {

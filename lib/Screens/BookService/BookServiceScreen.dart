@@ -21,7 +21,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   TextEditingController vehicleNumberController = TextEditingController();
   TextEditingController commentsController = TextEditingController();
   String serviceType = 'General Service';
-  String myError = "You will have only two attempts to change your number";
   TextEditingController vehicleTypeTextfield = TextEditingController();
   String vehicleType = 'Classic 350-black';
   bool textFieldDropdown = false;
