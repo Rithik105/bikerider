@@ -39,6 +39,12 @@ class BikeGalleryFetchedState extends BikeState {}
 
 class BikeFetchingState extends BikeState {}
 
+class BikeMineProfileEditState extends BikeState {
+  Map profile;
+
+  BikeMineProfileEditState({required this.profile}) {}
+}
+
 class BikeMineProfileFetchedState extends BikeState {
   Map profile;
   BikeMineProfileFetchedState({required this.profile});
