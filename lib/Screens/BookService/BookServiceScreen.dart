@@ -1,3 +1,4 @@
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   TextEditingController vehicleNumberController = TextEditingController();
   TextEditingController commentsController = TextEditingController();
   String serviceType = 'General Service';
+  String myError = "You will have only two attempts to change your number";
   TextEditingController vehicleTypeTextfield = TextEditingController();
   String vehicleType = 'Classic 350-black';
   bool textFieldDropdown = false;
@@ -28,7 +30,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
   bool isEdit = false;
   bool comments = false;
   bool visibility = false;
-  int attempts = 0;
+
+  int? attempts;
+
   List<String> categories = [
     "Free service",
     "General service",
@@ -40,6 +44,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     // TODO: implement initState
     super.initState();
     textFieldDropdown = widget.prefill.prefill.length > 1 ? true : false;
+    attempts = widget.prefill.attemptsLeft!;
     if (!textFieldDropdown) {
       vehicleTypeTextfield.text = widget.prefill.prefill[0].vehicleName!;
       vehicleNumberController.text = widget.prefill.prefill[0].vehicleNumber!;
@@ -70,6 +75,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -95,6 +101,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
           children: [
             Stack(alignment: Alignment.centerRight, children: [
               TextField(
+
+                keyboardType: TextInputType.number,
+
                 enabled: isEdit,
                 controller: mobileNumberController,
                 decoration: InputDecoration(
@@ -119,6 +128,91 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   //     color: Color(0xffA6A4A3),
                   //   ),
                   // ),
+
+                ),
+                onChanged: (value) {
+                  //callWarning();
+                  //  myError;
+                  //  mobileNumberController.text=value;
+
+                  mobileNumberController.text != widget.prefill.mobile &&
+                          value.length == 10
+                      ? showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                              'Are you sure to change the mobile number?',
+                              style: TextStyle(color: Colors.grey.shade700),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  BookServiceHttp.updatePhoneNumber(
+                                      mobileNumberController.text)
+                                      .then((value)  {
+                                    print(value);
+                                    print("call warning");
+                                    visibility = false;
+                                    attempts = value["attempts_left"];
+                                    isEdit = false;
+
+                                    showToast(msg: "Phone number changed successfully");
+
+                                    setState(() {});
+                                  });
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Yes',
+                                    style: TextStyle(
+                                        color: Colors.orangeAccent,
+                                        fontSize: 21)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  mobileNumberController.text =
+                                      widget.prefill.mobile!;
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'No',
+                                  style: TextStyle(
+                                      color: Colors.orangeAccent, fontSize: 21),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        )
+                      : null;
+                  setState(() {});
+                },
+              ),
+              GestureDetector(
+                onTap: () {
+
+                  attempts!>0?visibility = true:visibility=false;
+                  if((widget.prefill.attemptsLeft)!>0&&(attempts!)>0){
+                    isEdit = true;
+
+                  }
+                  else{
+                    isEdit = false;
+                    print("less than zero");
+                    showToast(msg: "You have exceeded the attempts to change the number");
+                    // mobileNumberController.text = "";
+                  }
+
+                  // attempts <= 0 ? isEdit = false : isEdit = true;
+                  // attempts <= 0 ?null:mobileNumberController.text = "";
+
+                  setState(() {});
+
+                },
+                child: Icon(
+                  isEdit?Icons.done: Icons.edit,
+                  color: Color(0xffA6A4A3),
+
                 ),
                 onChanged: (value) {
                   //callWarning();
@@ -183,6 +277,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   color: Color(0xffA6A4A3),
                 ),
               ),
+
             ]),
 
             visibility == false
@@ -194,11 +289,17 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FittedBox(
-                            child: Text(
+
+                            child: attempts==1?Text(
+                              "You will have only ${attempts} attempt to change your number",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),):Text(
                                 "You will have only ${attempts} attempts to change your number",
                                 style: TextStyle(
                                   color: Colors.red,
-                                ))),
+                                ),),),
+
                         Text(
                           "The new number will be your login id",
                           style: TextStyle(color: Colors.red),

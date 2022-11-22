@@ -14,7 +14,10 @@ class BookServiceHttp {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
-        body: jsonEncode({"text": search}));
+
+        body: jsonEncode({
+          "text": search
+        }));
 
     return response;
   }
@@ -110,8 +113,8 @@ class BookServiceHttp {
     return jsonDecode(response.body);
   }
 
-  static Future getBookingDetails(
-      String vehicleType, String serviceType) async {
+  static Future getBookingDetails(String vehicleType,
+      String serviceType) async {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
@@ -120,8 +123,12 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
         },
-        body: json
-            .encode({"vehicleType": vehicleType, "serviceType": serviceType}));
+
+        body: json.encode({
+          "vehicleType": vehicleType,
+          "serviceType": serviceType
+        }));
+
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
@@ -135,7 +142,10 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
         },
-        body: json.encode({"serviceId": id}));
+
+        body: json.encode({
+          "serviceId": id
+        }));
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
@@ -163,7 +173,12 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
         },
-        body: json.encode({"mobile": phone, "token": token}));
+
+        body: json.encode({
+          "mobile": phone,
+          "token": token
+        }));
+    print(response.body);
     await UserSecureStorage.setToken(jsonDecode(response.body)["accessToken"]);
     print(jsonDecode(response.body));
     return jsonDecode(response.body);

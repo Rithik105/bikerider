@@ -9,8 +9,8 @@ import '../../custom/widgets/button.dart';
 import '../SuccessPage.dart';
 
 class ConfirmBookingDetails extends StatefulWidget {
-   ConfirmBookingDetails({Key? key,required this.dealerPhone}) : super(key: key);
-   final String dealerPhone;
+  ConfirmBookingDetails({Key? key,required this.dealerPhone}) : super(key: key);
+  final String dealerPhone;
 
   @override
   State<ConfirmBookingDetails> createState() => _ConfirmBookingDetailsState();
@@ -45,16 +45,16 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
               ),
             ),
             GestureDetector(
-                onTap: () {
-                  print(details);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),)
+              onTap: () {
+                print(details);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),)
           ],
         ),
       ),
@@ -101,40 +101,42 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                      SizedBox(
-                        width: 150,
-                        child: Text(
-                          e.key,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xff4F504F),
+                          SizedBox(
+                            width: 150,
+                            child: Text(
+                              e.key,
+                              style: GoogleFonts.roboto(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff4F504F),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(":"),
-                      Container(
-                        width: 170,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                         e.value ==null?'': DateFormat('dd MMM yyyy').format(e.value),
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: const Color(0xff4F504F),
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      ),
-                    ]),
+                          Text(":"),
+                          Container(
+                            width: 130,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              e.value ==null?'': DateFormat('dd MMM yyyy').format(e.value),
+                              style: GoogleFonts.roboto(
+                                fontSize: 18,
+                                color: const Color(0xff4F504F),
+                              ),
+                            ),
+                          ),
+                        ]),
                     const Divider(
                       thickness: 1,
                       color: Color(0xffB4B3B3),
                     ),
                   ],
                 );
-              } else {
+              }
+
+              else {
                 return Column(children: [
                   const SizedBox(
                     height: 25,
@@ -154,8 +156,20 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                         ),
                       ),
                       Text(":"),
+                      e.value!="Breakdown assistance"?
                       Container(
                         width: 130,
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          e.value,
+                          style: GoogleFonts.roboto(
+                            fontSize: 18,
+                            color: Color(0xff4F504F),
+                          ),
+                        ),
+                      ):
+                      Container(
+                        width: 90,
                         alignment: Alignment.centerRight,
                         child: Text(
                           e.value,
@@ -183,24 +197,24 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                 text: "BOOK",
                 ontap: () {
                   BookServiceHttp.uploadBookingDetails(widget.dealerPhone!).then(
-                    (value) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SuccessPage(
-                                title: "Your booking has been confirmed",
-                                nextScreen: '',
-                              ),
-                        ),
-                      );
-                      Future.delayed(Duration(milliseconds: 250)).then((value) {
-                        BookServiceModel.clearBookingDetails();
-                        setState(() {
+                          (value) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SuccessPage(
+                                  title: "Your booking has been confirmed",
+                                  nextScreen: '',
+                                ),
+                          ),
+                        );
+                        Future.delayed(Duration(milliseconds: 250)).then((value) {
+                          BookServiceModel.clearBookingDetails();
+                          setState(() {
 
+                          });
                         });
-                      });
-                    }
+                      }
                   );
                 },
               ),
@@ -210,6 +224,4 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
       ),
     );
   }
-
-
 }
