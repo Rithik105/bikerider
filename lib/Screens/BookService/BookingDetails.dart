@@ -9,7 +9,8 @@ import '../../custom/widgets/button.dart';
 import '../SuccessPage.dart';
 
 class ConfirmBookingDetails extends StatefulWidget {
-  ConfirmBookingDetails({Key? key,required this.dealerPhone}) : super(key: key);
+  ConfirmBookingDetails({Key? key, required this.dealerPhone})
+      : super(key: key);
   final String dealerPhone;
 
   @override
@@ -18,7 +19,6 @@ class ConfirmBookingDetails extends StatefulWidget {
 
 class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
   Map details = BookServiceModel.toJson();
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,8 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
               child: const Icon(
                 Icons.edit,
                 color: Colors.white,
-              ),)
+              ),
+            )
           ],
         ),
       ),
@@ -99,7 +100,8 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                     const SizedBox(
                       height: 25,
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
                             width: 150,
@@ -120,7 +122,9 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                             width: 130,
                             alignment: Alignment.centerRight,
                             child: Text(
-                              e.value ==null?'': DateFormat('dd MMM yyyy').format(e.value),
+                              e.value == null
+                                  ? ''
+                                  : DateFormat('dd MMM yyyy').format(e.value),
                               style: GoogleFonts.roboto(
                                 fontSize: 18,
                                 color: const Color(0xff4F504F),
@@ -134,9 +138,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                     ),
                   ],
                 );
-              }
-
-              else {
+              } else {
                 return Column(children: [
                   const SizedBox(
                     height: 25,
@@ -156,30 +158,30 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                         ),
                       ),
                       Text(":"),
-                      e.value!="Breakdown assistance"?
-                      Container(
-                        width: 130,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          e.value,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: Color(0xff4F504F),
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ):
-                      Container(
-                        width: 90,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          e.value,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: Color(0xff4F504F),
-                          ),
-                        ),
-                      ),
+                      e.value != "Breakdown assistance"
+                          ? Container(
+                              width: 130,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                e.value,
+                                textAlign: TextAlign.right,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  color: Color(0xff4F504F),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: 90,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                e.value,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  color: Color(0xff4F504F),
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                   const Divider(
@@ -197,26 +199,22 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
               child: LargeSubmitButton(
                 text: "BOOK",
                 ontap: () {
-                  BookServiceHttp.uploadBookingDetails(widget.dealerPhone!).then(
-                          (value) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                SuccessPage(
-                                  title: "Your booking has been confirmed",
-                                  nextScreen: '',
-                                ),
-                          ),
-                        );
-                        Future.delayed(Duration(milliseconds: 250)).then((value) {
-                          BookServiceModel.clearBookingDetails();
-                          setState(() {
-
-                          });
-                        });
-                      }
-                  );
+                  BookServiceHttp.uploadBookingDetails(widget.dealerPhone!)
+                      .then((value) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SuccessPage(
+                          title: "Your booking has been confirmed",
+                          nextScreen: '',
+                        ),
+                      ),
+                    );
+                    Future.delayed(Duration(milliseconds: 250)).then((value) {
+                      BookServiceModel.clearBookingDetails();
+                      setState(() {});
+                    });
+                  });
                 },
               ),
             ),

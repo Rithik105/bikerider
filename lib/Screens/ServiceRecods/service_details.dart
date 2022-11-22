@@ -33,7 +33,14 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   double store = 2;
   Widget billpaid() {
     if (widget.invoiceModelList.isEmpty) {
-      return Text("Service yet to be completed",style: GoogleFonts.robotoFlex(color: Color(0xffed863a),letterSpacing: 1, fontSize: 20,fontWeight: FontWeight.w600),);
+      return Text(
+        "Service yet to be completed",
+        style: GoogleFonts.robotoFlex(
+            color: Color(0xffed863a),
+            letterSpacing: 1,
+            fontSize: 20,
+            fontWeight: FontWeight.w600),
+      );
     } else {
       return Column(children: [
         Text(
@@ -70,8 +77,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           ),
           onRatingUpdate: (rating) async {
             store = rating;
-            await AddBikeHttp.addReview(widget.serviceRecordList.id!,
-                rating, widget.serviceRecordList.dealerPhone!)
+            await AddBikeHttp.addReview(widget.serviceRecordList.id!, rating,
+                    widget.serviceRecordList.dealerPhone!)
                 .then((value) {
               print("the value is${value["dealerTotalRatings"]}");
               _rating = rating;
@@ -301,30 +308,31 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       ),
                                     ),
                                     Text(':'),
-                                    e.value!="Breakdown assistance"?
-                                    Container(
-                                      width: 150,
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        e.value,
-                                        textAlign: TextAlign.right,
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 15,
-                                          color: Color(0xff4F504F),
-                                        ),
-                                      ),
-                                    ):
-                                    Container(
-                                      width: 90,
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        e.value,
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 15,
-                                          color: Color(0xff4F504F),
-                                        ),
-                                      ),
-                                    ),
+
+                                    e.value != "Breakdown assistance"
+                                        ? Container(
+                                            width: 150,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              e.value,
+                                              textAlign: TextAlign.right,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 15,
+                                                color: Color(0xff4F504F),
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            width: 90,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              e.value,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 15,
+                                                color: Color(0xff4F504F),
+                                              ),
+                                            ),
+                                          ),
                                   ],
                                 ),
                                 const Divider(
@@ -372,7 +380,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
               height: 30,
             ),
             billpaid(),
-
             const SizedBox(
               height: 60,
             ),
