@@ -33,19 +33,22 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   double store = 2;
   Widget billpaid() {
     if (widget.invoiceModelList.isEmpty) {
-      return Text(
-        "Service yet to be completed",
-        style: GoogleFonts.robotoFlex(
-            color: Color(0xffed863a),
-            letterSpacing: 1,
-            fontSize: 20,
-            fontWeight: FontWeight.w600),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18.0,horizontal: 5),
+        child: Text(
+          "Service yet to be completed",
+          style: GoogleFonts.robotoFlex(
+              color: const Color(0xffed863a),
+              letterSpacing: 1,
+              fontSize: 20,
+              fontWeight: FontWeight.w600),
+        ),
       );
     } else {
       return Column(children: [
         Text(
           "Total bill paid",
-          style: GoogleFonts.roboto(color: Color(0x99000000), fontSize: 16),
+          style: GoogleFonts.roboto(color: const Color(0x99000000), fontSize: 16),
         ),
         const SizedBox(
           height: 20,
@@ -53,24 +56,24 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         Text(
           "Rs ${widget.invoiceModelList[0].total ?? ""}/-",
           style: GoogleFonts.roboto(
-              color: Color(0xffED7F2C),
+              color: const Color(0xffED7F2C),
               fontSize: 35,
               fontWeight: FontWeight.w400),
         ),
         const SizedBox(
           height: 20,
         ),
-        Text("Rate the Service"),
+        const Text("Rate the Service"),
         const SizedBox(
           height: 20,
         ),
         RatingBar.builder(
           initialRating: widget.serviceRecordList.dealerRating!.toDouble(),
           minRating: 0,
-          unratedColor: Color(0x33000000),
+          unratedColor: const Color(0x33000000),
           itemCount: 5,
           itemSize: 25.0,
-          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
             _selectedIcon ?? Icons.star,
             color: Colors.amber,
@@ -96,10 +99,10 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffed863a),
+        backgroundColor: const Color(0xffed863a),
         leading: BackButton(
           onPressed: () {
-            Timer(Duration(milliseconds: 500), () {
+            Timer(const Duration(milliseconds: 500), () {
               Navigator.pop(context);
             });
             widget.callBack();
@@ -115,7 +118,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         ),
         actions: [
           Container(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             height: 40,
             width: 40,
             child: GestureDetector(
@@ -143,8 +146,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.8,
-              margin: EdgeInsets.only(left: 20, right: 20, top: 30),
+              // height:MediaQuery.of(context).orientation==Orientation.portrait MediaQuery.of(context).size.height * 0.8,
+              margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(
                   Radius.circular(8),
@@ -165,11 +168,12 @@ class _ServiceDetailsState extends State<ServiceDetails> {
               child: Stack(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(20),
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 10),
                           height: 70,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -182,7 +186,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                           widget.serviceRecordList.slotDate!),
                                     ),
                                     style: GoogleFonts.roboto(
-                                        color: Color(0xffED7F2C),
+                                        color: const Color(0xffED7F2C),
                                         fontSize: 45,
                                         fontWeight: FontWeight.w900),
                                   ),
@@ -198,7 +202,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                               .serviceRecordList.slotDate!),
                                         ),
                                         style: GoogleFonts.roboto(
-                                            color: Color(0xffED7F2C),
+                                            color: const Color(0xffED7F2C),
                                             fontSize: 22,
                                             fontWeight: FontWeight.w900),
                                       ),
@@ -209,7 +213,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                         ),
                                         style: GoogleFonts.roboto(
                                           fontSize: 18,
-                                          color: Color(0xffED7F2C),
+                                          color: const Color(0xffED7F2C),
                                         ),
                                       ),
                                     ],
@@ -218,14 +222,19 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                               ),
                               Container(
                                 width: 1,
-                                color: Color(0x25000000),
+                                color: const Color(0x25000000),
                               ),
                               Column(
                                 children: [
-                                  Text(
-                                    widget.serviceRecordList.serviceType!,
-                                    style: GoogleFonts.roboto(
-                                      color: Color(0x99000000),
+                                  SizedBox(
+
+                                    child: Text(
+                                      widget.serviceRecordList.serviceType!,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      style: GoogleFonts.roboto(
+                                        color: const Color(0x99000000),
+                                      ),
                                     ),
                                   ),
                                   RatingBarIndicator(
@@ -239,7 +248,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                     ),
                                     itemCount: 5,
                                     itemSize: 23.0,
-                                    unratedColor: Color(0xffd3d3d3),
+                                    unratedColor: const Color(0xffd3d3d3),
                                     direction: Axis.horizontal,
                                   ),
                                 ],
@@ -267,7 +276,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                   style: GoogleFonts.roboto(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    color: Color(0xff4F504F),
+                                    color: const Color(0xff4F504F),
                                   ),
                                 ),
                                 const SizedBox(
@@ -275,6 +284,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                 ),
                                 Text(
                                   e.value,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
                                   style: GoogleFonts.roboto(
                                     fontSize: 18,
                                     color: const Color(0xff4F504F),
@@ -297,39 +308,37 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: 150,
+                                      width: MediaQuery.of(context).size.width*0.35,
                                       child: Text(
                                         e.key,
                                         style: GoogleFonts.roboto(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w900,
-                                          color: Color(0x99000000),
+                                          color: const Color(0x99000000),
                                         ),
                                       ),
                                     ),
-                                    Text(':'),
+                                    const Text(':'),
 
                                     e.value != "Breakdown assistance"
-                                        ? Container(
-                                            width: 150,
-                                            alignment: Alignment.centerRight,
+                                        ? SizedBox(
+                                      width: MediaQuery.of(context).size.width*0.35,
                                             child: Text(
                                               e.value,
                                               textAlign: TextAlign.right,
                                               style: GoogleFonts.roboto(
                                                 fontSize: 15,
-                                                color: Color(0xff4F504F),
+                                                color: const Color(0xff4F504F),
                                               ),
                                             ),
                                           )
-                                        : Container(
-                                            width: 90,
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
+                                        : SizedBox(
+                                      width: MediaQuery.of(context).size.width*0.35,
+                                      child: Text(
                                               e.value,
                                               style: GoogleFonts.roboto(
                                                 fontSize: 15,
-                                                color: Color(0xff4F504F),
+                                                color: const Color(0xff4F504F),
                                               ),
                                             ),
                                           ),

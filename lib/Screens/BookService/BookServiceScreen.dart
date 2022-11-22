@@ -100,7 +100,6 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Row(children: [
               Expanded(
                 child: TextField(
@@ -132,91 +131,9 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     // ),
                   ),
                   // onChanged: (value) {
-
                   //callWarning();
                   //  myError;
                   //  mobileNumberController.text=value;
-
-                   mobileNumberController.text != widget.prefill.mobile &&
-                           value.length == 10
-                       ? showDialog<String>(
-                           context: context,
-                           builder: (BuildContext context) => AlertDialog(
-                             content: Text(
-                               'Are you sure to change the mobile number?',
-                               style: TextStyle(color: Colors.grey.shade700),
-                             ),
-                             actions: <Widget>[
-                               TextButton(
-                                 onPressed: () {
-                                   BookServiceHttp.updatePhoneNumber(
-                                       mobileNumberController.text)
-                                       .then((value)  {
-                                     print(value);
-                                     print("call warning");
-                                     visibility = false;
-                                     attempts = value["attempts_left"];
-                                     isEdit = false;
-
-                                     showToast(msg: "Phone number changed successfully");
-
-                                     setState(() {});
-                                   });
-
-                                   Navigator.pop(context);
-                                 },
-                                 child: const Text('Yes',
-                                     style: TextStyle(
-                                         color: Colors.orangeAccent,
-                                         fontSize: 21)),
-                               ),
-                               TextButton(
-                                 onPressed: () {
-                                   mobileNumberController.text =
-                                       widget.prefill.mobile!;
-                                   Navigator.pop(context);
-                                 },
-                                 child: const Text(
-                                   'No',
-                                   style: TextStyle(
-                                       color: Colors.orangeAccent, fontSize: 21),
-                                 ),
-                               ),
-
-                             ],
-                           ),
-                         )
-                       : null;
-                   setState(() {});
-                 },
-               ),
-             ),
-             GestureDetector(
-               onTap: () {
-
-                 attempts!>0?visibility = true:visibility=false;
-                 if((widget.prefill.attemptsLeft)!>0&&(attempts!)>0){
-                   isEdit = true;
-
-                 }
-                 else{
-                   isEdit = false;
-                   print("less than zero");
-                   showToast(msg: "You have exceeded the attempts to change the number");
-                   // mobileNumberController.text = "";
-                 }
-
-                 // attempts <= 0 ? isEdit = false : isEdit = true;
-                 // attempts <= 0 ?null:mobileNumberController.text = "";
-
-                 setState(() {});
-
-               },
-               child: Icon(
-                 isEdit?Icons.done: Icons.edit,
-                 color: Color(0xffA6A4A3),
-               ),
-             ),
 
                   // mobileNumberController.text != widget.prefill.mobile &&
                   //         value.length == 10
@@ -282,72 +199,72 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                     setState(() {});
                     print(isEdit);
                     mobileNumberController.text != widget.prefill.mobile &&
-                            mobileNumberController.text.length == 10
+                        mobileNumberController.text.length == 10
                         ? showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              content: Text(
-                                'Are you sure to change the mobile number?',
-                                style: TextStyle(color: Colors.grey.shade700),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    BookServiceHttp.updatePhoneNumber(
-                                            mobileNumberController.text)
-                                        .then((value) {
-                                      if (value["message"] ==
-                                          "Mobile Number updated Successfully!") {
-                                        UserSecureStorage.setToken(
-                                            value["accessToken"]);
-                                        visibility = false;
-                                        attempts = value["attempts_left"];
-                                        isEdit = false;
-                                        UserSecureStorage.setDetails(
-                                            key: "mobile",
-                                            value: mobileNumberController.text);
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        content: Text(
+                          'Are you sure to change the mobile number?',
+                          style: TextStyle(color: Colors.grey.shade700),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              BookServiceHttp.updatePhoneNumber(
+                                  mobileNumberController.text)
+                                  .then((value) {
+                                if (value["message"] ==
+                                    "Mobile Number updated Successfully!") {
+                                  UserSecureStorage.setToken(
+                                      value["accessToken"]);
+                                  visibility = false;
+                                  attempts = value["attempts_left"];
+                                  isEdit = false;
+                                  UserSecureStorage.setDetails(
+                                      key: "mobile",
+                                      value: mobileNumberController.text);
 
-                                        showToast(
-                                            msg:
-                                                "Phone number changed successfully");
+                                  showToast(
+                                      msg:
+                                      "Phone number changed successfully");
 
-                                        setState(() {});
-                                      } else {
-                                        showToast(
-                                            msg: "Phone number already exists");
-                                      }
-                                    });
+                                  setState(() {});
+                                } else {
+                                  showToast(
+                                      msg: "Phone number already exists");
+                                }
+                              });
 
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Yes',
-                                      style: TextStyle(
-                                          color: Colors.orangeAccent,
-                                          fontSize: 21)),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    mobileNumberController.text =
-                                        widget.prefill.mobile!;
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'No',
-                                    style: TextStyle(
-                                        color: Colors.orangeAccent,
-                                        fontSize: 21),
-                                  ),
-                                ),
-                              ],
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Yes',
+                                style: TextStyle(
+                                    color: Colors.orangeAccent,
+                                    fontSize: 21)),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              mobileNumberController.text =
+                              widget.prefill.mobile!;
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'No',
+                              style: TextStyle(
+                                  color: Colors.orangeAccent,
+                                  fontSize: 21),
                             ),
-                          )
+                          ),
+                        ],
+                      ),
+                    )
                         : null;
                   } else {
                     isEdit = false;
                     print("less than zero");
                     showToast(
                         msg:
-                            "You have exceeded the attempts to change the number");
+                        "You have exceeded the attempts to change the number");
                     // mobileNumberController.text = "";
                   }
 
@@ -409,98 +326,96 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                   //     : null;
                   // }
                   // setState(() {});
-
                 },
                 child: Icon(
                   isEdit ? Icons.done : Icons.edit,
                   color: Color(0xffA6A4A3),
                 ),
               ),
-
             ]),
 
             !visibility
                 ? SizedBox()
                 : Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: attempts == 1
-                              ? Text(
-                                  "You will have only ${attempts} attempt to change your number",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                )
-                              : Text(
-                                  "You will have only ${attempts} attempts to change your number",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                        ),
-                        Text(
-                          "The new number will be your login id",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FittedBox(
+                    child: attempts == 1
+                        ? Text(
+                      "You will have only ${attempts} attempt to change your number",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+                        : Text(
+                      "You will have only ${attempts} attempts to change your number",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
                     ),
                   ),
+                  Text(
+                    "The new number will be your login id",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
             textFieldDropdown
                 ? DropdownButtonFormField(
-                    icon: Image.asset(
-                        "assets/images/book_service/drop_down.png",
-                        width: 10),
-                    decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey)),
-                      labelText: 'Select vehicle',
-                      labelStyle: GoogleFonts.roboto(
-                          color: const Color(0xff9F9F9F), fontSize: 18),
-                    ),
-                    items: [
-                      ...widget.prefill.prefill.map(
-                        (VehicleDetails item) => DropdownMenuItem<String>(
-                          value: item.vehicleName,
-                          child: Text(
-                            item.vehicleName!,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ),
+              icon: Image.asset(
+                  "assets/images/book_service/drop_down.png",
+                  width: 10),
+              decoration: InputDecoration(
+                focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey)),
+                labelText: 'Select vehicle',
+                labelStyle: GoogleFonts.roboto(
+                    color: const Color(0xff9F9F9F), fontSize: 18),
+              ),
+              items: [
+                ...widget.prefill.prefill.map(
+                      (VehicleDetails item) => DropdownMenuItem<String>(
+                    value: item.vehicleName,
+                    child: Text(
+                      item.vehicleName!,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87,
                       ),
-                    ],
-                    // value: vehicleType,
-                    onChanged: (value) {
-                      vehicleType = value!;
-                      setState(() {
-                        vehicleNumberController.text = widget.prefill.prefill
-                            .where((element) => element.vehicleName == value)
-                            .toList()[0]
-                            .vehicleNumber!;
-                        // vehicleType = value as String;
-                        // vehicleNumberController.text=value;
-                        print("vehicle type${vehicleType}");
-                        print("vehicle no ${vehicleNumberController.text}");
-                      });
-                    },
-                    itemHeight: 50,
-                  )
-                : TextField(
-                    enabled: false,
-                    controller: vehicleTypeTextfield,
-                    decoration: InputDecoration(
-                      labelText: 'Vehicle type',
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      labelStyle: GoogleFonts.robotoFlex(
-                          color: Color(0xff9F9F9F), fontSize: 18),
                     ),
                   ),
+                ),
+              ],
+              // value: vehicleType,
+              onChanged: (value) {
+                vehicleType = value!;
+                setState(() {
+                  vehicleNumberController.text = widget.prefill.prefill
+                      .where((element) => element.vehicleName == value)
+                      .toList()[0]
+                      .vehicleNumber!;
+                  // vehicleType = value as String;
+                  // vehicleNumberController.text=value;
+                  print("vehicle type${vehicleType}");
+                  print("vehicle no ${vehicleNumberController.text}");
+                });
+              },
+              itemHeight: 50,
+            )
+                : TextField(
+              enabled: false,
+              controller: vehicleTypeTextfield,
+              decoration: InputDecoration(
+                labelText: 'Vehicle type',
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                labelStyle: GoogleFonts.robotoFlex(
+                    color: Color(0xff9F9F9F), fontSize: 18),
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -533,14 +448,14 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               items: categories
                   .map(
                     (item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                            fontSize: 18, color: Colors.black87),
-                      ),
-                    ),
-                  )
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                        fontSize: 18, color: Colors.black87),
+                  ),
+                ),
+              )
                   .toList(),
               onChanged: (value) {
                 setState(() {
@@ -626,7 +541,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
               child: ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all(Colors.transparent),
+                    MaterialStateProperty.all(Colors.transparent),
                     elevation: MaterialStateProperty.all(0)),
                 onPressed: submit ? () => submitData() : null,
                 child: Text(
