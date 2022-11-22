@@ -1,5 +1,3 @@
-import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Screens/trip_summary_go.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../custom/widgets/CustomCard.dart';
-import '../custom/widgets/button.dart';
-import 'create_trip_screen.dart';
 
 class ActivityCard extends StatelessWidget {
   ActivityCard({Key? key}) : super(key: key);
@@ -19,8 +15,8 @@ class ActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BikeCubit, BikeState>(builder: (context, state) {
       if (state is BikeFetchingState) {
-        return Center(
-          child: const CircularProgressIndicator(
+        return const Center(
+          child: CircularProgressIndicator(
             color: Colors.orange,
           ),
         );
@@ -32,25 +28,26 @@ class ActivityCard extends StatelessWidget {
             children: [
               Material(
                 elevation: 2.0,
-                shadowColor: Color.fromRGBO(194, 188, 188, 0.5),
+                shadowColor: const Color.fromRGBO(194, 188, 188, 0.5),
                 child: TextField(
                   controller: searchCardController,
                   decoration: InputDecoration(
                     labelText: "Search a trip",
                     labelStyle: GoogleFonts.roboto(
-                        color: Color.fromRGBO(166, 166, 166, 0.87),
+                        color: const Color.fromRGBO(166, 166, 166, 0.87),
                         fontSize: 14),
                     fillColor: Colors.white,
                     filled: true,
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                    focusedBorder: UnderlineInputBorder(
+                    contentPadding:
+                        const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Color.fromRGBO(194, 188, 188, 0.5))),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         borderSide:
-                            BorderSide(color: Colors.white, width: 4.0)),
-                    prefixIcon: Icon(
+                            const BorderSide(color: Colors.white, width: 4.0)),
+                    prefixIcon: const Icon(
                       Icons.search,
                       size: 30,
                       color: Color(0xff989898),
@@ -58,7 +55,7 @@ class ActivityCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -117,24 +114,29 @@ class ActivityCard extends StatelessWidget {
                   Text(
                     "Welcome Aboard",
                     style: GoogleFonts.robotoFlex(
-                        fontSize: 28, color: Color(0xff4F504F)),
+                        fontSize: 28, color: const Color(0xff4F504F)),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "You are not a part of any trips at",
-                    style: GoogleFonts.robotoFlex(
-                        fontSize: 20, color: Color(0xff4F504F)),
+                  Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: Text(
+                      "You are not a part of any trips at this moment",
+                      style: GoogleFonts.robotoFlex(
+                          fontSize: 20, color: const Color(0xff4F504F)),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "this moment",
-                    style: GoogleFonts.robotoFlex(
-                        fontSize: 20, color: Color(0xff4F504F)),
-                  ),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                  // Text(
+                  //   "this moment",
+                  //   style: GoogleFonts.robotoFlex(
+                  //       fontSize: 20, color: const Color(0xff4F504F)),
+                  // ),
                   const SizedBox(
                     height: 40,
                   ),

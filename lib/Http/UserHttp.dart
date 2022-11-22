@@ -333,46 +333,29 @@ class UserChatImageHttp {
 }
 
 class UserProfileEditHttp {
-  static Future submitSubscription(
-      {File? file,
-      required String name,
-      required String aboutUser,
-      required String token}) async {
-    if (file != null) {
-      var request = await registerSubscription(token);
-      request.files.add(
-        http.MultipartFile(
-            'image', file.readAsBytes().asStream(), file.lengthSync(),
-            filename: basename(file.path)),
-      );
-      request.fields.addAll({"aboutUser": aboutUser!, "userName": name!});
-      print(request.files.first.filename.toString());
-      var res = request.send().then((value) {
-        print("this is executed");
-        value.stream.transform(utf8.decoder).listen((value) {
-          print(value);
-        });
-        print("hi");
+  static Future editImage({required File file, required String token}) async {
+    var request = await registerSubscription(token);
+    request.files.add(
+      http.MultipartFile(
+          'image', file.readAsBytes().asStream(), file.lengthSync(),
+          filename: basename(file.path)),
+    );
+    print(request.files.first.filename.toString());
+    var res = request.send().then((value) {
+      print("this is executed");
+      value.stream.transform(utf8.decoder).listen((value) {
+        print(value);
       });
-    } else {
-      final http.Response response = await http.post(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/editProfile"),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'BEARER $token'
-          },
-          body: jsonEncode({"aboutUser": aboutUser, "userName": name}));
-      print("no image ${jsonDecode(response.body)}");
-      return jsonDecode(response.body);
-    }
+      print("hi");
+    });
   }
 
   static Future<http.MultipartRequest> registerSubscription(
       String token) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse("https://riding-application.herokuapp.com/api/v1/editProfile"),
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/editProfileImage"),
     );
     Map<String, String> headers = {
       "Content-type":
@@ -381,5 +364,21 @@ class UserProfileEditHttp {
     };
     request.headers.addAll(headers);
     return request;
+  }
+
+  static Future editInfo(
+      {required String name,
+      required String aboutUser,
+      required String token}) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/editProfile"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"aboutUser": aboutUser, "userName": name}));
+
+    print(jsonDecode(response.body));
   }
 }

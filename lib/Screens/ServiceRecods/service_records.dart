@@ -1,4 +1,5 @@
 import 'package:bikerider/Screens/ServiceRecods/service_record_card.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +61,11 @@ class _ServiceRecordsState extends State<ServiceRecords> {
         .toList();
     return item!;
   }
-
-  List<DropdownMenuItem>? removeService() {
-    item = null;
-    return item;
-  }
+  //
+  // List<DropdownMenuItem>? removeService() {
+  //   item = null;
+  //   return item;
+  // }
 
   // Map<String,dynamic> serviceRecordList={};
 
@@ -75,6 +76,7 @@ class _ServiceRecordsState extends State<ServiceRecords> {
     if (!textFieldDropdown) {
       vehicleTypeTextfield.text = widget.prefillDetails.prefill[0].vehicleName!;
       vehicleType = vehicleTypeTextfield.text;
+      addService();
     }
   }
 
@@ -130,10 +132,10 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                       ],
                       // value: vehicleType,
                       onChanged: (value) {
-                        removeService();
-                        setState(() {});
+                        // removeService();
+                        // setState(() {});
                         addService();
-                        print(value);
+                        // print(value);
                         vehicleType = value!;
                         setState(() {});
                       },
@@ -184,7 +186,9 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                       //  print(serviceRecordList.toString());
                     }
                     //   serviceRecordList.add(value);
-                    print(serviceRecordList);
+                    serviceRecordList.isEmpty
+                        ? showToast(msg: "No services booked")
+                        : null;
                     setState(() {});
                   });
                 },

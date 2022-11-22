@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bikerider/Http/photoHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/gallery/image_view_future.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -20,7 +21,7 @@ class GalleryPreviewScreen extends StatefulWidget {
 
 class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
   int _page = 1;
-  final _limit = 4;
+  final _limit = 8;
   bool _isFirstLoadRun = false;
   bool _hasNextPage = true;
   List _posts = [];
@@ -87,9 +88,7 @@ class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
   Widget build(BuildContext context) {
     if (_isFirstLoadRun) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: Colors.orange,
-        ),
+        child: CircularProgressIndicator(),
       );
     } else {
       return MasonryGridView.builder(
@@ -107,13 +106,15 @@ class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
               onTap: () {
                 UserSecureStorage.getToken().then((value) {
                   PhotosHttp.getPhotoDetails(_posts[index]["_id"], value!)
-                      .then((value) {
-                    ImageDetails temp = ImageDetails.fromJson(value);
+                      .then((value2) {
+                    ImageDetails temp = value2;
                     print(value);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ImageView(imageDetails: temp),
+                        builder: (context) =>
+                            ImageViewFuture(imageDetails: temp, token: value!),
                       ),
                     );
                   });

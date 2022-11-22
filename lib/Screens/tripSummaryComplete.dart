@@ -253,10 +253,12 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.41,
-                        child: GalleryPreviewScreen(
-                            getTripModel: widget.getTripModel))
+                    SingleChildScrollView(
+                      child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.41,
+                          child: GalleryPreviewScreen(
+                              getTripModel: widget.getTripModel)),
+                    )
                   ],
                 ),
               );

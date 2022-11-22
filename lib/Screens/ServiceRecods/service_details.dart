@@ -33,7 +33,14 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   double store = 2;
   Widget billpaid() {
     if (widget.invoiceModelList.isEmpty) {
-      return Text("Service undone");
+      return Text(
+        "Service yet to be completed",
+        style: GoogleFonts.robotoFlex(
+            color: Color(0xffed863a),
+            letterSpacing: 1,
+            fontSize: 20,
+            fontWeight: FontWeight.w600),
+      );
     } else {
       return Column(children: [
         Text(
@@ -49,6 +56,37 @@ class _ServiceDetailsState extends State<ServiceDetails> {
               color: Color(0xffED7F2C),
               fontSize: 35,
               fontWeight: FontWeight.w400),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text("Rate the Service"),
+        const SizedBox(
+          height: 20,
+        ),
+        RatingBar.builder(
+          initialRating: widget.serviceRecordList.dealerRating!.toDouble(),
+          minRating: 0,
+          unratedColor: Color(0x33000000),
+          itemCount: 5,
+          itemSize: 25.0,
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => Icon(
+            _selectedIcon ?? Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) async {
+            store = rating;
+            await AddBikeHttp.addReview(widget.serviceRecordList.id!, rating,
+                    widget.serviceRecordList.dealerPhone!)
+                .then((value) {
+              print("the value is${value["dealerTotalRatings"]}");
+              _rating = rating;
+              print(_rating);
+            });
+            setState(() {});
+          },
+          updateOnDrag: true,
         ),
       ]);
     }
@@ -83,7 +121,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
             child: GestureDetector(
               onTap: () {
                 if (widget.invoiceModelList.isEmpty) {
-                  showToast(msg: "Service undone");
+                  showToast(msg: "Service yet to be completed");
                 } else {
                   Navigator.push(
                     context,
@@ -105,7 +143,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.73,
+              height: MediaQuery.of(context).size.height * 0.8,
               margin: EdgeInsets.only(left: 20, right: 20, top: 30),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(
@@ -248,7 +286,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                 ),
                               ],
                             );
-                          } else
+                          } else {
                             return Column(
                               children: [
                                 const SizedBox(
@@ -263,24 +301,37 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       child: Text(
                                         e.key,
                                         style: GoogleFonts.roboto(
-                                          fontSize: 14,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w900,
                                           color: Color(0x99000000),
                                         ),
                                       ),
                                     ),
                                     Text(':'),
-                                    Container(
-                                      width: 150,
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        e.value,
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 15,
-                                          color: Color(0x99000000),
-                                        ),
-                                      ),
-                                    ),
+                                    e.value != "Breakdown assistance"
+                                        ? Container(
+                                            width: 150,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              e.value,
+                                              textAlign: TextAlign.right,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 15,
+                                                color: Color(0xff4F504F),
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            width: 90,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              e.value,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 15,
+                                                color: Color(0xff4F504F),
+                                              ),
+                                            ),
+                                          ),
                                   ],
                                 ),
                                 const Divider(
@@ -288,6 +339,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                 ),
                               ],
                             );
+                          }
                         }),
                       ],
                     ),
@@ -327,37 +379,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
               height: 30,
             ),
             billpaid(),
-            const SizedBox(
-              height: 20,
-            ),
-            Text("Rate the Service"),
-            const SizedBox(
-              height: 20,
-            ),
-            RatingBar.builder(
-              initialRating: widget.serviceRecordList.dealerRating!.toDouble(),
-              minRating: 0,
-              unratedColor: Color(0x33000000),
-              itemCount: 5,
-              itemSize: 25.0,
-              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => Icon(
-                _selectedIcon ?? Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: (rating) async {
-                store = rating;
-                await AddBikeHttp.addReview(widget.serviceRecordList.id!,
-                        rating, widget.serviceRecordList.dealerPhone!)
-                    .then((value) {
-                  print("the value is${value["dealerTotalRatings"]}");
-                  _rating = rating;
-                  print(_rating);
-                });
-                setState(() {});
-              },
-              updateOnDrag: true,
-            ),
             const SizedBox(
               height: 60,
             ),

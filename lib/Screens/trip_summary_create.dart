@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import 'package:bikerider/Screens/google_maps_preview.dart';
-import 'package:bikerider/Screens/milestone_card.dart';
-import 'package:bikerider/Screens/home_screen.dart';
-import 'package:bikerider/custom/widgets/CustomCard.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:bikerider/custom/widgets/button.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
-import 'package:bikerider/custom/constants.dart';
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/create_trip_modal.dart';
 import 'package:bikerider/Providers/invite_provider.dart';
+import 'package:bikerider/Screens/google_maps_preview.dart';
+import 'package:bikerider/Screens/home_screen.dart';
+import 'package:bikerider/Screens/milestone_card.dart';
 import 'package:bikerider/Utility/enums.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/custom/constants.dart';
+import 'package:bikerider/custom/widgets/CustomCard.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class TripSummaryCreateScreen extends StatefulWidget {
   const TripSummaryCreateScreen({
@@ -70,8 +68,8 @@ class _TripSummaryCreateScreenState extends State<TripSummaryCreateScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              CreateTripModal.printRecommendations();
-              // Navigator.pop(context);
+              // CreateTripModal.printRecommendations();
+              Navigator.pop(context);
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 25.0),
@@ -222,41 +220,57 @@ class _TripSummaryCreateScreenState extends State<TripSummaryCreateScreen> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    top: 8,
-                                    bottom: 10,
-                                    right: 5,
-                                    left: 5,
-                                  ),
-                                  child: CircularButton(
-                                    type: CircularButtonType.invite,
-                                    callBack: () {
-                                      debugPrint('Add a invite button pressed');
-                                      Navigator.pushNamed(
-                                          context, '/InvitePage');
-                                    },
-                                  ),
+                                CircularButton(
+                                  type: CircularButtonType.invite,
+                                  callBack: () {
+                                    Navigator.pushNamed(context, '/InvitePage');
+                                  },
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  width: 20,
                                 ),
-                                ...Provider.of<InviteProvider>(context,
-                                        listen: true)
-                                    .selectedContact
-                                    .map(
-                                      (e) => Container(
-                                        margin: const EdgeInsets.symmetric(
-                                          horizontal: 5,
+                                Provider.of<InviteProvider>(context,
+                                            listen: true)
+                                        .selectedContact
+                                        .isEmpty
+                                    ? Text(
+                                        'Invite other riders',
+                                        style: GoogleFonts.robotoFlex(
+                                          color: const Color(0xFF4F504F),
+                                          fontSize: 20,
                                         ),
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.grey,
-                                          child: Image.asset(
-                                            'assets/images/create_trip/rider.png',
+                                      )
+                                    : SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              ...Provider.of<InviteProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .selectedContact
+                                                  .map(
+                                                    (e) => Container(
+                                                      margin: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 5,
+                                                      ),
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            Colors.grey,
+                                                        child: Image.asset(
+                                                          'assets/images/create_trip/rider.png',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    ),
                               ],
                             ),
                           ),

@@ -12,15 +12,16 @@ import 'comment_card.dart';
 import 'galary_constants.dart';
 import 'gallery_model.dart';
 
-class ImageView extends StatefulWidget {
+class ImageViewFuture extends StatefulWidget {
   ImageDetails imageDetails;
-  ImageView({required this.imageDetails});
+  String token;
+  ImageViewFuture({required this.imageDetails, required this.token});
 
   @override
-  State<ImageView> createState() => _ImageViewState();
+  State<ImageViewFuture> createState() => _ImageViewFutureState();
 }
 
-class _ImageViewState extends State<ImageView> {
+class _ImageViewFutureState extends State<ImageViewFuture> {
   bool _isDisabled = false;
   void imageDownload() async {
     String? url = widget.imageDetails.photos?.imageUrl;
@@ -115,37 +116,40 @@ class _ImageViewState extends State<ImageView> {
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
                                     _isDisabled = true;
-                                    setState(
-                                      () {
-                                        UserSecureStorage.getToken()
-                                            .then((value) {
-                                          showToast(msg: "Loading....");
-                                          PhotosHttp.addLike(
-                                                  widget.imageDetails.photos!
-                                                      .imageId
-                                                      .toString(),
-                                                  value!)
-                                              .then((value) {
-                                            _isDisabled = false;
-                                            if (widget.imageDetails.liked) {
-                                              setState(() {
-                                                widget.imageDetails.photos!
-                                                    .likeCount--;
-                                                widget.imageDetails.liked =
-                                                    false;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                widget.imageDetails.photos!
-                                                    .likeCount++;
-                                                widget.imageDetails.liked =
-                                                    true;
-                                              });
-                                            }
-                                          });
-                                        });
-                                      },
-                                    );
+                                    setState(() {});
+
+                                    showToast(msg: "Loading....");
+                                    PhotosHttp.addLike(
+                                            widget.imageDetails.photos!.imageId
+                                                .toString(),
+                                            widget.token)
+                                        .then((value) {
+                                      PhotosHttp.getPhotoDetails(
+                                              widget.imageDetails.photos!
+                                                  .imageId!,
+                                              widget.token)
+                                          .then((value) {
+                                        widget.imageDetails = value;
+                                        _isDisabled = false;
+
+                                        setState(() {});
+                                      });
+                                      // if (widget.imageDetails.liked) {
+                                      //   setState(() {
+                                      //     widget.imageDetails.photos!
+                                      //         .likeCount--;
+                                      //     widget.imageDetails.liked =
+                                      //         false;
+                                      //   });
+                                      // } else {
+                                      //   setState(() {
+                                      //     widget.imageDetails.photos!
+                                      //         .likeCount++;
+                                      //     widget.imageDetails.liked =
+                                      //         true;
+                                      //   });
+                                      // }
+                                    });
                                   },
                                   icon: widget.imageDetails.liked
                                       ? kLikedIconStyle

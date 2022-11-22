@@ -79,8 +79,10 @@ class MessageBubble extends StatelessWidget {
                         bottomRight: Radius.circular(30),
                       ),
                 elevation: 5,
+
                 color:
                     !isMe ? const Color(0xffADADAD) : const Color(0xff4EB5F4),
+
                 child: Container(
                   child: Container(
                     constraints: BoxConstraints(
