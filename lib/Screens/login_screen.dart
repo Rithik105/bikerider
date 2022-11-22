@@ -152,7 +152,9 @@ class LoginScreen extends StatelessWidget {
                                       value: value["profileImage"]);
                                   _setLogin();
                                   _setNoTutorial();
-                                  Navigator.pushNamed(context, "/HomeScreen");
+
+                                  Navigator.pushReplacementNamed(
+                                      context, "/HomeScreen");
                                   showToast(msg: "Login Successful");
                                 });
                               } else {
@@ -177,12 +179,13 @@ class LoginScreen extends StatelessWidget {
                                   UserSecureStorage.setDetails(
                                       key: "haveBike",
                                       value: value["haveBike"].toString());
-                                  UserSecureStorage.setDetails(
-                                      key: "profileImage",
-                                      value: value["profileImage"]);
+                                  // UserSecureStorage.setDetails(
+                                  //     key: "profileImage",
+                                  //     value: value["profileImage"]);
                                   _setLogin();
                                   _setNoTutorial();
-                                  Navigator.pushNamed(context, "/HomeScreen");
+                                  Navigator.pushReplacementNamed(
+                                      context, "/HomeScreen");
                                   showToast(msg: "Login Successful");
                                 });
                               } else {

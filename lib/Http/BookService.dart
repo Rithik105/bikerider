@@ -14,9 +14,7 @@ class BookServiceHttp {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
-        body: jsonEncode({
-          "text": search,
-        }));
+        body: jsonEncode({"text": search}));
 
     return response;
   }
@@ -28,7 +26,7 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/prefilledService"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         });
     print(jsonDecode(response.body));
     return PrefillModel.fromJson(jsonDecode(response.body));
@@ -96,53 +94,48 @@ class BookServiceHttp {
             "https://riding-application.herokuapp.com/api/v1/service/bookService"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: json.encode({
-          "vehicleNumber":BookServiceModel.vehicleNumber,
+          "vehicleNumber": BookServiceModel.vehicleNumber,
           "serviceType": BookServiceModel.serviceType,
           "slotDate": BookServiceModel.slotDate.toString(),
           "time": BookServiceModel.slotTime,
           "dealer": BookServiceModel.dealerName,
           "city": BookServiceModel.dealerCity,
           "comments": BookServiceModel.comments,
-          "dealerPhoneNumber":dealerPhone
+          "dealerPhoneNumber": dealerPhone
         }));
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
-
   }
 
   static Future getBookingDetails(
       String vehicleType, String serviceType) async {
     String? token = await UserSecureStorage.getToken();
-      final http.Response response = await http.post(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/service/getServiceDetails"),
-          headers: {
-            'Authorization': 'BEARER $token',
-            'Content-Type': 'application/json',
-          },
-          body: json.encode({
-            "vehicleType": vehicleType,
-            "serviceType": serviceType,
-          }));
-      print(jsonDecode(response.body));
-      return jsonDecode(response.body);
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/service/getServiceDetails"),
+        headers: {
+          'Authorization': 'BEARER $token',
+          'Content-Type': 'application/json'
+        },
+        body: json
+            .encode({"vehicleType": vehicleType, "serviceType": serviceType}));
+    print(jsonDecode(response.body));
+    return jsonDecode(response.body);
   }
 
-  static Future getInvoiceDetails(String id) async{
+  static Future getInvoiceDetails(String id) async {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/service/getInvoice"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: json.encode({
-          "serviceId": id,
-        }));
+        body: json.encode({"serviceId": id}));
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
@@ -150,14 +143,29 @@ class BookServiceHttp {
   static Future getSortedServiceList() async {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.get(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/service/getAllService"),
+      headers: {
+        'Authorization': 'BEARER $token',
+        'Content-Type': 'application/json'
+      },
+    );
+    // print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+
+  static Future updatePhoneNumber(String phone) async {
+    String? token = await UserSecureStorage.getToken();
+    final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/service/getAllService"),
+            "https://riding-application.herokuapp.com/api/v1/service/updateMobileNumber"),
         headers: {
           'Authorization': 'BEARER $token',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-      );
-    // print(jsonDecode(response.body));
+        body: json.encode({"mobile": phone, "token": token}));
+    await UserSecureStorage.setToken(jsonDecode(response.body)["accessToken"]);
+    print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
 }

@@ -2,6 +2,8 @@
 
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
+import 'package:bikerider/Screens/tripSummaryComplete.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -609,32 +611,38 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
-                              UserSecureStorage.getToken().then((value) async {
-                                endTrip(value!, widget.getTripModel.id!);
-                              });
-                              print('clear');
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return TripSummaryComplete(
+                                    getTripModel: widget.getTripModel);
+                              }));
 
-                              setState(() {
-                                _markers.removeWhere((element) =>
-                                    element.markerId.value.startsWith('ATM') ||
-                                    element.markerId.value
-                                        .startsWith('Restaurant') ||
-                                    element.markerId.value
-                                        .startsWith('Lodge') ||
-                                    element.markerId.value.startsWith('Fuel') ||
-                                    element.markerId.value
-                                        .startsWith('currentLocation'));
-                                // _markers.forEach((element) {
-                                //   element.markerId.value.startsWith('ATM');
-                                //   element.markerId.value
-                                //       .startsWith('Restaurant');
-                                //   element.markerId.value.startsWith('Lodge');
-                                //   element.markerId.value
-                                //       .startsWith('currentLocation');
-                                //   element.markerId.value.startsWith('Fuel');
-                                // });
-                              });
-                              Navigator.of(context).pop();
+                              // UserSecureStorage.getToken().then((value) async {
+                              //   endTrip(value!, widget.getTripModel.id!);
+                              // });
+                              // print('clear');
+
+                              // setState(() {
+                              //   _markers.removeWhere((element) =>
+                              //       element.markerId.value.startsWith('ATM') ||
+                              //       element.markerId.value
+                              //           .startsWith('Restaurant') ||
+                              //       element.markerId.value
+                              //           .startsWith('Lodge') ||
+                              //       element.markerId.value.startsWith('Fuel') ||
+                              //       element.markerId.value
+                              //           .startsWith('currentLocation'));
+                              //   // _markers.forEach((element) {
+                              //   //   element.markerId.value.startsWith('ATM');
+                              //   //   element.markerId.value
+                              //   //       .startsWith('Restaurant');
+                              //   //   element.markerId.value.startsWith('Lodge');
+                              //   //   element.markerId.value
+                              //   //       .startsWith('currentLocation');
+                              //   //   element.markerId.value.startsWith('Fuel');
+                              //   // });
+                              // });
+                              // Navigator.of(context).pop();
                             },
                           ),
                           TextButton(
@@ -643,7 +651,7 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('No'),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                             },
                           ),
                         ],
