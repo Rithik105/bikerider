@@ -7,9 +7,11 @@ class MessageBubble extends StatelessWidget {
       required this.messageText,
       required this.senderName,
       required this.image,
+      required this.date,
       required this.time});
   String messageText;
   String time;
+  String date;
   String senderName, image;
   bool isMe;
   @override
@@ -40,7 +42,14 @@ class MessageBubble extends StatelessWidget {
                         time,
                         style:
                             TextStyle(fontSize: 13, color: Color(0x99000000)),
-                      )
+                      ),
+                      Text(
+                        date,
+                        style: TextStyle(
+                          fontSize: 8,
+                          color: Color(0x99000000),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -107,7 +116,14 @@ class MessageBubble extends StatelessWidget {
                         time,
                         style:
                             TextStyle(fontSize: 13, color: Color(0x99000000)),
-                      )
+                      ),
+                      Text(
+                        date,
+                        style: TextStyle(
+                          fontSize: 8,
+                          color: Color(0x99000000),
+                        ),
+                      ),
                     ],
                   ),
                 ),
