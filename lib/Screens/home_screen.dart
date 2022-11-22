@@ -153,12 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     UserSecureStorage.clear();
                     showToast(msg: value2["message"]);
                     _setLogin();
+
                     Navigator.pushNamedAndRemoveUntil(context, "/LoginScreen",
                         ModalRoute.withName("/LoginScreen"));
                     // Future.delayed(Duration(milliseconds: 150)).then((value) =>
                     //     Navigator.pushReplacementNamed(
                     //         context, "/LoginScreen"));
                     // showToast(msg: 'Logged out successfully');
+
                   });
                 });
               },

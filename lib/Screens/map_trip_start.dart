@@ -610,6 +610,7 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -619,7 +620,6 @@ class _MapStartState extends State<MapStart> {
                                   },
                                 ),
                               );
-
                               setState(() {
                                 _markers.removeWhere((element) =>
                                     element.markerId.value.startsWith('ATM') ||

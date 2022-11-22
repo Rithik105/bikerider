@@ -122,6 +122,7 @@ class BookServiceHttp {
         },
         body: json
             .encode({"vehicleType": vehicleType, "serviceType": serviceType}));
+
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
@@ -164,8 +165,7 @@ class BookServiceHttp {
           'Content-Type': 'application/json'
         },
         body: json.encode({"mobile": phone, "token": token}));
-    await UserSecureStorage.setToken(jsonDecode(response.body)["accessToken"]);
-    print(jsonDecode(response.body));
+
     return jsonDecode(response.body);
   }
 }

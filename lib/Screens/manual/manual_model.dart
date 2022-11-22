@@ -57,6 +57,6 @@ class BikeDetailsModel {
   }
   @override
   String toString() {
-    return 'License:${vehicleType}';
+    return 'License:$vehicleType';
   }
 }

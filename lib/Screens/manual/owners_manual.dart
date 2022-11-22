@@ -1,4 +1,5 @@
 import 'package:bikerider/Screens/manual/personal_details.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'edit_details.dart';
@@ -16,6 +17,8 @@ class OwnersManual extends StatefulWidget {
 
 class _OwnersManualState extends State<OwnersManual> {
   int index = 0;
+  @override
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
