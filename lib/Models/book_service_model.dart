@@ -44,7 +44,6 @@ class BookServiceModel {
       'Mobile Number': mobileNumber,
       'Vehicle Number': vehicleNumber,
       'Service Type': serviceType,
-      'VehicleType': vehicleType,
       'Slot Date': slotDate,
       'Time': slotTime,
       'Dealer': dealerName,

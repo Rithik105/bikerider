@@ -134,7 +134,9 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                     ),
                   ],
                 );
-              } else {
+              }
+
+              else {
                 return Column(children: [
                   const SizedBox(
                     height: 25,

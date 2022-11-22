@@ -155,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     showToast(msg: value2["message"]);
                     _setLogin();
                     Navigator.pop(context);
+
                     Navigator.pushNamed(context, "/LoginScreen");
                   });
                 });

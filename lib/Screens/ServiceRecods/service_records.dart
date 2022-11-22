@@ -46,25 +46,25 @@ class _ServiceRecordsState extends State<ServiceRecords> {
     });
   }
 
-  List<DropdownMenuItem> addService() {
-    item = categories
-        .map(
-          (item) => DropdownMenuItem<String>(
-            value: item,
-            child: Text(
-              item,
-              style: const TextStyle(fontSize: 18, color: Colors.black87),
-            ),
-          ),
-        )
-        .toList();
-    return item!;
-  }
-
-  List<DropdownMenuItem>? removeService() {
-    item = null;
-    return item;
-  }
+  // List<DropdownMenuItem> addService() {
+  //   item = categories
+  //       .map(
+  //         (item) => DropdownMenuItem<String>(
+  //           value: item,
+  //           child: Text(
+  //             item,
+  //             style: const TextStyle(fontSize: 18, color: Colors.black87),
+  //           ),
+  //         ),
+  //       )
+  //       .toList();
+  //   return item!;
+  // }
+  //
+  // List<DropdownMenuItem>? removeService() {
+  //   item = null;
+  //   return item;
+  // }
 
   // Map<String,dynamic> serviceRecordList={};
 
@@ -130,10 +130,10 @@ class _ServiceRecordsState extends State<ServiceRecords> {
                       ],
                       // value: vehicleType,
                       onChanged: (value) {
-                        removeService();
-                        setState(() {});
-                        addService();
-                        print(value);
+                        // removeService();
+                        // setState(() {});
+                        // addService();
+                        // print(value);
                         vehicleType = value!;
                         setState(() {});
                       },
