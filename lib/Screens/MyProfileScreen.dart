@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../Http/UserHttp.dart';
 import '../bloc/BikeCubit.dart';
@@ -28,6 +29,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   TextEditingController _editingController1 = TextEditingController();
   TextEditingController _editingController2 = TextEditingController();
   File? storeImage;
+  bool newImage = false;
 
   Future pickImage(ImageSource source) async {
     try {
@@ -353,18 +355,24 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                           pickImage(ImageSource.gallery)
                                               .then((value) {
                                             if (value == null) {
+                                              newImage = false;
+                                              setState(() {});
                                             } else {
+                                              newImage = true;
                                               storeImage = value;
+                                              setState(() {});
                                             }
                                           });
                                         },
                                         child: CircleAvatar(
-                                          radius: 70,
-                                          backgroundColor: Colors.transparent,
-                                          backgroundImage: NetworkImage(
-                                              state.profile["userDetails"]
-                                                  ["profileImage"]),
-                                        ),
+                                            radius: 70,
+                                            backgroundColor: Colors.transparent,
+                                            backgroundImage: storeImage == null
+                                                ? NetworkImage(
+                                                    state.profile["userDetails"]
+                                                        ["profileImage"])
+                                                : FileImage(storeImage!)
+                                                    as ImageProvider),
                                       ),
                                     ),
                                     const SizedBox(
@@ -538,17 +546,33 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              UserSecureStorage.getToken().then((value) {
-                                UserProfileEditHttp.submitSubscription(
-                                        file: storeImage,
-                                        name: _editingController1.text,
-                                        aboutUser: _editingController2.text,
-                                        token: value!)
-                                    .then((value) {
-                                  BlocProvider.of<BikeCubit>(context)
-                                      .getMyProfile();
+                              if (newImage) {
+                                UserSecureStorage.getToken().then((value) {
+                                  UserProfileEditHttp.editImage(
+                                          file: storeImage!, token: value!)
+                                      .then((value2) {
+                                    UserProfileEditHttp.editInfo(
+                                            name: _editingController1.text,
+                                            aboutUser: _editingController2.text,
+                                            token: value)
+                                        .then((value3) {
+                                      BlocProvider.of<BikeCubit>(context)
+                                          .getMyProfile();
+                                    });
+                                  });
                                 });
-                              });
+                              } else {
+                                UserSecureStorage.getToken().then((value) {
+                                  UserProfileEditHttp.editInfo(
+                                          name: _editingController1.text,
+                                          aboutUser: _editingController2.text,
+                                          token: value!)
+                                      .then((value) {
+                                    BlocProvider.of<BikeCubit>(context)
+                                        .getMyProfile();
+                                  });
+                                });
+                              }
                             },
                           ),
                         );
