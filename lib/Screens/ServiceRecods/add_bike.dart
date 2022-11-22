@@ -43,7 +43,9 @@ class _AddBikeState extends State<AddBike> {
         for (var e in value) {
           bikeList.add(BikeListModel.fromJson(e));
         }
-        setState(() {});
+        setState(() {
+          bikeList;
+        });
       },
     );
   }
@@ -57,6 +59,8 @@ class _AddBikeState extends State<AddBike> {
     modelController.dispose();
     colorController.dispose();
     dealerCodeController.dispose();
+    bikeList.clear();
+    _pageController.dispose();
     super.dispose();
     print('Dispose');
   }

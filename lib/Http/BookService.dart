@@ -14,6 +14,7 @@ class BookServiceHttp {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
+
         body: jsonEncode({
           "text": search
         }));
@@ -122,10 +123,12 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
         },
+
         body: json.encode({
           "vehicleType": vehicleType,
           "serviceType": serviceType
         }));
+
     print(jsonDecode(response.body));
     return jsonDecode(response.body);
   }
@@ -139,6 +142,7 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
         },
+
         body: json.encode({
           "serviceId": id
         }));
@@ -169,6 +173,7 @@ class BookServiceHttp {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
         },
+
         body: json.encode({
           "mobile": phone,
           "token": token

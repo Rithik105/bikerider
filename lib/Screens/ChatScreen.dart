@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Http/UserHttp.dart';
-import '../bloc/BikeCubit.dart';
 import '../custom/widgets/bubble.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -52,6 +50,14 @@ class _ChatScreenState extends State<ChatScreen> {
         setState(() {});
       });
     });
+  }
+
+  String TimeConverter(String time) {
+    DateTime temp = DateTime.parse(time);
+    final _utcTime = DateTime.utc(
+        temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+    final lokalTime = _utcTime.toLocal();
+    return (lokalTime.toString().split(' ')[1].split('.')[0]);
   }
 
   @override
@@ -156,15 +162,21 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: ((context, index) {
                         if (widget.chatList[index]["memberNumber"] ==
                             widget.number) {
-                          print(widget.number);
+                          //   print(widget.chatList[index]);
+                          // print("time is");
+                          // print(widget.chatList[index]["time"]);
                           return MessageBubble(
                               isMe: true,
+                              time:
+                                  TimeConverter(widget.chatList[index]["time"]),
                               image: widget.chatList[index]["senderImage"],
                               messageText: widget.chatList[index]["chat"],
                               senderName: widget.chatList[index]["senderName"]);
                         } else {
                           return MessageBubble(
                               isMe: false,
+                              time:
+                                  TimeConverter(widget.chatList[index]["time"]),
                               image: widget.chatList[index]["senderImage"],
                               messageText: widget.chatList[index]["chat"],
                               senderName: widget.chatList[index]["senderName"]);
