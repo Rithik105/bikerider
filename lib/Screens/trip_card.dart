@@ -8,15 +8,34 @@ import 'package:bikerider/custom/widgets/button.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 
-class TripCard extends StatelessWidget {
+import '../Utility/Secure_storeage.dart';
+
+class TripCard extends StatefulWidget {
   TripCard({Key? key}) : super(key: key);
 
+  @override
+  State<TripCard> createState() => _TripCardState();
+}
+
+class _TripCardState extends State<TripCard> {
   final TextEditingController searchCardController = TextEditingController();
+  String? myMobile;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    UserSecureStorage.getDetails(key: 'mobile').then(
+      (value) {
+        myMobile = value;
+        print('myMobile' + myMobile.toString());
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BikeCubit, BikeState>(builder: (context, state) {
-      if (state is BikeFetchingState) {
+      if (state is BikeFetchingState && myMobile == null) {
         return const Center(
           child: CircularProgressIndicator(
             color: Colors.orange,
@@ -78,6 +97,9 @@ class TripCard extends StatelessWidget {
                                 });
                           },
                           child: CustomCard(
+                            mobile: state.getTripModel[index].mobile,
+                            myMobile: myMobile,
+                            tripStatus: state.getTripModel[index].tripStatus,
                             id: state.getTripModel[index].id!,
                             tripName: state.getTripModel[index].tripName!,
                             startDate: state.getTripModel[index].startDate!,
@@ -133,18 +155,15 @@ class TripCard extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "You do not have any trips at",
-                    style: GoogleFonts.robotoFlex(
-                        fontSize: 20, color: const Color(0xff4F504F)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "this moment",
-                    style: GoogleFonts.robotoFlex(
-                        fontSize: 20, color: const Color(0xff4F504F)),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Text(
+                      "You do not have any trips at this moment",
+                      style: GoogleFonts.robotoFlex(
+                          fontSize: 20, color: const Color(0xff4F504F)),
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   const SizedBox(
                     height: 40,

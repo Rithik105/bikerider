@@ -249,7 +249,7 @@ class UserHttp {
       headers: {'Authorization': 'BEARER $token'},
     );
 
-    print("${jsonDecode(response.body)}");
+    print("Response: ${jsonDecode(response.body)}");
     print(
       'T  ${TimeLineModel.fromJson(jsonDecode(response.body)).tripList.length}',
     );

@@ -4,17 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Utility/Secure_storeage.dart';
 import '../custom/widgets/CustomCard.dart';
 
-class ActivityCard extends StatelessWidget {
+class ActivityCard extends StatefulWidget {
   ActivityCard({Key? key}) : super(key: key);
 
+  @override
+  State<ActivityCard> createState() => _ActivityCardState();
+}
+
+class _ActivityCardState extends State<ActivityCard> {
   TextEditingController searchCardController = TextEditingController();
+  String? myMobile;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    UserSecureStorage.getDetails(key: 'mobile').then(
+      (value) => myMobile = value,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BikeCubit, BikeState>(builder: (context, state) {
-      if (state is BikeFetchingState) {
+      if (state is BikeFetchingState && myMobile == null) {
         return const Center(
           child: CircularProgressIndicator(
             color: Colors.orange,
@@ -65,6 +81,7 @@ class ActivityCard extends StatelessWidget {
                     itemCount: state.getTripModel.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       print(state.getTripModel[index].tripName!);
+
                       return GestureDetector(
                         onTap: () {
                           print(
@@ -85,10 +102,14 @@ class ActivityCard extends StatelessWidget {
                           //                 state.getTripModel[index]))));
                         },
                         child: CustomCard(
+                          // data: state.getTripModel,
                           url: state.getTripModel[index].url,
                           id: state.getTripModel[index].id!,
                           tripName: state.getTripModel[index].tripName!,
                           startDate: state.getTripModel[index].startDate!,
+                          mobile: state.getTripModel[index].mobile,
+                          tripStatus: state.getTripModel[index].tripStatus,
+                          myMobile: myMobile,
                           ontap: () {},
                         ),
                       );

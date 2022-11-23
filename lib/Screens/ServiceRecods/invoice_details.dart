@@ -45,6 +45,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               width: 30,
               child: GestureDetector(
                 onTap: () async {
+                  showToast(msg: "downloading...");
                   final data = await pdf.createFinalInvoice(
                       widget.productInvoiceList.cast<ProductInvoiceModel>());
                   print('Got Data');

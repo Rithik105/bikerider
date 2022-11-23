@@ -14,6 +14,7 @@ class GetTripModel {
   String? tripName;
   String? startDate;
   String? endDate;
+  String? tripStatus;
   List<ContactDetails> riders = [];
   String? startTime;
   List<MilestoneModal> milestones = [];
@@ -33,6 +34,7 @@ class GetTripModel {
   GetTripModel.fromJson(Map json) {
     id = json['_id'];
     mobile = json['mobile'];
+    tripStatus = json['tripStatus'];
     url = json['tripImage'];
     source = LocationDetails.fromJson(json['source'][0]);
     destination = LocationDetails.fromJson(json['destination'][0]);
