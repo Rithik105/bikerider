@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble(
-      {required this.isMe,
-      required this.messageText,
-      required this.senderName,
-      required this.image,
-      required this.date,
-      required this.time});
+
+  MessageBubble({
+    required this.isMe,
+    required this.messageText,
+    required this.senderName,
+    required this.image,
+    required this.time,
+    required this.isImage,
+  });
   String messageText;
   String time;
   String date;
   String senderName, image;
   bool isMe;
+  bool isImage;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,18 +31,19 @@ class MessageBubble extends StatelessWidget {
                 isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 10),
                 child: Visibility(
                   visible: isMe,
                   child: Column(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.done_rounded,
                         size: 13,
                         color: Colors.green,
                       ),
                       Text(
                         time,
+
                         style:
                             TextStyle(fontSize: 13, color: Color(0x99000000)),
                       ),
@@ -50,6 +54,7 @@ class MessageBubble extends StatelessWidget {
                           color: Color(0x99000000),
                         ),
                       ),
+
                     ],
                   ),
                 ),
@@ -58,7 +63,7 @@ class MessageBubble extends StatelessWidget {
                 visible: !isMe,
                 child: CircleAvatar(
                   radius: 25,
-                  backgroundColor: Color(0x44ffaa10),
+                  backgroundColor: const Color(0x44ffaa10),
                   foregroundImage: NetworkImage(image),
                   // backgroundImage: NetworkImage(profileUrl),
                 ),
@@ -68,21 +73,25 @@ class MessageBubble extends StatelessWidget {
               ),
               Material(
                 borderRadius: isMe
-                    ? const BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        bottomLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+                    ? BorderRadius.only(
+                        topLeft:
+                            isImage ? Radius.circular(10) : Radius.circular(30),
+                        bottomLeft:
+                            isImage ? Radius.circular(10) : Radius.circular(30),
+                        topRight:
+                            isImage ? Radius.circular(10) : Radius.circular(30),
                       )
-                    : const BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        topLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
+                    : BorderRadius.only(
+                        topRight:
+                            isImage ? Radius.circular(10) : Radius.circular(30),
+                        topLeft:
+                            isImage ? Radius.circular(10) : Radius.circular(30),
+                        bottomRight:
+                            isImage ? Radius.circular(10) : Radius.circular(30),
                       ),
                 elevation: 5,
-
                 color:
                     !isMe ? const Color(0xffADADAD) : const Color(0xff4EB5F4),
-
                 child: Container(
                   child: Container(
                     constraints: BoxConstraints(
@@ -93,13 +102,15 @@ class MessageBubble extends StatelessWidget {
                       vertical: 10.0,
                       horizontal: 20.0,
                     ),
-                    child: Text(
-                      "$messageText",
-                      style: GoogleFonts.roboto(
-                        color: Colors.white,
-                        fontSize: 17,
-                      ),
-                    ),
+                    child: isImage
+                        ? Image.network(messageText)
+                        : Text(
+                            "$messageText",
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontSize: 17,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -109,7 +120,7 @@ class MessageBubble extends StatelessWidget {
                   visible: !isMe,
                   child: Column(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.done_rounded,
                         size: 13,
                         color: Color(0x99000000),
@@ -126,6 +137,7 @@ class MessageBubble extends StatelessWidget {
                           color: Color(0x99000000),
                         ),
                       ),
+
                     ],
                   ),
                 ),
