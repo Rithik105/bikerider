@@ -446,6 +446,7 @@ class TripSummaryCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               softWrap: true,
+              textAlign: TextAlign.center,
             ),
           ),
           // Text(
@@ -594,6 +595,7 @@ class TripSummaryGoCard extends StatelessWidget {
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
+              textAlign: TextAlign.center,
             ),
           ),
           // Text(

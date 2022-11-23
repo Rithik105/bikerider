@@ -17,15 +17,16 @@ class ChatScreen extends StatefulWidget {
   String groupId, number, token, groupName;
 
   List chatList;
-
-  ChatScreen(
-      {Key? key,
-      required this.chatList,
-      required this.number,
-      required this.groupId,
-      required this.token,
-      required this.groupName})
-      : super(key: key);
+  String adminNumber;
+  ChatScreen({
+    Key? key,
+    required this.chatList,
+    required this.number,
+    required this.groupId,
+    required this.token,
+    required this.groupName,
+    required this.adminNumber,
+  }) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -113,6 +114,22 @@ class _ChatScreenState extends State<ChatScreen> {
           PopupMenuButton<int>(
             onSelected: (value) {
               print(value);
+              if (value == 0) {
+                //  group info
+              }
+              if (value == 2) {
+                //  Notifications
+              }
+              if (value == 3) {
+                if (widget.number == widget.adminNumber) {
+                  showToast(msg: 'Call ClearChat');
+                  UserChatImageHttp.clearChats(
+                      token: widget.token, groupId: widget.groupId);
+                } else {
+                  showToast(
+                      msg: 'You do not have permission to clear the chat');
+                }
+              }
             },
             // position: PopupMenuPosition.under,
             itemBuilder: (context) => [

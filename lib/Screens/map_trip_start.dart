@@ -775,6 +775,7 @@ class _MapStartState extends State<MapStart> {
                                     number: value1["mobile"],
                                     groupId: widget.getTripModel.id!,
                                     groupName: widget.getTripModel.tripName!,
+                                    adminNumber: widget.getTripModel.mobile!,
                                   );
                                 },
                               ),

@@ -179,7 +179,7 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'groupId': groupId}));
-    print(" chat ${jsonDecode(response.body)}");
+    // print(" chat ${jsonDecode(response.body)}");
     return jsonDecode(response.body);
   }
 
@@ -296,6 +296,26 @@ class UserImageHttp {
 }
 
 class UserChatImageHttp {
+  static Future clearChats(
+      {required String groupId, required String token}) async {
+    print('token'+token);
+    print('groupId'+groupId);
+    final http.Response response = await http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/chat/clearChat"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+      body: jsonEncode({"groupId": groupId}),
+    );
+    print(token);
+    print(groupId);
+    print(response.toString());
+    print('---------------------------------');
+    print('000000000' + jsonDecode(response.body).toString());
+  }
+
   static Future submitSubscription(
       {required File file,
       required String token,
