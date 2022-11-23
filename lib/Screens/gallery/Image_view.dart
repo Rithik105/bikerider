@@ -208,8 +208,7 @@ class _ImageViewState extends State<ImageView> {
                         return CommentCard(
                           comment: e.commented!,
                           name: e.commentedBy!,
-                          profilePic:
-                              'https://images.unsplash.com/photo-1550853418-bb4348ff6a80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z2lybCUyMHdpdGglMjBib29rfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+                          profilePic: e.commentUserPic.toString(),
                         );
                       }),
                     ],
@@ -322,12 +321,14 @@ class _ImageViewState extends State<ImageView> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            if (_messageController.text != null) {
+                            if (_messageController.text.trim().isNotEmpty) {
                               UserSecureStorage.getToken().then((value) {
                                 PhotosHttp.addComment(
                                         widget.imageDetails.photos!.imageId
                                             .toString(),
-                                        _messageController.text.toString(),
+                                        _messageController.text
+                                            .toString()
+                                            .trim(),
                                         value!)
                                     .then(
                                   (value) => {

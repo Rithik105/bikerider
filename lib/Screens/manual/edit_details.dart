@@ -111,11 +111,9 @@ class _EditDetailsState extends State<EditDetails> {
                         height: 20,
                       ),
                       TextField(
-                        enabled: false,
+                        enabled: true,
                         controller: widget.person.licenceNumberController,
                         decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey.withOpacity(0.2),
                           label: Text(
                             "Licence No",
                             style: GoogleFonts.roboto(

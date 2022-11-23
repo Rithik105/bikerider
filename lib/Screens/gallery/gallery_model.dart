@@ -93,14 +93,17 @@ class Photos {
 class LikedBy {
   String? likedNumber;
   String? likedName;
+  String? likedProfilePic;
   String? sId;
 
-  LikedBy({this.likedNumber, this.likedName, this.sId});
+  LikedBy({this.likedNumber, this.likedName, this.sId, this.likedProfilePic});
 
   LikedBy.fromJson(Map<String, dynamic> json) {
     likedNumber = json['likedNumber'];
     likedName = json['likedName'];
     sId = json['_id'];
+    likedProfilePic = json['likedUserImage'];
+    print(likedProfilePic);
   }
 
   Map<String, dynamic> toJson() {
@@ -108,6 +111,7 @@ class LikedBy {
     data['likedNumber'] = this.likedNumber;
     data['likedName'] = this.likedName;
     data['_id'] = this.sId;
+    data['likedUserImage'] = this.likedProfilePic;
     return data;
   }
 }
@@ -118,13 +122,15 @@ class CommentData {
   String? sId;
   String? time;
   String? commentedNumber;
+  String? commentUserPic;
 
   CommentData(
       {this.commentedBy,
       this.commented,
       this.sId,
       this.time,
-      this.commentedNumber});
+      this.commentedNumber,
+      this.commentUserPic});
 
   CommentData.fromJson(Map<String, dynamic> json) {
     commentedBy = json['commentedBy'];
@@ -132,6 +138,7 @@ class CommentData {
     sId = json['_id'];
     time = json['time'];
     commentedNumber = json['commentedNumber'];
+    commentUserPic = json['commentedUserImage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -141,6 +148,7 @@ class CommentData {
     data['_id'] = this.sId;
     data['time'] = this.time;
     data['commentedNumber'] = this.commentedNumber;
+    data['commentedUserImage'] = this.commentUserPic;
     return data;
   }
 }
