@@ -10,20 +10,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Http/UserHttp.dart';
+import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/bubble.dart';
 
 class ChatScreen extends StatefulWidget {
   String groupId, number, token, groupName;
 
   List chatList;
-  ChatScreen(
-      {Key? key,
-      required this.chatList,
-      required this.number,
-      required this.groupId,
-      required this.token,
-      required this.groupName})
-      : super(key: key);
+  String adminNumber;
+  ChatScreen({
+    Key? key,
+    required this.chatList,
+    required this.number,
+    required this.groupId,
+    required this.token,
+    required this.groupName,
+    required this.adminNumber,
+  }) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -31,7 +34,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   ScrollController chatListController = ScrollController();
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
   Timer? timer1;
@@ -56,8 +59,17 @@ class _ChatScreenState extends State<ChatScreen> {
     DateTime temp = DateTime.parse(time);
     final _utcTime = DateTime.utc(
         temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
-    final lokalTime = _utcTime.toLocal();
-    return (lokalTime.toString().split(' ')[1].split('.')[0]);
+    final localTime = _utcTime.toLocal();
+    return (localTime.toString().split(' ')[1].split('.')[0]);
+  }
+
+  String DateConverter(String time) {
+// print(DateTime.parse(time).hour);
+    DateTime temp = DateTime.parse(time);
+    final _utcTime = DateTime.utc(
+        temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+    final localTime = _utcTime.toLocal();
+    return (localTime.toString().split(' ')[0].split('-').reversed.join('-'));
   }
 
   @override
@@ -71,16 +83,17 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       final image = await ImagePicker()
           .pickImage(source: source, preferredCameraDevice: CameraDevice.front);
-      if (image == null)
+      if (image == null) {
         return;
-      else {
+      } else {
         final tempImage = File(image.path);
 
-        this.storeImage = tempImage;
+        storeImage = tempImage;
         return tempImage;
       }
     } on PlatformException catch (e) {
       print("failed to pick image : $e");
+      showToast(msg: "failed to pick image : $e");
     }
     ;
   }
@@ -101,6 +114,22 @@ class _ChatScreenState extends State<ChatScreen> {
           PopupMenuButton<int>(
             onSelected: (value) {
               print(value);
+              if (value == 0) {
+                //  group info
+              }
+              if (value == 2) {
+                //  Notifications
+              }
+              if (value == 3) {
+                if (widget.number == widget.adminNumber) {
+                  showToast(msg: 'Call ClearChat');
+                  UserChatImageHttp.clearChats(
+                      token: widget.token, groupId: widget.groupId);
+                } else {
+                  showToast(
+                      msg: 'You do not have permission to clear the chat');
+                }
+              }
             },
             // position: PopupMenuPosition.under,
             itemBuilder: (context) => [
@@ -145,43 +174,53 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    image: DecorationImage(
-                      alignment: Alignment.bottomRight,
-                      image: AssetImage(
-                        'assets/images/Chat/chat.png',
-                      ),
-                      scale: 1.7,
-                      opacity: 0.05,
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
+                  image: DecorationImage(
+                    alignment: Alignment.bottomRight,
+                    image: AssetImage(
+                      'assets/images/Chat/chat.png',
                     ),
+                    scale: 1.7,
+                    opacity: 0.05,
                   ),
-                  child: ListView.builder(
-                      controller: chatListController,
-                      itemCount: widget.chatList.length,
-                      itemBuilder: ((context, index) {
-                        if (widget.chatList[index]["memberNumber"] ==
-                            widget.number) {
-                          //   print(widget.chatList[index]);
-                          // print("time is");
-                          // print(widget.chatList[index]["time"]);
-                          return MessageBubble(
-                              isMe: true,
-                              time:
-                                  TimeConverter(widget.chatList[index]["time"]),
-                              image: widget.chatList[index]["senderImage"],
-                              messageText: widget.chatList[index]["chat"],
-                              senderName: widget.chatList[index]["senderName"]);
-                        } else {
-                          return MessageBubble(
-                              isMe: false,
-                              time:
-                                  TimeConverter(widget.chatList[index]["time"]),
-                              image: widget.chatList[index]["senderImage"],
-                              messageText: widget.chatList[index]["chat"],
-                              senderName: widget.chatList[index]["senderName"]);
-                        }
-                      }))),
+                ),
+                child: ListView.builder(
+                  controller: chatListController,
+                  itemCount: widget.chatList.length,
+                  itemBuilder: ((context, index) {
+                    if (widget.chatList[index]["memberNumber"] ==
+                        widget.number) {
+                      //   print(widget.chatList[index]);
+                      // print("time is");
+                      // print(widget.chatList[index]["time"]);
+                      return MessageBubble(
+                        isMe: true,
+                        time: TimeConverter(widget.chatList[index]["time"]),
+                        image: widget.chatList[index]["senderImage"],
+                        messageText: widget.chatList[index]["chat"],
+                        senderName: widget.chatList[index]["senderName"],
+                        isImage: widget.chatList[index]["isImage"],
+
+                        date: DateConverter(
+                          widget.chatList[index]["time"],
+                        ),
+
+                      );
+                    } else {
+                      return MessageBubble(
+                        isMe: false,
+                        time: TimeConverter(widget.chatList[index]["time"]),
+                        image: widget.chatList[index]["senderImage"],
+                        messageText: widget.chatList[index]["chat"],
+                        senderName: widget.chatList[index]["senderName"],
+                        isImage: widget.chatList[index]["isImage"],
+                        date: DateConverter(widget.chatList[index]["time"]),
+                      );
+                    }
+                  }),
+                ),
+              ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6),

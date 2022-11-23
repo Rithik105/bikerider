@@ -188,7 +188,8 @@ class UserHttp {
     return jsonDecode(response.body);
   }
 
-  static Future sendChat(String groupId, String token, String message) async {
+  static Future sendChat(String groupId, String token, String message,
+      {bool isImage = false}) async {
     final http.Response response = await http.post(
         Uri.parse(
             'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
@@ -196,7 +197,8 @@ class UserHttp {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
-        body: jsonEncode({'chat': message, 'groupId': groupId}));
+        body: jsonEncode(
+            {'chat': message, 'groupId': groupId, 'isImage': isImage}));
     return jsonDecode(response.body);
   }
 
@@ -209,7 +211,7 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'groupId': groupId}));
-    print(" chat ${jsonDecode(response.body)}");
+    // print(" chat ${jsonDecode(response.body)}");
     return jsonDecode(response.body);
   }
 
@@ -299,7 +301,7 @@ class UserImageHttp {
           filename: basename(file.path)),
     );
     print(request.files.first.filename.toString());
-    var res = request.send().then((value) {
+    request.send().then((value) {
       print("this is executed");
       value.stream.transform(utf8.decoder).listen((value) {
         print(value);
@@ -326,6 +328,26 @@ class UserImageHttp {
 }
 
 class UserChatImageHttp {
+  static Future clearChats(
+      {required String groupId, required String token}) async {
+    print('token'+token);
+    print('groupId'+groupId);
+    final http.Response response = await http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/chat/clearChat"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+      body: jsonEncode({"groupId": groupId}),
+    );
+    print(token);
+    print(groupId);
+    print(response.toString());
+    print('---------------------------------');
+    print('000000000' + jsonDecode(response.body).toString());
+  }
+
   static Future submitSubscription(
       {required File file,
       required String token,
@@ -338,10 +360,17 @@ class UserChatImageHttp {
     );
     request.fields.addAll({"id": groupId});
     print(request.files.first.filename.toString());
-    var res = request.send().then((value) {
+    request.send().then((value) {
       print("this is executed");
       value.stream.transform(utf8.decoder).listen((value) {
-        print(value);
+        print('value' + value.toString());
+        if (jsonDecode(value)['message'] == 'Image upload successfull !') {
+          UserHttp.sendChat(groupId, token, jsonDecode(value)['url'],
+                  isImage: true)
+              .then((value1) {
+            print(value1);
+          });
+        }
       });
       print("hi");
     });

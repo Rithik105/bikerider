@@ -23,7 +23,7 @@ class ServiceRecordsCard extends StatefulWidget {
 }
 
 class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
-  List<ProductInvoiceModel> invoiceList = [];
+
   IconData? _selectedIcon;
   //double _userRating = widget.serviceRecordList.dealerRating!.toDouble();
   bool _isVertical = false;
@@ -31,30 +31,39 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        BookServiceHttp.getInvoiceDetails(widget.serviceRecordList.id!).then(
-          (value) {
-            invoiceList = [];
-
-            for (var e in value) {
-              print("value of e is ${e}");
-              invoiceList.add(
-                ProductInvoiceModel.fromJson(e),
-              );
-            }
-            //   serviceRecordList.add(value);
-            print("invoice list is${invoiceList}");
-            setState(() {});
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ServiceDetails(
-                    serviceRecordList: widget.serviceRecordList,
-                    callBack: widget.callBack,
-                    invoiceModelList: invoiceList),
-              ),
-            );
-          },
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ServiceDetails(
+                serviceRecordList: widget.serviceRecordList,
+                callBack: widget.callBack,
+               ),
+          ),
         );
+        // BookServiceHttp.getInvoiceDetails(widget.serviceRecordList.id!).then(
+        //   (value) {
+        //     invoiceList = [];
+        //
+        //     for (var e in value) {
+        //       print("value of e is ${e}");
+        //       invoiceList.add(
+        //         ProductInvoiceModel.fromJson(e),
+        //       );
+        //     }
+        //     //   serviceRecordList.add(value);
+        //     print("invoice list is${invoiceList}");
+        //     setState(() {});
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => ServiceDetails(
+        //             serviceRecordList: widget.serviceRecordList,
+        //             callBack: widget.callBack,
+        //             invoiceModelList: invoiceList),
+        //       ),
+        //     );
+        //   },
+        // );
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 10),

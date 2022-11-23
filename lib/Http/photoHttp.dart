@@ -48,7 +48,7 @@ class PhotosHttp {
         'Authorization': 'BEARER $token',
       },
     );
-    print('getPhotoAPIr${response.body}');
+    //print('getPhotoAPIr${jsonDecode(response.body)['distinctComment']}');
     // return response;
     return ImageDetails.fromJson(jsonDecode(response.body));
   }

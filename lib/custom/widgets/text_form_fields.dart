@@ -473,7 +473,8 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
                 ? TextInputType.number
                 : TextInputType.text,
             validator: (value) {
-              if (widget.textFieldType == TextFieldType.custom) {
+              if (widget.textFieldType == TextFieldType.custom ||
+                  widget.textFieldType == TextFieldType.tripName) {
                 return value!.isEmpty ? 'Enter a value' : null;
               }
 
@@ -556,7 +557,11 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
 
               counterText: '',
             ),
-            maxLength: widget.textFieldType == TextFieldType.mobile ? 10 : null,
+            maxLength: widget.textFieldType == TextFieldType.mobile
+                ? 10
+                : widget.textFieldType == TextFieldType.tripName
+                    ? 30
+                    : null,
           ),
         ),
       ),

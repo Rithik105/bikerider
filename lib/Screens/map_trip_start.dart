@@ -610,6 +610,11 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
+
+                              UserSecureStorage.getToken().then((value) async {
+                                endTrip(value!, widget.getTripModel.id!);
+                              });
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -772,6 +777,7 @@ class _MapStartState extends State<MapStart> {
                                     number: value1["mobile"],
                                     groupId: widget.getTripModel.id!,
                                     groupName: widget.getTripModel.tripName!,
+                                    adminNumber: widget.getTripModel.mobile!,
                                   );
                                 },
                               ),
