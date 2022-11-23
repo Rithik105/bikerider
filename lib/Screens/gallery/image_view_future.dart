@@ -41,18 +41,16 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
           child: Stack(
             children: [
               Container(
-                //color: Colors.red,
                 height: MediaQuery.of(context).size.height - 125,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       Container(
-                        // color: Colors.red,
+                        color: Colors.grey.shade200,
                         height: 400,
-                        width: double.infinity,
                         child: Image.network(
                           widget.imageDetails.photos?.imageUrl as String,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.contain,
                         ),
                       ),
                       Container(
