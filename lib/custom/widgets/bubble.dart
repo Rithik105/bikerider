@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MessageBubble extends StatelessWidget {
-
   MessageBubble({
     required this.isMe,
     required this.messageText,
@@ -10,6 +9,7 @@ class MessageBubble extends StatelessWidget {
     required this.image,
     required this.time,
     required this.isImage,
+    required this.date,
   });
   String messageText;
   String time;
@@ -43,7 +43,6 @@ class MessageBubble extends StatelessWidget {
                       ),
                       Text(
                         time,
-
                         style:
                             TextStyle(fontSize: 13, color: Color(0x99000000)),
                       ),
@@ -54,7 +53,6 @@ class MessageBubble extends StatelessWidget {
                           color: Color(0x99000000),
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -137,7 +135,6 @@ class MessageBubble extends StatelessWidget {
                           color: Color(0x99000000),
                         ),
                       ),
-
                     ],
                   ),
                 ),

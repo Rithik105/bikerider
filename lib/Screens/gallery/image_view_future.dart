@@ -77,7 +77,13 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                                 .map(
                                               (e) {
                                                 return ListTile(
-                                                  leading: CircleAvatar(),
+                                                  leading: CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      e.likedProfilePic
+                                                          .toString(),
+                                                    ),
+                                                  ),
                                                   title: Text(
                                                       e.likedName.toString()),
                                                   onTap: () {
