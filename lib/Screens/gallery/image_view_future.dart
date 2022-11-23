@@ -164,7 +164,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                       ? kLikedIconStyle
                                       : kDefaultIconStyle),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 0,
                             ),
                             GestureDetector(
@@ -177,19 +177,19 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              ...widget.imageDetails.photos!
-                                                  .commentData!
+                                              ...widget
+                                                  .imageDetails.distinctComment
                                                   .map(
                                                 (e) {
                                                   return ListTile(
                                                     leading: CircleAvatar(
                                                       backgroundImage:
                                                           NetworkImage(e
-                                                              .commentUserPic
+                                                              .profilePic
                                                               .toString()),
                                                     ),
-                                                    title: Text(e.commentedBy
-                                                        .toString()),
+                                                    title:
+                                                        Text(e.name.toString()),
                                                     onTap: () {
                                                       Navigator.pop(context);
                                                     },
@@ -208,7 +208,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                   child: Text(
                                       "${widget.imageDetails.photos?.commentCount}"),
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               width: 0,
                             ),
                             IconButton(
