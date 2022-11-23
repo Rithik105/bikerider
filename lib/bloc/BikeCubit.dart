@@ -145,6 +145,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTrips(value!).then((value1) {
+        print('myTrips' + value1.toString());
         if (value1.isEmpty) {
           emit(BikeEmptyTripState());
         } else {
