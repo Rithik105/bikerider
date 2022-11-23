@@ -37,98 +37,141 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pageOptions[bottomIndex],
-      backgroundColor: Colors.white,
-      bottomNavigationBar: Container(
-        height: 65,
-        width: double.infinity,
-        decoration: kBottomNavigationBar,
-        child: BottomNavigationBar(
-          selectedItemColor: Colors.white,
-          currentIndex: bottomIndex,
-          onTap: (index) {
-            setState(() {
-              if (index != 4) {
-                bottomIndex = index;
+    return WillPopScope(
+      onWillPop: () async {
+        var shouldPop;
+        if (bottomIndex == 0) {
+          shouldPop = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Do you really want to quit?'),
+                actionsAlignment: MainAxisAlignment.end,
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text(
+                      'Yes',
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: const Text(
+                      'No',
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          setState(() {
+            bottomIndex = 0;
+            // shouldPop = await Future.delayed(Duration(microseconds: 0))
+            //     .then((value) => false);
+          });
+        }
+        return shouldPop;
+      },
+      child: Scaffold(
+        body: _pageOptions[bottomIndex],
+        backgroundColor: Colors.white,
+        bottomNavigationBar: Container(
+          height: 65,
+          width: double.infinity,
+          decoration: kBottomNavigationBar,
+          child: BottomNavigationBar(
+            selectedItemColor: Colors.white,
+            currentIndex: bottomIndex,
+            onTap: (index) {
+              setState(() {
+                if (index != 4) {
+                  bottomIndex = index;
+                }
+              });
+              if (index == 4) {
+                bottomSheetCall(context);
               }
-            });
-            if (index == 4) {
-              bottomSheetCall(context);
-            }
-          },
-          elevation: 0,
-          type: BottomNavigationBarType.fixed,
-          showUnselectedLabels: false,
-          backgroundColor: Colors.transparent,
-          selectedIconTheme: const IconThemeData(color: Colors.white),
-          items: [
-            BottomNavigationBarItem(
-              label: 'Trips',
-              icon: bottomIndex == 0
-                  ? Image.asset(
-                      "assets/images/homePage/bottom_navigation/bike.png",
-                      color: Colors.white,
-                      width: 40,
-                    )
-                  : Image.asset(
-                      "assets/images/homePage/bottom_navigation/bike.png",
-                      color: Colors.white.withOpacity(0.4),
-                      width: 40,
-                    ),
-            ),
-            BottomNavigationBarItem(
-              label: 'My Garage',
-              icon: bottomIndex == 1
-                  ? Image.asset(
-                      "assets/images/homePage/bottom_navigation/wrench.png",
-                      color: Colors.white,
-                      width: 30,
-                    )
-                  : Image.asset(
-                      "assets/images/homePage/bottom_navigation/wrench.png",
-                      color: Colors.white.withOpacity(0.4),
-                      width: 30,
-                    ),
-            ),
-            BottomNavigationBarItem(
-              label: 'Activities',
-              icon: bottomIndex == 2
-                  ? Image.asset(
-                      "assets/images/homePage/bottom_navigation/list.png",
-                      color: Colors.white,
-                      width: 30)
-                  : Image.asset(
-                      "assets/images/homePage/bottom_navigation/list.png",
-                      color: Colors.white.withOpacity(0.4),
-                      width: 30),
-            ),
-            BottomNavigationBarItem(
-              label: 'My Profile',
-              icon: bottomIndex == 3
-                  ? Image.asset(
-                      "assets/images/homePage/bottom_navigation/user.png",
-                      width: 25)
-                  : Image.asset(
-                      "assets/images/homePage/bottom_navigation/user.png",
-                      width: 25,
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-            ),
-            BottomNavigationBarItem(
-              label: 'More',
-              icon: bottomIndex == 4
-                  ? Image.asset(
-                      "assets/images/homePage/bottom_navigation/more.png",
-                      width: 30,
-                      color: Colors.white,
-                    )
-                  : Image.asset(
-                      "assets/images/homePage/bottom_navigation/more.png",
-                      width: 30,
-                    ),
-            ),
-          ],
+            },
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            showUnselectedLabels: false,
+            backgroundColor: Colors.transparent,
+            selectedIconTheme: const IconThemeData(color: Colors.white),
+            items: [
+              BottomNavigationBarItem(
+                label: 'Trips',
+                icon: bottomIndex == 0
+                    ? Image.asset(
+                        "assets/images/homePage/bottom_navigation/bike.png",
+                        color: Colors.white,
+                        width: 40,
+                      )
+                    : Image.asset(
+                        "assets/images/homePage/bottom_navigation/bike.png",
+                        color: Colors.white.withOpacity(0.4),
+                        width: 40,
+                      ),
+              ),
+              BottomNavigationBarItem(
+                label: 'My Garage',
+                icon: bottomIndex == 1
+                    ? Image.asset(
+                        "assets/images/homePage/bottom_navigation/wrench.png",
+                        color: Colors.white,
+                        width: 30,
+                      )
+                    : Image.asset(
+                        "assets/images/homePage/bottom_navigation/wrench.png",
+                        color: Colors.white.withOpacity(0.4),
+                        width: 30,
+                      ),
+              ),
+              BottomNavigationBarItem(
+                label: 'Activities',
+                icon: bottomIndex == 2
+                    ? Image.asset(
+                        "assets/images/homePage/bottom_navigation/list.png",
+                        color: Colors.white,
+                        width: 30)
+                    : Image.asset(
+                        "assets/images/homePage/bottom_navigation/list.png",
+                        color: Colors.white.withOpacity(0.4),
+                        width: 30),
+              ),
+              BottomNavigationBarItem(
+                label: 'My Profile',
+                icon: bottomIndex == 3
+                    ? Image.asset(
+                        "assets/images/homePage/bottom_navigation/user.png",
+                        width: 25)
+                    : Image.asset(
+                        "assets/images/homePage/bottom_navigation/user.png",
+                        width: 25,
+                        color: Colors.white.withOpacity(0.4),
+                      ),
+              ),
+              BottomNavigationBarItem(
+                label: 'More',
+                icon: bottomIndex == 4
+                    ? Image.asset(
+                        "assets/images/homePage/bottom_navigation/more.png",
+                        width: 30,
+                        color: Colors.white,
+                      )
+                    : Image.asset(
+                        "assets/images/homePage/bottom_navigation/more.png",
+                        width: 30,
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -160,7 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     //     Navigator.pushReplacementNamed(
                     //         context, "/LoginScreen"));
                     // showToast(msg: 'Logged out successfully');
-
                   });
                 });
               },

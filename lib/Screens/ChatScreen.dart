@@ -201,9 +201,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         messageText: widget.chatList[index]["chat"],
                         senderName: widget.chatList[index]["senderName"],
                         isImage: widget.chatList[index]["isImage"],
+
                         date: DateConverter(
                           widget.chatList[index]["time"],
                         ),
+
                       );
                     } else {
                       return MessageBubble(
