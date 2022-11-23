@@ -146,6 +146,38 @@ class UserHttp {
     return jsonDecode(response.body);
   }
 
+  static Future<List> searchTrips(String trip, String token) async {
+    String value = "text";
+    print(value.runtimeType);
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({value: trip}));
+    print(jsonDecode(response.body));
+
+    return jsonDecode(response.body);
+  }
+
+  static Future<List> searchTripsDetails(String trip, String token) async {
+    String value = "text";
+    print(value.runtimeType);
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({value: trip}));
+    print(jsonDecode(response.body));
+
+    return jsonDecode(response.body);
+  }
+
   static Future<List> getTripDetails(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
