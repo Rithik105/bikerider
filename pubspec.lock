@@ -133,7 +133,7 @@ packages:
       name: emoji_picker_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.1"
   equatable:
     dependency: transitive
     description:
@@ -582,7 +582,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.21"
+    version: "2.0.22"
   path_provider_ios:
     dependency: transitive
     description:
@@ -818,7 +818,7 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.0"
   stream_transform:
     dependency: transitive
     description:
@@ -846,7 +846,9 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+
     version: "0.4.14"
+
   typed_data:
     dependency: transitive
     description:
@@ -916,7 +918,9 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
+
     version: "2.1.4"
+
   win32:
     dependency: transitive
     description:
