@@ -322,12 +322,14 @@ class _ImageViewState extends State<ImageView> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            if (_messageController.text != null) {
+                            if (_messageController.text.trim().isNotEmpty) {
                               UserSecureStorage.getToken().then((value) {
                                 PhotosHttp.addComment(
                                         widget.imageDetails.photos!.imageId
                                             .toString(),
-                                        _messageController.text.toString(),
+                                        _messageController.text
+                                            .toString()
+                                            .trim(),
                                         value!)
                                     .then(
                                   (value) => {
