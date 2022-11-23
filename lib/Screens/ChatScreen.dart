@@ -58,8 +58,17 @@ class _ChatScreenState extends State<ChatScreen> {
     DateTime temp = DateTime.parse(time);
     final _utcTime = DateTime.utc(
         temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
-    final lokalTime = _utcTime.toLocal();
-    return (lokalTime.toString().split(' ')[1].split('.')[0]);
+    final localTime = _utcTime.toLocal();
+    return (localTime.toString().split(' ')[1].split('.')[0]);
+  }
+
+  String DateConverter(String time) {
+// print(DateTime.parse(time).hour);
+    DateTime temp = DateTime.parse(time);
+    final _utcTime = DateTime.utc(
+        temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+    final localTime = _utcTime.toLocal();
+    return (localTime.toString().split(' ')[0].split('-').reversed.join('-'));
   }
 
   @override
@@ -158,6 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     scale: 1.7,
                     opacity: 0.05,
                   ),
+
                 ),
                 child: ListView.builder(
                   controller: chatListController,
