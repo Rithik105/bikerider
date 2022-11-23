@@ -610,7 +610,9 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
-
+                              UserSecureStorage.getToken().then((value) async {
+                                endTrip(value!, widget.getTripModel.id!);
+                              });
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
