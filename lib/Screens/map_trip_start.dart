@@ -610,7 +610,6 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -160,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     //     Navigator.pushReplacementNamed(
                     //         context, "/LoginScreen"));
                     // showToast(msg: 'Logged out successfully');
-
                   });
                 });
               },

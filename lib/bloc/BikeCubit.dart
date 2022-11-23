@@ -17,6 +17,8 @@ class BikeInitialState extends BikeState {} //
 
 class BikeLoggedInState extends BikeState {} //
 
+class BikeNoTripResultState extends BikeState {} //
+
 class BikeLoggedOutState extends BikeState {} //
 
 class BikeFirstLoginState extends BikeState {} //
@@ -59,7 +61,8 @@ class BikeEmptyTripState extends BikeState {}
 
 class BikeNonEmptyTripState extends BikeState {
   List<GetTripModel> getTripModel = [];
-  BikeNonEmptyTripState(this.getTripModel);
+  String myMobile;
+  BikeNonEmptyTripState(this.getTripModel, this.myMobile);
 }
 
 class BikeAccFetchedState extends BikeState {
@@ -153,8 +156,10 @@ class BikeCubit extends Cubit<BikeState> {
           value1.forEach((element) {
             temp.add(GetTripModel.fromJson(element));
           });
-          // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
-          emit(BikeNonEmptyTripState(temp));
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            print(value);
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
         }
       });
     });
@@ -172,7 +177,47 @@ class BikeCubit extends Cubit<BikeState> {
             temp.add(GetTripModel.fromJson(element));
           });
           // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
-          emit(BikeNonEmptyTripState(temp));
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
+        }
+      });
+    });
+  }
+
+  void searchTrip(String trip) {
+    emit(BikeFetchingState());
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.searchTrips(trip, value!).then((value1) {
+        if (value1.isEmpty) {
+          emit(BikeNoTripResultState());
+        } else {
+          List<GetTripModel> temp = [];
+          value1.forEach((element) {
+            temp.add(GetTripModel.fromJson(element));
+          });
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
+        }
+      });
+    });
+  }
+
+  void searchTripDetails(String trip) {
+    emit(BikeFetchingState());
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.searchTripsDetails(trip, value!).then((value1) {
+        if (value1.isEmpty) {
+          emit(BikeNoTripResultState());
+        } else {
+          List<GetTripModel> temp = [];
+          value1.forEach((element) {
+            temp.add(GetTripModel.fromJson(element));
+          });
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
         }
       });
     });

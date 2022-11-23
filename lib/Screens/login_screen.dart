@@ -126,6 +126,7 @@ class LoginScreen extends StatelessWidget {
                     LargeSubmitButton(
                       text: 'LOGIN',
                       ontap: () {
+                        showToast(msg: "Logging in");
                         if (numberKey.currentState!.validate()) {
                           if (EmailOrPhone.email) {
                             UserHttp.loginUserEmail(User(
