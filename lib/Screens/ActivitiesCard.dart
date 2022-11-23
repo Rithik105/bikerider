@@ -1,3 +1,4 @@
+import 'package:bikerider/Screens/tripSummaryComplete.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
@@ -84,16 +85,33 @@ class _ActivityCardState extends State<ActivityCard> {
 
                       return GestureDetector(
                         onTap: () {
-                          print(
-                              'milestone length${state.getTripModel[index].milestones.length}');
-                          print(state.getTripModel[index].milestones);
-
-                          print(index);
-                          print(state.getTripModel[index].source);
-                          Navigator.pushNamed(context, '/TripSummaryGo',
-                              arguments: {
-                                "getTripModel": state.getTripModel[index]
-                              });
+                          if (state.getTripModel[index].tripStatus ==
+                              'upcoming') {
+                            Navigator.pushNamed(context, '/TripSummaryGo',
+                                arguments: {
+                                  "getTripModel": state.getTripModel[index]
+                                });
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TripSummaryComplete(
+                                  getTripModel: state.getTripModel[index],
+                                ),
+                              ),
+                              ModalRoute.withName('/HomeScreen'),
+                            );
+                          }
+                          // print(
+                          //     'milestone length${state.getTripModel[index].milestones.length}');
+                          // print(state.getTripModel[index].milestones);
+                          //
+                          // print(index);
+                          // print(state.getTripModel[index].source);
+                          // Navigator.pushNamed(context, '/TripSummaryGo',
+                          //     arguments: {
+                          //       "getTripModel": state.getTripModel[index]
+                          //     });
                           // Navigator.push(
                           //     context,
                           //     MaterialPageRoute(
