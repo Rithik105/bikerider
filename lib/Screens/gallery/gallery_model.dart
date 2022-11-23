@@ -118,13 +118,15 @@ class CommentData {
   String? sId;
   String? time;
   String? commentedNumber;
+  String? commentUserPic;
 
   CommentData(
       {this.commentedBy,
       this.commented,
       this.sId,
       this.time,
-      this.commentedNumber});
+      this.commentedNumber,
+      this.commentUserPic});
 
   CommentData.fromJson(Map<String, dynamic> json) {
     commentedBy = json['commentedBy'];
@@ -132,6 +134,7 @@ class CommentData {
     sId = json['_id'];
     time = json['time'];
     commentedNumber = json['commentedNumber'];
+    commentUserPic = json['commentedUserImage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -141,6 +144,7 @@ class CommentData {
     data['_id'] = this.sId;
     data['time'] = this.time;
     data['commentedNumber'] = this.commentedNumber;
+    data['commentedUserImage'] = this.commentUserPic;
     return data;
   }
 }

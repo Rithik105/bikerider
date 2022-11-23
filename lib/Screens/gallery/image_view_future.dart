@@ -105,8 +105,13 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                       );
                                     });
                               },
-                              child: Text(
-                                  "${widget.imageDetails.photos?.likeCount}"),
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 20,
+                                height: 20,
+                                child: Text(
+                                    "${widget.imageDetails.photos?.likeCount}"),
+                              ),
                             ),
                             IgnorePointer(
                               ignoring: _isDisabled,
@@ -154,7 +159,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                       : kDefaultIconStyle),
                             ),
                             SizedBox(
-                              width: 10,
+                              width: 0,
                             ),
                             GestureDetector(
                                 onTap: () {
@@ -171,7 +176,12 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                                   .map(
                                                 (e) {
                                                   return ListTile(
-                                                    leading: CircleAvatar(),
+                                                    leading: CircleAvatar(
+                                                      backgroundImage:
+                                                          NetworkImage(e
+                                                              .commentUserPic
+                                                              .toString()),
+                                                    ),
                                                     title: Text(e.commentedBy
                                                         .toString()),
                                                     onTap: () {
@@ -185,8 +195,13 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                         );
                                       });
                                 },
-                                child: Text(
-                                    "${widget.imageDetails.photos?.commentCount}")),
+                                child: Container(
+                                  height: 20,
+                                  width: 20,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                      "${widget.imageDetails.photos?.commentCount}"),
+                                )),
                             SizedBox(
                               width: 0,
                             ),
@@ -210,8 +225,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                         return CommentCard(
                           comment: e.commented!,
                           name: e.commentedBy!,
-                          profilePic:
-                              'https://images.unsplash.com/photo-1550853418-bb4348ff6a80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z2lybCUyMHdpdGglMjBib29rfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+                          profilePic: e.commentUserPic.toString(),
                         );
                       }),
                     ],
