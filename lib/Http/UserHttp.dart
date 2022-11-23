@@ -178,6 +178,17 @@ class UserHttp {
     return jsonDecode(response.body);
   }
 
+  static Future followUser(String number, String token) async {
+    final http.Response response = await http.post(
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"wantToFollow": number}));
+    print(response.body);
+  }
+
   static Future<List> getTripDetails(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
@@ -330,8 +341,8 @@ class UserImageHttp {
 class UserChatImageHttp {
   static Future clearChats(
       {required String groupId, required String token}) async {
-    print('token'+token);
-    print('groupId'+groupId);
+    print('token' + token);
+    print('groupId' + groupId);
     final http.Response response = await http.post(
       Uri.parse(
           "https://riding-application.herokuapp.com/api/v1/chat/clearChat"),

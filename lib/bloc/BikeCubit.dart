@@ -54,7 +54,10 @@ class BikeMineProfileFetchedState extends BikeState {
 
 class BikeOtherProfileFetchedState extends BikeState {
   Map profile;
-  BikeOtherProfileFetchedState({required this.profile});
+  String number;
+  bool following;
+  BikeOtherProfileFetchedState(
+      {required this.profile, required this.number, required this.following});
 }
 
 class BikeEmptyTripState extends BikeState {}
@@ -258,6 +261,7 @@ class BikeCubit extends Cubit<BikeState> {
   }
 
   void getProfile(String number) {
+    bool following = false;
     print("emitted");
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
@@ -268,8 +272,20 @@ class BikeCubit extends Cubit<BikeState> {
             emit(BikeMineProfileFetchedState(
               profile: value2,
             ));
-          } else
-            emit(BikeOtherProfileFetchedState(profile: value2));
+          } else {
+            for (int i = 0;
+                i < value2["userDetails"]["followers"].length;
+                i++) {
+              if (value2["userDetails"]["followers"][i]["followerPhone"] ==
+                  value3) {
+                following = true;
+                break;
+              } else
+                following = false;
+            }
+            emit(BikeOtherProfileFetchedState(
+                profile: value2, number: number, following: following));
+          }
         });
       });
     });

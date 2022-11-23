@@ -203,23 +203,38 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600)),
                                     const SizedBox(height: 15),
-                                    Container(
-                                      width: 100,
-                                      height: 30,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 6, vertical: 3),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                              color: Colors.white, width: 1)),
-                                      child: Center(
-                                        child: Text(
-                                          "Follow",
-                                          style: GoogleFonts.roboto(
-                                              color: const Color(0xffffffff),
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500),
+                                    GestureDetector(
+                                      onTap: () {
+                                        UserSecureStorage.getToken()
+                                            .then((value) {
+                                          UserHttp.followUser(
+                                                  state.number, value!)
+                                              .then((value) {
+                                            BlocProvider.of<BikeCubit>(context)
+                                                .getProfile(state.number);
+                                          });
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 30,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 6, vertical: 3),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                                color: Colors.white, width: 1)),
+                                        child: Center(
+                                          child: Text(
+                                            state.following
+                                                ? "Following"
+                                                : "Follow",
+                                            style: GoogleFonts.roboto(
+                                                color: const Color(0xffffffff),
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500),
+                                          ),
                                         ),
                                       ),
                                     ),
