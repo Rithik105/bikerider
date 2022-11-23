@@ -34,7 +34,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   Widget billpaid() {
     if (widget.invoiceModelList.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 18.0,horizontal: 5),
+        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 5),
         child: Text(
           "Service yet to be completed",
           style: GoogleFonts.robotoFlex(
@@ -48,7 +48,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       return Column(children: [
         Text(
           "Total bill paid",
-          style: GoogleFonts.roboto(color: const Color(0x99000000), fontSize: 16),
+          style:
+              GoogleFonts.roboto(color: const Color(0x99000000), fontSize: 16),
         ),
         const SizedBox(
           height: 20,
@@ -227,7 +228,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                               Column(
                                 children: [
                                   SizedBox(
-
                                     child: Text(
                                       widget.serviceRecordList.serviceType!,
                                       overflow: TextOverflow.ellipsis,
@@ -308,7 +308,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width*0.35,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.35,
                                       child: Text(
                                         e.key,
                                         style: GoogleFonts.roboto(
@@ -319,10 +320,12 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                       ),
                                     ),
                                     const Text(':'),
-
                                     e.value != "Breakdown assistance"
                                         ? SizedBox(
-                                      width: MediaQuery.of(context).size.width*0.35,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.35,
                                             child: Text(
                                               e.value,
                                               textAlign: TextAlign.right,
@@ -333,9 +336,13 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                             ),
                                           )
                                         : SizedBox(
-                                      width: MediaQuery.of(context).size.width*0.35,
-                                      child: Text(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.35,
+                                            child: Text(
                                               e.value,
+                                              textAlign: TextAlign.right,
                                               style: GoogleFonts.roboto(
                                                 fontSize: 15,
                                                 color: const Color(0xff4F504F),
