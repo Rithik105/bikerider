@@ -19,6 +19,7 @@ class ActivityModel {
     startDate = DateTime.parse(json['startDate']);
     endDate = DateTime.parse(json['endDate']);
     // url = json['url'];
+    url = json['tripImage'];
   }
 
   @override
