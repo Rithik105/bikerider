@@ -154,6 +154,7 @@ class _DealerDetailsState extends State<DealerDetails> {
                                   initialEntryMode:
                                       TimePickerEntryMode.dialOnly,
                                   initialTime: TimeOfDay.now(),
+                                  helpText: "",
                                   builder: (context, child) {
                                     return Theme(
                                       data: ThemeData.light().copyWith(
