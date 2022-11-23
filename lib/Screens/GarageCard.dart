@@ -88,7 +88,9 @@ class _GarageCardState extends State<GarageCard> {
     if (sortedDates.isEmpty) {
       print('No service booked');
       diffInDays = "No services booked";
-      setState(() {});
+      setState(() {
+        diffInDays;
+      });
       return;
     } else {
       DateTime temp = DateTime(
@@ -109,6 +111,12 @@ class _GarageCardState extends State<GarageCard> {
       }
       setState(() {});
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

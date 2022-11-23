@@ -1,5 +1,6 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/text_form_fields.dart';
@@ -15,20 +16,32 @@ import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
   String startDate, id, tripName;
+  String? mobile, tripStatus, myMobile;
   String? url;
   Function ontap;
-  CustomCard(
-      {required this.startDate,
-      required this.tripName,
-      required this.ontap,
-      required this.id,
-      required this.url});
+  CustomCard({
+    required this.startDate,
+    required this.tripName,
+    required this.ontap,
+    required this.id,
+    required this.url,
+    this.mobile,
+    this.tripStatus,
+    this.myMobile,
+  });
 
   @override
   State<CustomCard> createState() => _CustomCardState();
 }
 
 class _CustomCardState extends State<CustomCard> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.myMobile.toString() + '+' + widget.mobile.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,64 +67,82 @@ class _CustomCardState extends State<CustomCard> {
           ), //BoxShadow
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.tripName,
-                  style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  DateFormat('dd MMM')
-                      .format(DateTime.parse(widget.startDate))
-                      .toString(),
-                  style: GoogleFonts.roboto(color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white, width: 1)),
-                  child: const Text(
-                    "Upcoming",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              UserHttp.deleteTrip(widget.id).then((value) {
-                showToast(msg: "Trip Successfully Deleted");
-                BlocProvider.of<BikeCubit>(context).getTrips();
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              height: 45,
-              child: Image.asset(
-                "assets/images/homePage/cancel.png",
-                color: Colors.white,
+            height: 155,
+            width: double.maxFinite,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Colors.black, Colors.transparent],
               ),
             ),
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.tripName,
+                      style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      DateFormat('dd MMM')
+                          .format(DateTime.parse(widget.startDate))
+                          .toString(),
+                      style: GoogleFonts.roboto(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white, width: 1)),
+                      child: Text(
+                        widget.tripStatus.toString()[0].toUpperCase() +
+                            widget.tripStatus.toString().substring(1),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              widget.mobile == widget.myMobile!
+                  ? GestureDetector(
+                      onTap: () {
+                        UserHttp.deleteTrip(widget.id).then((value) {
+                          showToast(msg: "Trip Successfully Deleted");
+                          BlocProvider.of<BikeCubit>(context).getTrips();
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        height: 45,
+                        child: Image.asset(
+                          "assets/images/homePage/cancel.png",
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
         ],
       ),
     );
