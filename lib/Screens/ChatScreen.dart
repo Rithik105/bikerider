@@ -167,7 +167,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     scale: 1.7,
                     opacity: 0.05,
                   ),
-
                 ),
                 child: ListView.builder(
                   controller: chatListController,
@@ -185,6 +184,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         messageText: widget.chatList[index]["chat"],
                         senderName: widget.chatList[index]["senderName"],
                         isImage: widget.chatList[index]["isImage"],
+                        date: DateConverter(
+                          widget.chatList[index]["time"],
+                        ),
                       );
                     } else {
                       return MessageBubble(
@@ -194,6 +196,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         messageText: widget.chatList[index]["chat"],
                         senderName: widget.chatList[index]["senderName"],
                         isImage: widget.chatList[index]["isImage"],
+                        date: DateConverter(widget.chatList[index]["time"]),
                       );
                     }
                   }),

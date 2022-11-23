@@ -1,6 +1,5 @@
 import 'package:bikerider/Http/UserHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/text_form_fields.dart';
@@ -89,12 +88,19 @@ class _CustomCardState extends State<CustomCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.tripName,
-                      style: GoogleFonts.roboto(
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text(
+                        widget.tripName,
+                        style: GoogleFonts.roboto(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                          fontSize: 20,
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
                     ),
                     const SizedBox(
                       height: 5,
@@ -403,7 +409,7 @@ class TripSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 15),
       width: MediaQuery.of(context).size.width - 20,
-      height: 210,
+      // height: 210,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -429,12 +435,18 @@ class TripSummaryCard extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Text(
-            CreateTripModal.tripName!,
-            style: GoogleFonts.roboto(
-                color: const Color(0x99000000),
-                fontSize: 27,
-                fontWeight: FontWeight.w600),
+          Container(
+            width: MediaQuery.of(context).size.width - 60,
+            child: Text(
+              CreateTripModal.tripName!,
+              style: GoogleFonts.roboto(
+                  color: const Color(0x99000000),
+                  fontSize: 27,
+                  fontWeight: FontWeight.w600),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              softWrap: true,
+            ),
           ),
           // Text(
           //   "Scramble Goa",
@@ -527,7 +539,10 @@ class TripSummaryCard extends StatelessWidget {
               //   ),
               // )
             ],
-          )
+          ),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
@@ -543,7 +558,6 @@ class TripSummaryGoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 15),
       width: MediaQuery.of(context).size.width - 20,
-      height: 210,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -569,12 +583,18 @@ class TripSummaryGoCard extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Text(
-            getTripModel.tripName!,
-            style: GoogleFonts.roboto(
+          Container(
+            width: MediaQuery.of(context).size.width - 60,
+            child: Text(
+              getTripModel.tripName!,
+              style: GoogleFonts.roboto(
                 color: const Color(0x99000000),
                 fontSize: 27,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.w600,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
           // Text(
           //   "Scramble Goa",
@@ -667,7 +687,10 @@ class TripSummaryGoCard extends StatelessWidget {
               //   ),
               // )
             ],
-          )
+          ),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );

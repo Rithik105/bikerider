@@ -1,16 +1,14 @@
-import 'package:flutter/material.dart';
-
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import 'package:bikerider/custom/widgets/CustomCard.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:bikerider/custom/widgets/button.dart';
-import 'package:bikerider/custom/widgets/text_form_fields.dart';
 import 'package:bikerider/Models/create_trip_modal.dart';
 import 'package:bikerider/Models/milestone.dart';
 import 'package:bikerider/Providers/invite_provider.dart';
 import 'package:bikerider/Utility/enums.dart';
+import 'package:bikerider/custom/widgets/CustomCard.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/button.dart';
+import 'package:bikerider/custom/widgets/text_form_fields.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CreateTripScreen extends StatefulWidget {
   const CreateTripScreen({Key? key}) : super(key: key);
@@ -111,7 +109,7 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                       height: 15,
                     ),
                     CustomSmallTextFormField(
-                      textFieldType: TextFieldType.custom,
+                      textFieldType: TextFieldType.tripName,
                       label: 'Name of the trip',
                       controller: nameOfTrip,
                       width: MediaQuery.of(context).size.width * 0.8,
