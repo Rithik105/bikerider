@@ -56,13 +56,13 @@ class Followers extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Following",
+                  "Followers",
                   style: kProfileTitleTextStyle,
                 ),
                 SizedBox(
                   height: 2,
                 ),
-                following
+                followers
                 // Text(
                 //   "16",
                 //   style: kProfileNumberText,
@@ -78,13 +78,13 @@ class Followers extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Followers",
+                  "Following",
                   style: kProfileTitleTextStyle,
                 ),
                 SizedBox(
                   height: 2,
                 ),
-                followers
+                following
                 // Text("5", style: kProfileNumberText),
               ],
             ),
