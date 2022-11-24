@@ -1,16 +1,11 @@
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
-import 'package:bikerider/custom/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
-import '../custom/widgets/button.dart';
-import 'gallery/stagger.dart';
 import 'google_maps_preview_go.dart';
-import 'map_trip_start.dart';
-import 'milestone_card.dart';
 
 class TripSummaryComplete extends StatefulWidget {
   GetTripModel getTripModel;
@@ -255,9 +250,12 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
                     ),
                     SingleChildScrollView(
                       child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.41,
-                          child: GalleryPreviewScreen(
-                              getTripModel: widget.getTripModel)),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: MediaQuery.of(context).size.height * 0.41,
+                        child: GalleryPreviewScreen(
+                          getTripModel: widget.getTripModel,
+                        ),
+                      ),
                     )
                   ],
                 ),

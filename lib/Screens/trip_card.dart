@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:bikerider/Screens/tripSummaryComplete.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/CustomCard.dart';
 import 'package:bikerider/custom/widgets/button.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../Utility/Secure_storeage.dart';
 
@@ -138,10 +137,22 @@ class _TripCardState extends State<TripCard> {
                       itemBuilder: (BuildContext ctxt, int index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, '/TripSummaryGo',
-                                arguments: {
-                                  "getTripModel": state.getTripModel[index]
-                                });
+                            if (state.getTripModel[index].tripStatus ==
+                                'upcoming') {
+                              Navigator.pushNamed(context, '/TripSummaryGo',
+                                  arguments: {
+                                    "getTripModel": state.getTripModel[index]
+                                  });
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TripSummaryComplete(
+                                    getTripModel: state.getTripModel[index],
+                                  ),
+                                ),
+                              );
+                            }
                           },
                           child: CustomCard(
                             mobile: state.getTripModel[index].mobile,
