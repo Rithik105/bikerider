@@ -92,16 +92,27 @@ class _ActivityCardState extends State<ActivityCard> {
                                   "getTripModel": state.getTripModel[index]
                                 });
                           } else {
-                            Navigator.pushAndRemoveUntil(
+                            // Navigator.pop(context);
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => TripSummaryComplete(
                                   getTripModel: state.getTripModel[index],
                                 ),
                               ),
-                              ModalRoute.withName('/HomeScreen'),
                             );
                           }
+                          //   Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => TripSummaryComplete(
+                          //         getTripModel: state.getTripModel[index],
+                          //       ),
+                          //     ),
+                          //       (route)=>false,
+                          //     // ModalRoute.withName('/HomeScreen'),
+                          //   );
+                          // }
                           // print(
                           //     'milestone length${state.getTripModel[index].milestones.length}');
                           // print(state.getTripModel[index].milestones);
