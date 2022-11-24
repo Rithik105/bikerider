@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:bikerider/Models/timeLineModel.dart';
-import 'package:bikerider/Screens/followers_list.dart';
+import 'package:bikerider/Screens/follower_list.dart';
+import 'package:bikerider/Screens/following_list.dart';
 import 'package:bikerider/Screens/milestone_card.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +33,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   TextEditingController _editingController2 = TextEditingController();
   File? storeImage;
   bool newImage = false;
-
+  bool _clicked = false;
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker()
@@ -204,37 +206,52 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600)),
                                     const SizedBox(height: 15),
-                                    GestureDetector(
-                                      onTap: () {
-                                        UserSecureStorage.getToken()
-                                            .then((value) {
-                                          UserHttp.followUser(
-                                                  state.number, value!)
+                                    IgnorePointer(
+                                      ignoring: _clicked,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _clicked = true;
+
+                                          setState(() {});
+                                          showToast(
+                                              msg: state.following
+                                                  ? "Unfollowing..."
+                                                  : "Following..");
+                                          UserSecureStorage.getToken()
                                               .then((value) {
-                                            BlocProvider.of<BikeCubit>(context)
-                                                .getProfile(state.number);
+                                            UserHttp.followUser(
+                                                    state.number, value!)
+                                                .then((value) {
+                                              _clicked = false;
+                                              setState(() {});
+                                              BlocProvider.of<BikeCubit>(
+                                                      context)
+                                                  .getProfile(state.number);
+                                            });
                                           });
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        height: 30,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 3),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            border: Border.all(
-                                                color: Colors.white, width: 1)),
-                                        child: Center(
-                                          child: Text(
-                                            state.following
-                                                ? "Following"
-                                                : "Follow",
-                                            style: GoogleFonts.roboto(
-                                                color: const Color(0xffffffff),
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500),
+                                        },
+                                        child: Container(
+                                          width: 100,
+                                          height: 30,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 6, vertical: 3),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 1)),
+                                          child: Center(
+                                            child: Text(
+                                              state.following
+                                                  ? "Following"
+                                                  : "Follow",
+                                              style: GoogleFonts.roboto(
+                                                  color:
+                                                      const Color(0xffffffff),
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -612,18 +629,36 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                 style: kProfileNumberText,
                               ),
                               followers: GestureDetector(
-                                onTap: () {},
-                                //=> Navigator.push(context, MaterialPageRoute(builder: (context){ FollowerList(followersList: state.profile);})),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return FollowerList(
+                                        followerList:
+                                            state.profile["userDetails"]
+                                                ["followers"]);
+                                  }));
+                                },
                                 child: Text(
                                     state.profile['userDetails']
-                                            ["followingCount"]
+                                            ["followersCount"]
                                         .toString(),
                                     style: kProfileNumberText),
                               ),
-                              following: Text(
-                                state.profile['userDetails']["followersCount"]
-                                    .toString(),
-                                style: kProfileNumberText,
+                              following: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return FollowingList(
+                                        followingList:
+                                            state.profile["userDetails"]
+                                                ["following"]);
+                                  }));
+                                },
+                                child: Text(
+                                  state.profile['userDetails']["followingCount"]
+                                      .toString(),
+                                  style: kProfileNumberText,
+                                ),
                               ),
                             ),
                           ),
