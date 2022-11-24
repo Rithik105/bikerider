@@ -1,3 +1,4 @@
+import 'package:bikerider/Screens/tripSummaryComplete.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
@@ -134,6 +135,12 @@ class _ActivityCardState extends State<ActivityCard> {
                       itemBuilder: (BuildContext ctxt, int index) {
                         print(state.getTripModel[index].tripName!);
 
+// <<<<<<< phaneesh_1
+                      return GestureDetector(
+                        onTap: () {
+                          if (state.getTripModel[index].tripStatus ==
+                              'upcoming') {
+// =======
                         return GestureDetector(
                           onTap: () {
                             print(
@@ -142,31 +149,87 @@ class _ActivityCardState extends State<ActivityCard> {
 
                             print(index);
                             print(state.getTripModel[index].source);
+// >>>>>>> vishwa_1
                             Navigator.pushNamed(context, '/TripSummaryGo',
                                 arguments: {
                                   "getTripModel": state.getTripModel[index]
                                 });
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: ((context) => TripSummaryGo(
-                            //             getTripModel:
-                            //                 state.getTripModel[index]))));
-                          },
-                          child: CustomCard(
-                            // data: state.getTripModel,
-                            url: state.getTripModel[index].url,
-                            id: state.getTripModel[index].id!,
-                            tripName: state.getTripModel[index].tripName!,
-                            startDate: state.getTripModel[index].startDate!,
-                            mobile: state.getTripModel[index].mobile,
-                            tripStatus: state.getTripModel[index].tripStatus,
-                            myMobile: state.myMobile,
-                            ontap: () {},
-                          ),
-                        );
-                      }),
-                ),
+// <<<<<<< phaneesh_1
+                          } else {
+                            // Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TripSummaryComplete(
+                                  getTripModel: state.getTripModel[index],
+                                ),
+                              ),
+                            );
+                          }
+                          //   Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => TripSummaryComplete(
+                          //         getTripModel: state.getTripModel[index],
+                          //       ),
+                          //     ),
+                          //       (route)=>false,
+                          //     // ModalRoute.withName('/HomeScreen'),
+                          //   );
+                          // }
+                          // print(
+                          //     'milestone length${state.getTripModel[index].milestones.length}');
+                          // print(state.getTripModel[index].milestones);
+                          //
+                          // print(index);
+                          // print(state.getTripModel[index].source);
+                          // Navigator.pushNamed(context, '/TripSummaryGo',
+                          //     arguments: {
+                          //       "getTripModel": state.getTripModel[index]
+                          //     });
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: ((context) => TripSummaryGo(
+                          //             getTripModel:
+                          //                 state.getTripModel[index]))));
+                        },
+                        child: CustomCard(
+                          // data: state.getTripModel,
+                          url: state.getTripModel[index].url,
+                          id: state.getTripModel[index].id!,
+                          tripName: state.getTripModel[index].tripName!,
+                          startDate: state.getTripModel[index].startDate!,
+                          mobile: state.getTripModel[index].mobile,
+                          tripStatus: state.getTripModel[index].tripStatus,
+                          myMobile: myMobile,
+                          ontap: () {},
+                        ),
+                      );
+                    }),
+// =======
+//                             // Navigator.push(
+//                             //     context,
+//                             //     MaterialPageRoute(
+//                             //         builder: ((context) => TripSummaryGo(
+//                             //             getTripModel:
+//                             //                 state.getTripModel[index]))));
+//                           },
+//                           child: CustomCard(
+//                             // data: state.getTripModel,
+//                             url: state.getTripModel[index].url,
+//                             id: state.getTripModel[index].id!,
+//                             tripName: state.getTripModel[index].tripName!,
+//                             startDate: state.getTripModel[index].startDate!,
+//                             mobile: state.getTripModel[index].mobile,
+//                             tripStatus: state.getTripModel[index].tripStatus,
+//                             myMobile: state.myMobile,
+//                             ontap: () {},
+//                           ),
+//                         );
+//                       }),
+//                 ),
+// >>>>>>> vishwa_1
               ),
             ],
           ).paddingAll(20, 20, 60, 20)),

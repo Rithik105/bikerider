@@ -3,6 +3,7 @@
 import 'package:bikerider/Http/mapHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Screens/tripSummaryComplete.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -33,7 +34,7 @@ class _MapStartState extends State<MapStart> {
   bool showFuelStationMarkers = true;
   bool showRestaurantMarkers = true;
   bool showLodgingMarkers = true;
-
+  bool chatDisable = false;
   late BitmapDescriptor currentLocationIcon;
   late BitmapDescriptor atmLocationIcon;
   late BitmapDescriptor fuelStationLocationIcon;
@@ -611,19 +612,63 @@ class _MapStartState extends State<MapStart> {
                             child: const Text('Yes'),
                             onPressed: () {
 
-                              UserSecureStorage.getToken().then((value) async {
-                                endTrip(value!, widget.getTripModel.id!);
+                              UserSecureStorage.getDetails(key: 'mobile')
+                                  .then((value) {
+                                if (value == widget.getTripModel.mobile) {
+                                  UserSecureStorage.getToken().then(
+                                    (value) async {
+                                      endTrip(value!, widget.getTripModel.id!);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              TripSummaryComplete(
+                                            getTripModel: widget.getTripModel,
+                                          ),
+                                        ),
+                                        // (route) => false
+                                        // ModalRoute.withName('/'),
+                                      );
+                                      print('popall');
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) {
+                                      //       return TripSummaryComplete(
+                                      //           getTripModel:
+                                      //               widget.getTripModel);
+                                      //     },
+                                      //   ),
+                                      // );
+                                      showToast(msg: 'Trip ended successfully');
+                                    },
+                                  );
+                                } else {
+                                  showToast(
+                                      msg:
+                                          'You do not have the privileges to end the trip');
+                                }
                               });
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return TripSummaryComplete(
-                                        getTripModel: widget.getTripModel);
-                                  },
-                                ),
-                              );
+// =======
+
+//                               UserSecureStorage.getToken().then((value) async {
+//                                 endTrip(value!, widget.getTripModel.id!);
+//                               });
+
+//                               Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (context) {
+//                                     return TripSummaryComplete(
+//                                         getTripModel: widget.getTripModel);
+//                                   },
+//                                 ),
+//                               );
+// >>>>>>> vishwa_1
                               setState(() {
                                 _markers.removeWhere((element) =>
                                     element.markerId.value.startsWith('ATM') ||
@@ -759,45 +804,56 @@ class _MapStartState extends State<MapStart> {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: GestureDetector(
-              onTap: () {
-                UserSecureStorage.getToken().then(
-                  (value) {
-                    UserHttp.getNumber(value!).then(
-                      (value1) {
-                        UserHttp.getChats(widget.getTripModel.id!, value).then(
-                          (value2) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ChatScreen(
-                                    token: value,
-                                    chatList: value2["chatDetails"],
-                                    number: value1["mobile"],
-                                    groupId: widget.getTripModel.id!,
-                                    groupName: widget.getTripModel.tripName!,
-                                    adminNumber: widget.getTripModel.mobile!,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-                // getDirections(widget.getTripModel.source!,
-                //         widget.getTripModel.destination!)
-                //     .then(
-                //   (value) => _setPolyline(value.points),
-                // );
-                // _setPolyline(directions['polyline_decoded']);
-              },
-              child: Image.asset(
-                "assets/images/trip_start/chat.png",
-                width: 80,
+            child: IgnorePointer(
+              ignoring: chatDisable,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    chatDisable = true;
+                  });
+                  showToast(msg: 'loading chats');
+                  UserSecureStorage.getToken().then(
+                    (value) {
+                      UserHttp.getNumber(value!).then(
+                        (value1) {
+                          UserHttp.getChats(widget.getTripModel.id!, value)
+                              .then(
+                            (value2) {
+                              setState(() {
+                                chatDisable = false;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ChatScreen(
+                                      token: value,
+                                      chatList: value2["chatDetails"],
+                                      number: value1["mobile"],
+                                      groupId: widget.getTripModel.id!,
+                                      groupName: widget.getTripModel.tripName!,
+                                      adminNumber: widget.getTripModel.mobile!,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  );
+                  // getDirections(widget.getTripModel.source!,
+                  //         widget.getTripModel.destination!)
+                  //     .then(
+                  //   (value) => _setPolyline(value.points),
+                  // );
+                  // _setPolyline(directions['polyline_decoded']);
+                },
+                child: Image.asset(
+                  "assets/images/trip_start/chat.png",
+                  width: 80,
+                ),
               ),
             ),
           ).paddingAll(14, 0, 0, 30),
