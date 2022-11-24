@@ -50,14 +50,16 @@ class GetStartedScreen extends StatelessWidget {
                               width: 500,
                             )),
                         Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Image.asset(
-                                  "assets/images/chooseavatar/tick.png",
-                                )))
+                          right: 0,
+                          bottom: 0,
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: Image.asset(
+                              "assets/images/chooseavatar/tick.png",
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),

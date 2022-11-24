@@ -44,19 +44,21 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               height: 30,
               width: 30,
               child: GestureDetector(
-                onTap: () async {
+                onTap: () {
                   showToast(msg: "downloading...");
-                  final data = await pdf.createFinalInvoice(
-                      widget.productInvoiceList.cast<ProductInvoiceModel>());
-                  print('Got Data');
-                  savePDF("sai", data);
-                  showToast(msg: "Pdf downloaded successfully");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GarageCard(),
-                    ),
-                  );
+                  pdf
+                      .createFinalInvoice(
+                          widget.productInvoiceList.cast<ProductInvoiceModel>())
+                      .then((value) {
+                    savePDF("sai", value);
+                    showToast(msg: "Pdf downloaded successfully");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GarageCard(),
+                      ),
+                    );
+                  });
                 },
                 child: Image.asset(
                   "assets/images/book_service/download.png",

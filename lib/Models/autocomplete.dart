@@ -10,6 +10,7 @@ class LocationDetails {
 
   LocationDetails.fromJson(Map json) {
     place = (json['place']);
+
     latitude = double.parse(json['latitude']);
     longitude = double.parse(json['longitude']);
   }
