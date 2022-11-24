@@ -1,14 +1,9 @@
-import 'dart:convert';
 import 'package:bikerider/Http/photoHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
 import 'package:bikerider/Screens/gallery/image_view_future.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'Image_view.dart';
-import 'gallery_model.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class GalleryPreviewScreen extends StatefulWidget {
   GalleryPreviewScreen({Key? key, required this.getTripModel})
@@ -105,19 +100,14 @@ class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
             child: GestureDetector(
               onTap: () {
                 UserSecureStorage.getToken().then((value) {
-                  PhotosHttp.getPhotoDetails(_posts[index]["_id"], value!)
-                      .then((value2) {
-                    ImageDetails temp = value2;
-                    print(value);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ImageViewFuture(imageDetails: temp, token: value!),
-                      ),
-                    );
-                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageViewFuture(
+                          id: _posts[index]["_id"], token: value!),
+                    ),
+                  );
+                  // });
                 });
               },
               child: Image.network("${_posts[index]["imageUrl"]}"),

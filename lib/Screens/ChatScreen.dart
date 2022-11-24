@@ -18,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 
   List chatList;
   String adminNumber;
+
   ChatScreen({
     Key? key,
     required this.chatList,
@@ -38,20 +39,58 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isEmoji = false;
   FocusNode focus = FocusNode();
   Timer? timer1;
-
+  int timerCount = 0;
   File? storeImage;
+  FocusNode focusNode = FocusNode();
+  bool goDownButtonEnable = true;
+  bool once = true;
 
   @override
   void initState() {
     print(widget.chatList);
     // TODO: implement initState
     super.initState();
-    timer1 = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer1 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      timerCount++;
       print(widget.groupId);
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
-        widget.chatList = value["chatDetails"];
+        if (widget.chatList.length != value["chatDetails"].length) {
+          widget.chatList = value["chatDetails"];
+          Future.delayed(Duration(milliseconds: 500)).then(
+            (value) => chatListController.animateTo(
+                chatListController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.fastOutSlowIn),
+          );
+        }
+
         setState(() {});
+        if (once) {
+          print(once);
+          Future.delayed(const Duration(milliseconds: 500)).then((value) {
+            chatListController.animateTo(
+                chatListController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.fastOutSlowIn);
+            once = false;
+            print(once);
+            setState(() {});
+          });
+        }
       });
+    });
+
+    chatListController.addListener(() {
+      if (chatListController.position.pixels !=
+          chatListController.position.maxScrollExtent) {
+        setState(() {
+          goDownButtonEnable = true;
+        });
+      } else {
+        setState(() {
+          goDownButtonEnable = false;
+        });
+      }
     });
   }
 
@@ -77,6 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement dispose
     super.dispose();
     timer1!.cancel();
+    print('Timer disposed');
   }
 
   Future pickImage(ImageSource source) async {
@@ -170,265 +210,299 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
       body: WillPopScope(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  image: DecorationImage(
-                    alignment: Alignment.bottomRight,
-                    image: AssetImage(
-                      'assets/images/Chat/chat.png',
-                    ),
-                    scale: 1.7,
-                    opacity: 0.05,
-                  ),
-                ),
-                child: ListView.builder(
-                  controller: chatListController,
-                  itemCount: widget.chatList.length,
-                  itemBuilder: ((context, index) {
-                    if (widget.chatList[index]["memberNumber"] ==
-                        widget.number) {
-                      //   print(widget.chatList[index]);
-                      // print("time is");
-                      // print(widget.chatList[index]["time"]);
-                      return MessageBubble(
-                        isMe: true,
-                        time: TimeConverter(widget.chatList[index]["time"]),
-                        image: widget.chatList[index]["senderImage"],
-                        messageText: widget.chatList[index]["chat"],
-                        senderName: widget.chatList[index]["senderName"],
-                        isImage: widget.chatList[index]["isImage"],
-
-                        date: DateConverter(
-                          widget.chatList[index]["time"],
+            Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      image: DecorationImage(
+                        alignment: Alignment.bottomRight,
+                        image: AssetImage(
+                          'assets/images/Chat/chat.png',
                         ),
-
-                      );
-                    } else {
-                      return MessageBubble(
-                        isMe: false,
-                        time: TimeConverter(widget.chatList[index]["time"]),
-                        image: widget.chatList[index]["senderImage"],
-                        messageText: widget.chatList[index]["chat"],
-                        senderName: widget.chatList[index]["senderName"],
-                        isImage: widget.chatList[index]["isImage"],
-                        date: DateConverter(widget.chatList[index]["time"]),
-                      );
-                    }
-                  }),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(40),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    offset: const Offset(
-                      0,
-                      0,
-                    ),
-                    blurRadius: 5.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                ],
-              ),
-              margin: const EdgeInsets.only(bottom: 30),
-              height: 50,
-              width: 350,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isEmoji = !_isEmoji;
-                        FocusScope.of(context).unfocus();
-                        focus.canRequestFocus = true;
-                      });
-                    },
-                    child: const Icon(
-                      Icons.emoji_emotions_outlined,
-                      color: Color(0xff7F7F7F),
-                      size: 32,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 3),
-                      child: AutoSizeTextField(
-                        onTap: () {
-                          setState(() {
-                            _isEmoji = false;
-                          });
-                        },
-                        autofocus: false,
-                        controller: _messageController,
-                        style: const TextStyle(fontSize: 16),
-                        minFontSize: 15,
-                        minLines: 1,
-                        maxLines: 10,
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
+                        scale: 1.7,
+                        opacity: 0.05,
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: const Icon(Icons.photo),
-                                  title: const Text('Photo'),
-                                  onTap: () {
-                                    pickImage(ImageSource.gallery)
-                                        .then((storeImage) {
-                                      print(storeImage.toString());
-                                      if (storeImage == null) {
-                                        print("null");
-                                      } else {
-                                        UserSecureStorage.getToken()
-                                            .then((value) {
-                                          print(value);
-                                          UserChatImageHttp.submitSubscription(
-                                              token: value!,
-                                              file: storeImage,
-                                              groupId: widget.groupId);
-                                        });
-                                      }
-                                    });
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.music_note),
-                                  title: const Text('Music'),
-                                  onTap: () {
-                                    //   Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.videocam),
-                                  title: const Text('Video'),
-                                  onTap: () {
-                                    //  Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.share),
-                                  title: const Text('Share'),
-                                  onTap: () {
-                                    // Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.file_copy_rounded),
-                                  title: const Text('Files'),
-                                  onTap: () {
-                                    // Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-                    },
-                    child: const Icon(
-                      Icons.attach_file_outlined,
-                      color: Color(0xff7F7F7F),
-                      size: 32,
+                    child: ListView.builder(
+                      controller: chatListController,
+                      itemCount: widget.chatList.length,
+                      itemBuilder: ((context, index) {
+                        if (widget.chatList[index]["memberNumber"] ==
+                            widget.number) {
+                          //   print(widget.chatList[index]);
+                          // print("time is");
+                          // print(widget.chatList[index]["time"]);
+                          return MessageBubble(
+                            isMe: true,
+                            time: TimeConverter(widget.chatList[index]["time"]),
+                            image: widget.chatList[index]["senderImage"],
+                            messageText: widget.chatList[index]["chat"],
+                            senderName: widget.chatList[index]["senderName"],
+                            isImage: widget.chatList[index]["isImage"],
+                            date: DateConverter(
+                              widget.chatList[index]["time"],
+                            ),
+                          );
+                        } else {
+                          return MessageBubble(
+                            isMe: false,
+                            time: TimeConverter(widget.chatList[index]["time"]),
+                            image: widget.chatList[index]["senderImage"],
+                            messageText: widget.chatList[index]["chat"],
+                            senderName: widget.chatList[index]["senderName"],
+                            isImage: widget.chatList[index]["isImage"],
+                            date: DateConverter(widget.chatList[index]["time"]),
+                          );
+                        }
+                      }),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_messageController.text != "") {
-                        String text = _messageController.text;
-                        _messageController.clear();
-                        UserSecureStorage.getToken().then((value) {
-                          UserHttp.sendChat(widget.groupId, widget.token, text)
-                              .then((value) {
-                            print(value);
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        offset: const Offset(
+                          0,
+                          0,
+                        ),
+                        blurRadius: 5.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                    ],
+                  ),
+                  margin: const EdgeInsets.only(bottom: 30),
+                  height: 50,
+                  width: 350,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isEmoji = !_isEmoji;
+                            FocusScope.of(context).unfocus();
+                            focus.canRequestFocus = true;
                           });
-                        });
-
-                        // chatList.add({
-                        //   "sender": sender,
-                        //   "message": _messageController.text
-                        // });
-                        // chatListController.animateTo(
-                        //     chatListController.position.maxScrollExtent + 100,
-                        //     duration: const Duration(seconds: 1),
-                        //     curve: Curves.fastOutSlowIn);
-                      }
-                    },
-                    child: const CircleAvatar(
-                      backgroundColor: Color(0xffED7F2C),
-                      radius: 22,
-                      child: Center(
-                        child: Icon(
-                          Icons.send,
-                          color: Colors.white,
+                        },
+                        child: const Icon(
+                          Icons.emoji_emotions_outlined,
+                          color: Color(0xff7F7F7F),
                           size: 32,
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: _isEmoji,
-              child: SizedBox(
-                height: 250,
-                child: EmojiPicker(
-                  onEmojiSelected: (category, emoji) {},
-                  onBackspacePressed: () {
-                    // print(_messageController.text.length);
-                    _messageController.text = _messageController.text
-                        .substring(0, _messageController.text.length - 2);
-                  },
-                  textEditingController: _messageController,
-                  // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
-                  config: const Config(
-                    columns: 7,
-                    emojiSizeMax: 32 * 1.0,
-                    verticalSpacing: 0,
-                    horizontalSpacing: 0,
-                    gridPadding: EdgeInsets.zero,
-                    initCategory: Category.SMILEYS,
-                    bgColor: Color(0xFFF2F2F2),
-                    indicatorColor: Colors.grey,
-                    iconColor: Colors.grey,
-                    iconColorSelected: Colors.grey,
-                    backspaceColor: Colors.grey,
-                    skinToneDialogBgColor: Colors.white,
-                    skinToneIndicatorColor: Colors.grey,
-                    enableSkinTones: true,
-                    showRecentsTab: true,
-                    recentsLimit: 28,
-                    noRecents: Text(
-                      'No Recents',
-                      style: TextStyle(fontSize: 20, color: Colors.black26),
-                      textAlign: TextAlign.center,
-                    ),
-                    // Needs to be const Widget
-                    loadingIndicator: SizedBox.shrink(),
-                    // Needs to be const Widget
-                    tabIndicatorAnimDuration: kTabScrollDuration,
-                    categoryIcons: CategoryIcons(),
-                    buttonMode: ButtonMode.MATERIAL,
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 3),
+                          child: AutoSizeTextField(
+                            focusNode: focusNode,
+                            onTap: () {
+                              setState(() {
+                                _isEmoji = false;
+                              });
+                            },
+                            autofocus: false,
+                            controller: _messageController,
+                            style: const TextStyle(fontSize: 16),
+                            minFontSize: 15,
+                            minLines: 1,
+                            maxLines: 10,
+                            decoration:
+                                const InputDecoration(border: InputBorder.none),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: const Icon(Icons.photo),
+                                      title: const Text('Photo'),
+                                      onTap: () {
+                                        pickImage(ImageSource.gallery)
+                                            .then((storeImage) {
+                                          print(storeImage.toString());
+                                          if (storeImage == null) {
+                                            print("null");
+                                          } else {
+                                            UserSecureStorage.getToken()
+                                                .then((value) {
+                                              print(value);
+                                              UserChatImageHttp
+                                                  .submitSubscription(
+                                                      token: value!,
+                                                      file: storeImage,
+                                                      groupId: widget.groupId);
+                                            });
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.music_note),
+                                      title: const Text('Music'),
+                                      onTap: () {
+                                        //   Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.videocam),
+                                      title: const Text('Video'),
+                                      onTap: () {
+                                        //  Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.share),
+                                      title: const Text('Share'),
+                                      onTap: () {
+                                        // Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading:
+                                          const Icon(Icons.file_copy_rounded),
+                                      title: const Text('Files'),
+                                      onTap: () {
+                                        // Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        child: const Icon(
+                          Icons.attach_file_outlined,
+                          color: Color(0xff7F7F7F),
+                          size: 32,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (_messageController.text != "") {
+                            String text = _messageController.text;
+                            _messageController.clear();
+                            UserSecureStorage.getToken().then((value) {
+                              UserHttp.sendChat(
+                                      widget.groupId, widget.token, text)
+                                  .then((value) {
+                                print(value);
+                              });
+                            });
+                            showToast(msg: 'Sending message');
+                            focusNode.unfocus();
+
+                            // chatList.add({
+                            //   "sender": sender,
+                            //   "message": _messageController.text
+                            // });
+                            // chatListController.animateTo(
+                            //     chatListController.position.maxScrollExtent + 100,
+                            //     duration: const Duration(seconds: 1),
+                            //     curve: Curves.fastOutSlowIn);
+                          }
+                        },
+                        child: const CircleAvatar(
+                          backgroundColor: Color(0xffED7F2C),
+                          radius: 22,
+                          child: Center(
+                            child: Icon(
+                              Icons.send,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                Visibility(
+                  visible: _isEmoji,
+                  child: SizedBox(
+                    height: 250,
+                    child: EmojiPicker(
+                      onEmojiSelected: (category, emoji) {},
+                      onBackspacePressed: () {
+                        // print(_messageController.text.length);
+                        _messageController.text = _messageController.text
+                            .substring(0, _messageController.text.length - 2);
+                      },
+                      textEditingController: _messageController,
+                      // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                      config: const Config(
+                        columns: 7,
+                        emojiSizeMax: 32 * 1.0,
+                        verticalSpacing: 0,
+                        horizontalSpacing: 0,
+                        gridPadding: EdgeInsets.zero,
+                        initCategory: Category.SMILEYS,
+                        bgColor: Color(0xFFF2F2F2),
+                        indicatorColor: Colors.grey,
+                        iconColor: Colors.grey,
+                        iconColorSelected: Colors.grey,
+                        backspaceColor: Colors.grey,
+                        skinToneDialogBgColor: Colors.white,
+                        skinToneIndicatorColor: Colors.grey,
+                        enableSkinTones: true,
+                        showRecentsTab: true,
+                        recentsLimit: 28,
+                        noRecents: Text(
+                          'No Recents',
+                          style: TextStyle(fontSize: 20, color: Colors.black26),
+                          textAlign: TextAlign.center,
+                        ),
+                        // Needs to be const Widget
+                        loadingIndicator: SizedBox.shrink(),
+                        // Needs to be const Widget
+                        tabIndicatorAnimDuration: kTabScrollDuration,
+                        categoryIcons: CategoryIcons(),
+                        buttonMode: ButtonMode.MATERIAL,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+            goDownButtonEnable
+                ? Positioned(
+                    bottom: MediaQuery.of(context).size.height * 0.15,
+                    right: 20,
+                    child: InkWell(
+                      onTap: () {
+                        chatListController.animateTo(
+                          chatListController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.decelerate,
+                        );
+                      },
+                      // backgroundColor: Colors.orangeAccent,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.orangeAccent,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_downward_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
         onWillPop: () {
@@ -442,6 +516,28 @@ class _ChatScreenState extends State<ChatScreen> {
           return Future.value(false);
         },
       ),
+      // floatingActionButton: goDownButtonEnable
+      //     ? InkWell(
+      //         onTap: () {
+      //           chatListController.animateTo(
+      //             chatListController.position.maxScrollExtent,
+      //             duration: const Duration(milliseconds: 500),
+      //             curve: Curves.decelerate,
+      //           );
+      //         },
+      //         // backgroundColor: Colors.orangeAccent,
+      //         child: Container(
+      //           decoration: BoxDecoration(
+      //             borderRadius: BorderRadius.circular(5),
+      //             color: Colors.orangeAccent,
+      //           ),
+      //           child: const Icon(
+      //             Icons.arrow_downward_outlined,
+      //             color: Colors.white,
+      //           ),
+      //         ),
+      //       )
+      //     : null,
     );
   }
 }
