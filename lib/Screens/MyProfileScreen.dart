@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bikerider/Models/timeLineModel.dart';
+import 'package:bikerider/Screens/followers_list.dart';
 import 'package:bikerider/Screens/milestone_card.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:flutter/cupertino.dart';
@@ -610,10 +611,15 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                 state.profile["tripCount"].toString(),
                                 style: kProfileNumberText,
                               ),
-                              followers: Text(
-                                  state.profile['userDetails']["followingCount"]
-                                      .toString(),
-                                  style: kProfileNumberText),
+                              followers: GestureDetector(
+                                onTap: () {},
+                                //=> Navigator.push(context, MaterialPageRoute(builder: (context){ FollowerList(followersList: state.profile);})),
+                                child: Text(
+                                    state.profile['userDetails']
+                                            ["followingCount"]
+                                        .toString(),
+                                    style: kProfileNumberText),
+                              ),
                               following: Text(
                                 state.profile['userDetails']["followersCount"]
                                     .toString(),
