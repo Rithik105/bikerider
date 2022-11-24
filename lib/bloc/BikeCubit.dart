@@ -152,7 +152,7 @@ class BikeCubit extends Cubit<BikeState> {
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTrips(value!).then((value1) {
         print('myTrips' + value1.toString());
-        if (value1.isEmpty) {
+        if (value1!.isEmpty) {
           emit(BikeEmptyTripState());
         } else {
           List<GetTripModel> temp = [];
@@ -172,7 +172,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTripDetails(value!).then((value1) {
-        if (value1.isEmpty) {
+        if (value1!.isEmpty) {
           emit(BikeEmptyTripState());
         } else {
           List<GetTripModel> temp = [];
@@ -192,7 +192,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.searchTrips(trip, value!).then((value1) {
-        if (value1.isEmpty) {
+        if (value1!.isEmpty) {
           emit(BikeNoTripResultState());
         } else {
           List<GetTripModel> temp = [];
@@ -211,7 +211,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.searchTripsDetails(trip, value!).then((value1) {
-        if (value1.isEmpty) {
+        if (value1!.isEmpty) {
           emit(BikeNoTripResultState());
         } else {
           List<GetTripModel> temp = [];
@@ -231,7 +231,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getAccessories(item, value!).then((value2) {
-        if (value2.isEmpty) {
+        if (value2!.isEmpty) {
           emit(BikeAccEmptyFetchedState());
         } else {
           accessories = value2;
@@ -270,11 +270,11 @@ class BikeCubit extends Cubit<BikeState> {
           print(value3);
           if (value3 == number) {
             emit(BikeMineProfileFetchedState(
-              profile: value2,
+              profile: value2!,
             ));
           } else {
             for (int i = 0;
-                i < value2["userDetails"]["followers"].length;
+                i < value2!["userDetails"]["followers"].length;
                 i++) {
               if (value2["userDetails"]["followers"][i]["followerPhone"] ==
                   value3) {
