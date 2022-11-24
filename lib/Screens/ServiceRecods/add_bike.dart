@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../Models/add_bike_model.dart';
 import '../../custom/constants.dart';
 import '../../custom/widgets/button.dart';
+
 class AddBike extends StatefulWidget {
   AddBike({
     Key? key,
@@ -16,6 +17,7 @@ class AddBike extends StatefulWidget {
   @override
   State<AddBike> createState() => _AddBikeState();
 }
+
 class _AddBikeState extends State<AddBike> {
   TextEditingController vehicleNoController = TextEditingController();
   TextEditingController engineController = TextEditingController();
@@ -37,7 +39,7 @@ class _AddBikeState extends State<AddBike> {
     super.initState();
     print('InitState');
     AddBikeHttp.addBikeList().then(
-          (value) {
+      (value) {
         print(value);
         bikeList.clear();
         for (var e in value) {
@@ -49,6 +51,7 @@ class _AddBikeState extends State<AddBike> {
       },
     );
   }
+
   @override
   void dispose() {
     vehicleNoController.dispose();
@@ -64,13 +67,14 @@ class _AddBikeState extends State<AddBike> {
     super.dispose();
     print('Dispose');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(0xffed863a),
+        backgroundColor: const Color(0xffed863a),
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
@@ -88,94 +92,94 @@ class _AddBikeState extends State<AddBike> {
       body: Center(
         child: bikeList.isEmpty
             ? const CircularProgressIndicator(
-          color: Colors.orange,
-        )
+                color: Colors.orange,
+              )
             : SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                height: 150,
-                child: PageView(
-                  onPageChanged: (value) {
-                    bikeList.forEach((element) {
-                      print(element.vehicleImage);
-                    });
-                    print(value);
-                    setState(() {
-                      i = value;
-                    });
-                  },
-                  controller: _pageController,
-                  children: [
-                    ...bikeList.map(
-                          (e) => Image.network(e.vehicleImage),
-                    ),
-                  ],
-                ),
-              ),
-              Form(
-                key: _formKey,
+                scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Vehicle Type",
-                            style: kBikeGeneralTextStyle,
+                    Container(
+                      height: 150,
+                      child: PageView(
+                        onPageChanged: (value) {
+                          bikeList.forEach((element) {
+                            print(element.vehicleImage);
+                          });
+                          print(value);
+                          setState(() {
+                            i = value;
+                          });
+                        },
+                        controller: _pageController,
+                        children: [
+                          ...bikeList.map(
+                            (e) => Image.network(e.vehicleImage),
                           ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 200,
-                          child: DropdownButtonFormField(
-                            isExpanded: true,
-                            icon: Image.asset(
-                                "assets/images/book_service/drop_down.png",
-                                width: 10),
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
+                        ],
+                      ),
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Vehicle Type",
+                                  style: kBikeGeneralTextStyle,
+                                ),
                               ),
-                            ),
-                            items: [
-                              ...bikeList
-                                  .map(
-                                    (e) => DropdownMenuItem(
-                                  value: e.vehicleType,
-                                  child: Text(
-                                    e.vehicleType,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black87,
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width - 200,
+                                child: DropdownButtonFormField(
+                                  isExpanded: true,
+                                  icon: Image.asset(
+                                      "assets/images/book_service/drop_down.png",
+                                      width: 10),
+                                  decoration: const InputDecoration(
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
                                     ),
                                   ),
-                                ),
-                              )
-                                  .toList(),
-                            ],
-                            value: bikeList[i].vehicleType,
-                            onChanged: (value) {
-                              print(bikeList);
-                              print(value.runtimeType);
-                              vehicleType = value!;
-                              _pageController.jumpToPage(
-                                  bikeList.indexWhere((element) =>
-                                  value == element.vehicleType));
+                                  items: [
+                                    ...bikeList
+                                        .map(
+                                          (e) => DropdownMenuItem(
+                                            value: e.vehicleType,
+                                            child: Text(
+                                              e.vehicleType,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ],
+                                  value: bikeList[i].vehicleType,
+                                  onChanged: (value) {
+                                    print(bikeList);
+                                    print(value.runtimeType);
+                                    vehicleType = value!;
+                                    _pageController.jumpToPage(
+                                        bikeList.indexWhere((element) =>
+                                            value == element.vehicleType));
 // setState(() {
 // vehicleType = value!;
 // print("service type ${vehicleType}");
 // });
 //vehicleType = value as String;
-                            },
-                            itemHeight: 60,
-                          ),
+                                  },
+                                  itemHeight: 60,
+                                ),
 // TextField(
 // controller: vehicleTypeController,
 // textInputAction: TextInputAction.next,
@@ -188,433 +192,433 @@ class _AddBikeState extends State<AddBike> {
 // ),
 // // style: kDetailsTextStyle,
 // ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Engine",
-                            style: kBikeGeneralTextStyle,
+                              ),
+                            ],
                           ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            textInputAction: TextInputAction.next,
-                            controller: engineController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Engine';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Ex: 5RE20036798",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Engine",
+                                  style: kBikeGeneralTextStyle,
                                 ),
                               ),
-                            ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  controller: engineController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the Engine';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. 5RE20036798",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
 //style: kDetailsTextStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Frame No",
-                            style: kBikeGeneralTextStyle,
-                          ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: frameController,
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Frame Number';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Ex: 5R85F4061",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
                                 ),
                               ),
-                            ),
-// style: kDetailsTextStyle,
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Battery make",
-                            style: kBikeGeneralTextStyle,
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: batteryController,
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the battery make';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Ex: 36V 12AH",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Frame No",
+                                  style: kBikeGeneralTextStyle,
                                 ),
                               ),
-                            ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: frameController,
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the Frame Number';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. 5R85F4061",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
 // style: kDetailsTextStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Reg No.",
-                            style: kBikeGeneralTextStyle,
-                          ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: regController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Registration number';
-                              }
-                              return null;
-                            },
-                            textInputAction: TextInputAction.next,
-                            decoration:InputDecoration(
-                              hintText: "Ex: DL 5C A 4845",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
                                 ),
                               ),
-                            ),
-// style: kDetailsTextStyle,
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Model",
-                            style: kBikeGeneralTextStyle,
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                            controller: modelController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the model';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Ex: 2022",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Battery make",
+                                  style: kBikeGeneralTextStyle,
                                 ),
                               ),
-                            ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: batteryController,
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the battery make';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. 36V 12AH",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
 // style: kDetailsTextStyle,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Dealer code",
-                            style: kBikeGeneralTextStyle,
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: dealerCodeController,
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the dealer code';
-                              }
-                              return null;
-                            },
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Reg No.",
+                                  style: kBikeGeneralTextStyle,
+                                ),
+                              ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: regController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the Registration number';
+                                    }
+                                    return null;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. DL 5C A 4845",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
+// style: kDetailsTextStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Model",
+                                  style: kBikeGeneralTextStyle,
+                                ),
+                              ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  controller: modelController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the model';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. 2022",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
+// style: kDetailsTextStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Dealer code",
+                                  style: kBikeGeneralTextStyle,
+                                ),
+                              ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: dealerCodeController,
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the dealer code';
+                                    }
+                                    return null;
+                                  },
 //style: kDetailsTextStyle,
-                            decoration: InputDecoration(
-                              hintText: "Ex: TUN5A4300",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. TUN5A4300",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: Text(
-                            "Vehicle Number",
-                            style: kBikeGeneralTextStyle,
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: vehicleNoController,
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the vehicle number';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Ex: KA 21 MN 4711",
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  "Vehicle Number",
+                                  style: kBikeGeneralTextStyle,
                                 ),
                               ),
-                            ),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: vehicleNoController,
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the vehicle number';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "E.g. KA 21 MN 4711",
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
 // style: kDetailsTextStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                            width: 120,
-                            child: Text(
-                              "Color",
-                              style: kBikeGeneralTextStyle,
-                            )),
-                        const Text(':'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: colorController,
-                            textInputAction: TextInputAction.done,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Color';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              errorStyle: GoogleFonts.roboto(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              errorBorder: const UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffB4B3B3),
                                 ),
                               ),
-                            ),
-//style: kDetailsTextStyle,
+                            ],
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                  width: 120,
+                                  child: Text(
+                                    "Color",
+                                    style: kBikeGeneralTextStyle,
+                                  )),
+                              const Text(':'),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: colorController,
+                                  textInputAction: TextInputAction.done,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the Color';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    errorStyle: GoogleFonts.roboto(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    errorBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xffB4B3B3),
+                                      ),
+                                    ),
+                                  ),
+//style: kDetailsTextStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: LargeSubmitButton(
-                  text: "Submit",
-                  ontap: () {
+                    SizedBox(
+                      width: double.infinity,
+                      child: LargeSubmitButton(
+                        text: "Submit",
+                        ontap: () {
 //AddBikeModel(vehicleNumber: vehicleNoController.text, vehicleType: vehicleTypeController.text, engineNumber: engineController.text, batteryMake: batteryController.text, frameNumber: frameController.text, registerNumber: regController.text, model: modelController.text, color: colorController.text, dealerCode: dealerCodeController.text);
-                    if (_formKey.currentState!.validate()) {
-                      AddBikeHttp.addBikeDetails(
-                        AddBikeModel(
-                          vehicleNumber: vehicleNoController.text,
-                          vehicleType: vehicleType,
-                          engineNumber: engineController.text,
-                          batteryMake: batteryController.text,
-                          frameNumber: frameController.text,
-                          registerNumber: regController.text,
-                          model: modelController.text,
-                          color: colorController.text,
-                          dealerCode: dealerCodeController.text,
-                        ).toJson(),
-                      );
-                      showToast(msg: "Bike details added successfully");
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              )
-            ],
-          ).paddingAll(30, 30, 30, 30),
-        ),
+                          if (_formKey.currentState!.validate()) {
+                            AddBikeHttp.addBikeDetails(
+                              AddBikeModel(
+                                vehicleNumber: vehicleNoController.text,
+                                vehicleType: vehicleType,
+                                engineNumber: engineController.text,
+                                batteryMake: batteryController.text,
+                                frameNumber: frameController.text,
+                                registerNumber: regController.text,
+                                model: modelController.text,
+                                color: colorController.text,
+                                dealerCode: dealerCodeController.text,
+                              ).toJson(),
+                            );
+                            showToast(msg: "Bike details added successfully");
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ).paddingAll(30, 30, 30, 30),
+              ),
       ),
     );
   }

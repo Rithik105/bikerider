@@ -611,6 +611,7 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
+
                               UserSecureStorage.getDetails(key: 'mobile')
                                   .then((value) {
                                 if (value == widget.getTripModel.mobile) {
@@ -652,6 +653,22 @@ class _MapStartState extends State<MapStart> {
                                 }
                               });
 
+// =======
+
+//                               UserSecureStorage.getToken().then((value) async {
+//                                 endTrip(value!, widget.getTripModel.id!);
+//                               });
+
+//                               Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (context) {
+//                                     return TripSummaryComplete(
+//                                         getTripModel: widget.getTripModel);
+//                                   },
+//                                 ),
+//                               );
+// >>>>>>> vishwa_1
                               setState(() {
                                 _markers.removeWhere((element) =>
                                     element.markerId.value.startsWith('ATM') ||
