@@ -93,6 +93,28 @@ class UserHttp {
     return jsonDecode(secret.body);
   }
 
+  static Future getTokenStart(String token) async {
+    final http.Response secret = await http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    );
+    http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    ).then((value) {
+      UserSecureStorage.setToken(jsonDecode(secret.body)['access_token']);
+    });
+    return (jsonDecode(secret.body));
+  }
+
   static Future getToken(String token) async {
     final http.Response secret = await http.post(
       Uri.parse(
@@ -102,7 +124,7 @@ class UserHttp {
         'Authorization': 'BEARER $token'
       },
     );
-    await http.post(
+    http.post(
       Uri.parse(
           "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
       headers: {
@@ -110,10 +132,9 @@ class UserHttp {
         'Authorization': 'BEARER $token'
       },
     ).then((value) {
-      UserSecureStorage.setToken(value.body);
+      UserSecureStorage.setToken(jsonDecode(secret.body)['access_token']);
     });
-    print(jsonDecode(secret.body)['access_token']);
-    return jsonDecode(secret.body)['access_token'];
+    return (jsonDecode(secret.body)['access_token']);
   }
 
   static Future createTrip(String createTripModal) async {
@@ -129,17 +150,16 @@ class UserHttp {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        getToken(value!).then((value1) async {
-          final http.Response response = await http.post(
-              Uri.parse(
-                  "https://riding-application.herokuapp.com/api/v1/trip/createTrip"),
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'BEARER $value1'
-              },
-              body: createTripModal);
-          return jsonDecode(response.body);
-        });
+        String value1 = await getToken(value!);
+        final http.Response response = await http.post(
+            Uri.parse(
+                "https://riding-application.herokuapp.com/api/v1/trip/createTrip"),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'BEARER $value1'
+            },
+            body: createTripModal);
+        return jsonDecode(response.body);
       }
     });
   }
@@ -157,17 +177,16 @@ class UserHttp {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        getToken(value!).then((value2) async {
-          final http.Response response = await http.post(
-              Uri.parse(
-                  'https://riding-application.herokuapp.com/api/v1/trip/deleteTrip'),
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'BEARER $value'
-              },
-              body: jsonEncode({'_id': id}));
-          return jsonDecode(response.body);
-        });
+        String value1 = await getToken(value!);
+        final http.Response response = await http.post(
+            Uri.parse(
+                'https://riding-application.herokuapp.com/api/v1/trip/deleteTrip'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'BEARER $value1'
+            },
+            body: jsonEncode({'_id': id}));
+        return jsonDecode(response.body);
       }
     });
   }
@@ -177,18 +196,16 @@ class UserHttp {
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
-    print(response.statusCode);
+
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      print("status is this");
-      getToken(token).then((value) async {
-        final http.Response response = await http.get(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
-            headers: {'Authorization': 'BEARER $value'});
-        return jsonDecode(response.body);
-      });
+      String newToken = await getToken(token);
+      final http.Response response = await http.get(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
+          headers: {'Authorization': 'BEARER $newToken'});
+      return jsonDecode(response.body);
     }
   }
 
@@ -204,17 +221,17 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getNumber(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $value'
-            },
-            body: jsonEncode({"text": trip}));
-        return jsonDecode(response.body);
-      });
+      String value1 = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value1'
+          },
+          body: jsonEncode({"text": trip}));
+      print(jsonDecode(response.body));
+      return jsonDecode(response.body);
     }
   }
 
@@ -230,17 +247,16 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $value'
-            },
-            body: jsonEncode({"text": trip}));
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"text": trip}));
+      return jsonDecode(response.body);
     }
   }
 
@@ -254,15 +270,14 @@ class UserHttp {
         body: jsonEncode({"wantToFollow": number}));
     if (response.statusCode == 200) {
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $value'
-            },
-            body: jsonEncode({"wantToFollow": number}));
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"wantToFollow": number}));
     }
   }
 
@@ -274,13 +289,12 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.get(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/trip/getTripDetails"),
-            headers: {'Authorization': 'BEARER $token'});
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.get(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/getTripDetails"),
+          headers: {'Authorization': 'BEARER $value'});
+      return jsonDecode(response.body);
     }
   }
 
@@ -298,18 +312,17 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $token'
-            },
-            body: jsonEncode(
-                {'chat': message, 'groupId': groupId, 'isImage': isImage}));
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode(
+              {'chat': message, 'groupId': groupId, 'isImage': isImage}));
+      return jsonDecode(response.body);
     }
   }
 
@@ -325,17 +338,16 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $token'
-            },
-            body: jsonEncode({'groupId': groupId}));
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({'groupId': groupId}));
+      return jsonDecode(response.body);
     }
   }
 
@@ -351,17 +363,16 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $token'
-            },
-            body: jsonEncode({'text': item}));
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({'text': item}));
+      return jsonDecode(response.body);
     }
   }
 
@@ -376,16 +387,15 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getNumber(token).then((value) async {
-        final http.Response response = await http.post(
-          Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'BEARER $token'
-          },
-        );
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $value'
+        },
+      );
+      return jsonDecode(response.body);
     }
   }
 
@@ -456,8 +466,6 @@ class UserHttp {
             "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
         headers: {'Authorization': 'BEARER $value'},
       );
-      print(response.statusCode);
-      print(response.body);
       if (response.statusCode == 200) {
         return TimeLineModel.fromJson(jsonDecode(response.body));
       } else {

@@ -95,7 +95,7 @@ class BikeCubit extends Cubit<BikeState> {
           print(value);
           if (value) {
             UserSecureStorage.getToken().then((value1) {
-              UserHttp.getToken(value1!).then((value2) {
+              UserHttp.getTokenStart(value1!).then((value2) {
                 if (value2["message"] == "refresh token expired") {
                   showToast(msg: "You have been logged out");
                   print("hiii");
