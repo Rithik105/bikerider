@@ -194,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   UserHttp.userLogOut(value1!).then((value2) {
                     print('response' + value2.toString());
                     UserSecureStorage.clear();
-                    showToast(msg: value2["message"]);
+                    showToast(msg: value2!["message"]);
                     _setLogin();
 
                     Navigator.pushNamedAndRemoveUntil(context, "/LoginScreen",

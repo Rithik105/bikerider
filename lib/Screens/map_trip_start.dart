@@ -612,6 +612,7 @@ class _MapStartState extends State<MapStart> {
                             child: const Text('Yes'),
                             onPressed: () {
 
+
                               UserSecureStorage.getDetails(key: 'mobile')
                                   .then((value) {
                                 if (value == widget.getTripModel.mobile) {
@@ -669,6 +670,7 @@ class _MapStartState extends State<MapStart> {
 //                                 ),
 //                               );
 // >>>>>>> vishwa_1
+
                               setState(() {
                                 _markers.removeWhere((element) =>
                                     element.markerId.value.startsWith('ATM') ||
