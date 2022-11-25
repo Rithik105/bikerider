@@ -18,7 +18,8 @@ class ConfirmBookingDetails extends StatefulWidget {
 }
 
 class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
-  Map details = BookServiceModel.toJson();
+
+  bool disable=false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
             ),
             GestureDetector(
               onTap: () {
-                print(details);
+
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -198,8 +199,12 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
               width: double.infinity,
               child: LargeSubmitButton(
                 text: "BOOK",
-                ontap: () {
-                  BookServiceHttp.uploadBookingDetails(widget.dealerPhone!)
+                ontap: disable ? () {} : () {
+                 setState(() {
+                   disable=true;
+
+                 });
+                 disable? BookServiceHttp.uploadBookingDetails(widget.dealerPhone!)
                       .then((value) {
                     Navigator.push(
                       context,
@@ -214,7 +219,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
                       BookServiceModel.clearBookingDetails();
                       setState(() {});
                     });
-                  });
+                  }):null;
                 },
               ),
             ),

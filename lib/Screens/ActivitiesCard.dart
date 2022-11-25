@@ -140,21 +140,12 @@ class _ActivityCardState extends State<ActivityCard> {
                           onTap: () {
                             if (state.getTripModel[index].tripStatus ==
                                 'upcoming') {
-// =======
-//                         return GestureDetector(
-//                           onTap: () {
-//                             print(
-//                                 'milestone length${state.getTripModel[index].milestones.length}');
-//                             print(state.getTripModel[index].milestones);
 
-//                             print(index);
-//                             print(state.getTripModel[index].source);
-// // >>>>>>> vishwa_1
                               Navigator.pushNamed(context, '/TripSummaryGo',
                                   arguments: {
                                     "getTripModel": state.getTripModel[index]
                                   });
-// // <<<<<<< phaneesh_1
+
                             } else {
                               // Navigator.pop(context);
                               Navigator.push(
