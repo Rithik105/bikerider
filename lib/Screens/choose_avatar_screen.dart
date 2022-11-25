@@ -60,6 +60,14 @@ class ChooseAvatarScreen extends StatelessWidget {
               ),
               onTap: () async {
                 await getImageFileFromAssets("images/user.png").then((value) {
+                  UserSecureStorage.getToken().then((value1) {
+                    UserImageHttp.submitSubscription(
+                            token: value1!, file: value)
+                        .then((value3) {
+                      Navigator.pushNamed(context, "/GetStartedScreen",
+                          arguments: {"storeImage": value});
+                    });
+                  });
                   Navigator.pushNamed(context, "/GetStartedScreen",
                       arguments: {"storeImage": value});
                 });
@@ -88,8 +96,14 @@ class ChooseAvatarScreen extends StatelessWidget {
                     pickImage(ImageSource.camera).then((storeImage) {
                       if (storeImage == null) {
                         getImageFileFromAssets("images/user.png").then((value) {
-                          Navigator.pushNamed(context, "/GetStartedScreen",
-                              arguments: {"storeImage": value});
+                          UserSecureStorage.getToken().then((value1) {
+                            UserImageHttp.submitSubscription(
+                                    token: value1!, file: value)
+                                .then((value3) {
+                              Navigator.pushNamed(context, "/GetStartedScreen",
+                                  arguments: {"storeImage": value});
+                            });
+                          });
                         });
                       } else {
                         UserSecureStorage.getToken().then((value) {
