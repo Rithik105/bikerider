@@ -847,6 +847,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.14"
+
   typed_data:
     dependency: transitive
     description:
@@ -916,7 +917,9 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
+
     version: "2.1.4"
+
   win32:
     dependency: transitive
     description:

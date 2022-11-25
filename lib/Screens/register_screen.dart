@@ -78,7 +78,7 @@ class RegisterScreen extends StatelessWidget {
                   ontap: () {
                     if (formKey.currentState!.validate()) {
                       BlocProvider.of<BikeCubit>(context).timer(40);
-                      Navigator.pushNamed(context, "/OtpRegisterScreen",
+                      Navigator.pushNamed(context, "/OwnBikeScreen",
                           arguments: {
                             "User": User(
                                 email: _email.text,

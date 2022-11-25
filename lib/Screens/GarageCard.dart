@@ -88,9 +88,7 @@ class _GarageCardState extends State<GarageCard> {
     if (sortedDates.isEmpty) {
       print('No service booked');
       diffInDays = "No services booked";
-      setState(() {
-        diffInDays;
-      });
+      setState(() {});
       return;
     } else {
       DateTime temp = DateTime(

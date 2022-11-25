@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchCardController = TextEditingController();
 
-  int bottomIndex = 0;
+  int bottomIndex = 2;
   int previousIndex = 0;
   final _pageOptions = [
     TripintermediateCard(),
@@ -90,14 +90,33 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedItemColor: Colors.white,
             currentIndex: bottomIndex,
             onTap: (index) {
-              setState(() {
-                if (index != 4) {
-                  bottomIndex = index;
+              UserSecureStorage.getDetails(key: "haveBike").then((value) {
+                if (value == 'true') {
+                  setState(() {
+                    if (index != 4) {
+                      bottomIndex = index;
+                    }
+                  });
+                  if (index == 4) {
+                    bottomSheetCall(context);
+                  }
+                } else {
+                  if (index == 0 || index == 1) {
+                    bottomIndex = 2;
+                    setState(() {});
+                    showToast(msg: "You do not own a bike");
+                  } else {
+                    setState(() {
+                      if (index != 4) {
+                        bottomIndex = index;
+                      }
+                    });
+                    if (index == 4) {
+                      bottomSheetCall(context);
+                    }
+                  }
                 }
               });
-              if (index == 4) {
-                bottomSheetCall(context);
-              }
             },
             elevation: 0,
             type: BottomNavigationBarType.fixed,
@@ -194,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   UserHttp.userLogOut(value1!).then((value2) {
                     print('response' + value2.toString());
                     UserSecureStorage.clear();
-                    showToast(msg: value2["message"]);
+                    showToast(msg: value2!["message"]);
                     _setLogin();
 
                     Navigator.pushNamedAndRemoveUntil(context, "/LoginScreen",
