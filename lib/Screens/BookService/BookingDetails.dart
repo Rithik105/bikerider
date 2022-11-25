@@ -24,7 +24,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        // toolbarHeight: 80,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
@@ -192,7 +192,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
               }
             }),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
             SizedBox(
               width: double.infinity,
@@ -219,7 +219,7 @@ class _ConfirmBookingDetailsState extends State<ConfirmBookingDetails> {
               ),
             ),
           ],
-        ).paddingAll(30, 30, 20, 20),
+        ).paddingAll(30, 30, 20, 0),
       ),
     );
   }
