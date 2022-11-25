@@ -10,7 +10,7 @@ import '../Models/UserModel.dart';
 import '../Utility/Secure_storeage.dart';
 
 class UserHttp {
-  static Future registerUser(User user) async {
+  static Future registerUser(User user, bool ownbike) async {
     final http.Response response = await http.post(
         Uri.parse("https://riding-application.herokuapp.com/api/v1/register"),
         headers: {
@@ -21,7 +21,7 @@ class UserHttp {
           "email": user.email,
           "mobile": user.mobile,
           "password": user.password,
-          "haveBike": "true"
+          "haveBike": ownbike
         }));
     return jsonDecode(response.body);
   }
@@ -421,16 +421,15 @@ class UserHttp {
         body: jsonEncode({"_id": id, "likes": like}));
     if (response.statusCode == 200) {
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/product/addLike"),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $token'
-            },
-            body: jsonEncode({"_id": id, "likes": like}));
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/product/addLike"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"_id": id, "likes": like}));
     }
   }
 
@@ -445,17 +444,16 @@ class UserHttp {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      getToken(token).then((value) async {
-        final http.Response response = await http.post(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/getProfile"),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'BEARER $token'
-            },
-            body: jsonEncode({"mobile": number}));
-        return jsonDecode(response.body);
-      });
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/getProfile"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"mobile": number}));
+      return jsonDecode(response.body);
     }
   }
 
@@ -469,14 +467,13 @@ class UserHttp {
       if (response.statusCode == 200) {
         return TimeLineModel.fromJson(jsonDecode(response.body));
       } else {
-        getToken(value!).then((value2) async {
-          final response = await http.get(
-            Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
-            headers: {'Authorization': 'BEARER $value2'},
-          );
-          return TimeLineModel.fromJson(jsonDecode(response.body));
-        });
+        String value2 = await getToken(value!);
+        final response = await http.get(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+          headers: {'Authorization': 'BEARER $value2'},
+        );
+        return TimeLineModel.fromJson(jsonDecode(response.body));
       }
     });
     return TimeLineModel.fromJson([]);

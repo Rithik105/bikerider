@@ -37,7 +37,12 @@ class Routes {
         return LeftTransitions(child: TutorialScreen());
       //---------------------------------------------------------
       case "/OwnBikeScreen":
-        return LeftTransitions(child: const OwnBikeScreen());
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return LeftTransitions(
+            child: OwnBikeScreen(
+          user: arguments["User"],
+        ));
       //---------------------------------------------------------
       case "/LoginScreen":
         return LeftTransitions(child: LoginScreen());
@@ -66,8 +71,7 @@ class Routes {
             settings.arguments as Map<String, dynamic>;
         return LeftTransitions(
             child: OtpRegisterScreen(
-          user: arguments["User"],
-        ));
+                user: arguments["User"], own: arguments["OwnBike"]));
 
       //---------------------------------------------------------
       case "/ChooseAvatarScreen":

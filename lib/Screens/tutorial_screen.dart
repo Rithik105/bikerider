@@ -143,7 +143,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   child: LargeSubmitButton(
                     text: "LOGIN / REGISTER",
                     ontap: () {
-                      Navigator.pushNamed(context, "/OwnBikeScreen");
+                      Navigator.pushNamed(context, "/LoginScreen");
                     },
                     width: 320,
                   ),
