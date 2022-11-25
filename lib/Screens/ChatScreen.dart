@@ -16,7 +16,7 @@ import '../custom/widgets/bubble.dart';
 class ChatScreen extends StatefulWidget {
   String groupId, number, token, groupName;
 
-  List chatList;
+  List chatList = [];
   String adminNumber;
 
   ChatScreen({
@@ -51,6 +51,13 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement initState
     super.initState();
     timer1 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (widget.chatList.length < 20) {
+        setState(() {
+          goDownButtonEnable = false;
+        });
+        print('length<20');
+      }
+      print('pixels' + chatListController.position.pixels.toString());
       timerCount++;
       print(widget.groupId);
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
@@ -89,6 +96,18 @@ class _ChatScreenState extends State<ChatScreen> {
       } else {
         setState(() {
           goDownButtonEnable = false;
+        });
+      }
+    });
+    focus.addListener(() {
+      print('listening');
+      if (focus.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 500)).then((value) {
+          print('has focus');
+          chatListController.animateTo(
+              chatListController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 10),
+              curve: Curves.linear);
         });
       }
     });
