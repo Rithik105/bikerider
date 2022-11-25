@@ -1,3 +1,4 @@
+import 'package:bikerider/Models/UserModel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +7,8 @@ import 'package:bikerider/custom/widgets/button.dart';
 import 'package:bikerider/custom/constants.dart';
 
 class OwnBikeScreen extends StatelessWidget {
-  const OwnBikeScreen({super.key});
+  OwnBikeScreen({super.key, required this.user});
+  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,8 @@ class OwnBikeScreen extends StatelessWidget {
                   LargeSubmitButton(
                     text: "YES",
                     ontap: () {
-                      Navigator.pushNamed(context, "/LoginScreen");
+                      Navigator.pushNamed(context, "/OtpRegisterScreen",
+                          arguments: {"User": user, "OwnBike": true});
                     },
                     width: 120,
                     height: 50,
@@ -46,7 +49,8 @@ class OwnBikeScreen extends StatelessWidget {
                     style: kNoButtonDecoration,
                     text: "NO",
                     ontap: () {
-                      Navigator.pushNamed(context, "/LoginScreen");
+                      Navigator.pushNamed(context, "/OtpRegisterScreen",
+                          arguments: {"User": user, "OwnBike": false});
                     },
                     width: 120,
                     height: 50,

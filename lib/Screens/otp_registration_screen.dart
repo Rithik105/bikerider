@@ -16,7 +16,9 @@ import 'package:bikerider/bloc/BikeCubit.dart';
 // ignore: must_be_immutable
 class OtpRegisterScreen extends StatefulWidget {
   User user;
-  OtpRegisterScreen({Key? key, required this.user}) : super(key: key);
+  bool own;
+  OtpRegisterScreen({Key? key, required this.user, required this.own})
+      : super(key: key);
 
   @override
   State<OtpRegisterScreen> createState() => _OtpRegisterScreenState();
@@ -106,11 +108,13 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                   UserHttp.verifyOtp(pin).then((value) {
                     if (value["message"] == false) {
                       showToast(msg: "OTP Verified");
-                      UserHttp.registerUser(User(
-                              email: widget.user.email,
-                              name: widget.user.name,
-                              password: widget.user.password,
-                              mobile: widget.user.mobile))
+                      UserHttp.registerUser(
+                              User(
+                                  email: widget.user.email,
+                                  name: widget.user.name,
+                                  password: widget.user.password,
+                                  mobile: widget.user.mobile),
+                              widget.own)
                           .then((value1) {
                         if (value1["message"] == "successfully registered..") {
                           UserHttp.loginUserEmail(widget.user).then((value2) {

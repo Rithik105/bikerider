@@ -1,5 +1,6 @@
 import 'package:bikerider/Http/AddBikeHttp.dart';
 import 'package:bikerider/Models/bike_list_model.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/Material.dart';
@@ -594,7 +595,9 @@ class _AddBikeState extends State<AddBike> {
                       width: double.infinity,
                       child: LargeSubmitButton(
                         text: "Submit",
-                        ontap: () {
+                        ontap: () async {
+                          await UserSecureStorage.setDetails(
+                              key: "haveBike", value: "true");
 //AddBikeModel(vehicleNumber: vehicleNoController.text, vehicleType: vehicleTypeController.text, engineNumber: engineController.text, batteryMake: batteryController.text, frameNumber: frameController.text, registerNumber: regController.text, model: modelController.text, color: colorController.text, dealerCode: dealerCodeController.text);
                           if (_formKey.currentState!.validate()) {
                             AddBikeHttp.addBikeDetails(
@@ -612,6 +615,9 @@ class _AddBikeState extends State<AddBike> {
                             );
                             showToast(msg: "Bike details added successfully");
                             Navigator.pop(context);
+                            // Navigator.pop(context);
+                            // Navigator.pop(context);
+                            // Navigator.pushNamed(context, "/HomeScreen");
                           }
                         },
                       ),

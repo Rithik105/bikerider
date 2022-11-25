@@ -246,43 +246,48 @@ class _ActivityCardState extends State<ActivityCard> {
               const SizedBox(
                 height: 10,
               ),
-              RefreshIndicator(
-                  onRefresh: () async {
-                    BlocProvider.of<BikeCubit>(context).getTripDetails();
-                  },
-                  child: ListView(
-                    children: [
-                      Text(
-                        "Welcome Aboard",
-                        style: GoogleFonts.robotoFlex(
-                            fontSize: 28, color: const Color(0xff4F504F)),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        child: Text(
-                          "You are not a part of any trips at this moment",
-                          style: GoogleFonts.robotoFlex(
-                              fontSize: 20, color: const Color(0xff4F504F)),
-                          textAlign: TextAlign.center,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: RefreshIndicator(
+                    onRefresh: () async {
+                      BlocProvider.of<BikeCubit>(context).getTripDetails();
+                    },
+                    child: ListView(
+                      children: [
+                        Center(
+                          child: Text(
+                            "Welcome Aboard",
+                            style: GoogleFonts.robotoFlex(
+                                fontSize: 28, color: const Color(0xff4F504F)),
+                          ),
                         ),
-                      ),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                      // Text(
-                      //   "this moment",
-                      //   style: GoogleFonts.robotoFlex(
-                      //       fontSize: 20, color: const Color(0xff4F504F)),
-                      // ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ).paddingAll(40, 40, 40, 40))
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          child: Text(
+                            "You are not a part of any trips at this moment",
+                            style: GoogleFonts.robotoFlex(
+                                fontSize: 20, color: const Color(0xff4F504F)),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // Text(
+                        //   "this moment",
+                        //   style: GoogleFonts.robotoFlex(
+                        //       fontSize: 20, color: const Color(0xff4F504F)),
+                        // ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ).paddingAll(40, 40, 40, 40)),
+              )
             ],
           ),
         );
