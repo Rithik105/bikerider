@@ -136,77 +136,68 @@ class _ActivityCardState extends State<ActivityCard> {
                         print(state.getTripModel[index].tripName!);
 
 // <<<<<<< phaneesh_1
-                      return GestureDetector(
-                        onTap: () {
-                          if (state.getTripModel[index].tripStatus ==
-                              'upcoming') {
-// =======
                         return GestureDetector(
                           onTap: () {
-                            print(
-                                'milestone length${state.getTripModel[index].milestones.length}');
-                            print(state.getTripModel[index].milestones);
+                            if (state.getTripModel[index].tripStatus ==
+                                'upcoming') {
 
-                            print(index);
-                            print(state.getTripModel[index].source);
-// >>>>>>> vishwa_1
-                            Navigator.pushNamed(context, '/TripSummaryGo',
-                                arguments: {
-                                  "getTripModel": state.getTripModel[index]
-                                });
-// <<<<<<< phaneesh_1
-                          } else {
-                            // Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TripSummaryComplete(
-                                  getTripModel: state.getTripModel[index],
+                              Navigator.pushNamed(context, '/TripSummaryGo',
+                                  arguments: {
+                                    "getTripModel": state.getTripModel[index]
+                                  });
+
+                            } else {
+                              // Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TripSummaryComplete(
+                                    getTripModel: state.getTripModel[index],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                          //   Navigator.pushAndRemoveUntil(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => TripSummaryComplete(
-                          //         getTripModel: state.getTripModel[index],
-                          //       ),
-                          //     ),
-                          //       (route)=>false,
-                          //     // ModalRoute.withName('/HomeScreen'),
-                          //   );
-                          // }
-                          // print(
-                          //     'milestone length${state.getTripModel[index].milestones.length}');
-                          // print(state.getTripModel[index].milestones);
-                          //
-                          // print(index);
-                          // print(state.getTripModel[index].source);
-                          // Navigator.pushNamed(context, '/TripSummaryGo',
-                          //     arguments: {
-                          //       "getTripModel": state.getTripModel[index]
-                          //     });
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: ((context) => TripSummaryGo(
-                          //             getTripModel:
-                          //                 state.getTripModel[index]))));
-                        },
-                        child: CustomCard(
-                          // data: state.getTripModel,
-                          url: state.getTripModel[index].url,
-                          id: state.getTripModel[index].id!,
-                          tripName: state.getTripModel[index].tripName!,
-                          startDate: state.getTripModel[index].startDate!,
-                          mobile: state.getTripModel[index].mobile,
-                          tripStatus: state.getTripModel[index].tripStatus,
-                          myMobile: myMobile,
-                          ontap: () {},
-                        ),
-                      );
-                    }),
+                              );
+                            }
+                            //   Navigator.pushAndRemoveUntil(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => TripSummaryComplete(
+                            //         getTripModel: state.getTripModel[index],
+                            //       ),
+                            //     ),
+                            //       (route)=>false,
+                            //     // ModalRoute.withName('/HomeScreen'),
+                            //   );
+                            // }
+                            // print(
+                            //     'milestone length${state.getTripModel[index].milestones.length}');
+                            // print(state.getTripModel[index].milestones);
+                            //
+                            // print(index);
+                            // print(state.getTripModel[index].source);
+                            // Navigator.pushNamed(context, '/TripSummaryGo',
+                            //     arguments: {
+                            //       "getTripModel": state.getTripModel[index]
+                            //     });
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: ((context) => TripSummaryGo(
+                            //             getTripModel:
+                            //                 state.getTripModel[index]))));
+                          },
+                          child: CustomCard(
+                            // data: state.getTripModel,
+                            url: state.getTripModel[index].url,
+                            id: state.getTripModel[index].id!,
+                            tripName: state.getTripModel[index].tripName!,
+                            startDate: state.getTripModel[index].startDate!,
+                            mobile: state.getTripModel[index].mobile,
+                            tripStatus: state.getTripModel[index].tripStatus,
+                            myMobile: myMobile,
+                            ontap: () {},
+                          ),
+                        );
+                      }),
 // =======
 //                             // Navigator.push(
 //                             //     context,
@@ -230,7 +221,8 @@ class _ActivityCardState extends State<ActivityCard> {
 //                       }),
 //                 ),
 // >>>>>>> vishwa_1
-              ),
+                ),
+              )
             ],
           ).paddingAll(20, 20, 60, 20)),
         );
@@ -245,43 +237,48 @@ class _ActivityCardState extends State<ActivityCard> {
               const SizedBox(
                 height: 10,
               ),
-              RefreshIndicator(
-                  onRefresh: () async {
-                    BlocProvider.of<BikeCubit>(context).getTripDetails();
-                  },
-                  child: ListView(
-                    children: [
-                      Text(
-                        "Welcome Aboard",
-                        style: GoogleFonts.robotoFlex(
-                            fontSize: 28, color: const Color(0xff4F504F)),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        child: Text(
-                          "You are not a part of any trips at this moment",
-                          style: GoogleFonts.robotoFlex(
-                              fontSize: 20, color: const Color(0xff4F504F)),
-                          textAlign: TextAlign.center,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: RefreshIndicator(
+                    onRefresh: () async {
+                      BlocProvider.of<BikeCubit>(context).getTripDetails();
+                    },
+                    child: ListView(
+                      children: [
+                        Center(
+                          child: Text(
+                            "Welcome Aboard",
+                            style: GoogleFonts.robotoFlex(
+                                fontSize: 28, color: const Color(0xff4F504F)),
+                          ),
                         ),
-                      ),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                      // Text(
-                      //   "this moment",
-                      //   style: GoogleFonts.robotoFlex(
-                      //       fontSize: 20, color: const Color(0xff4F504F)),
-                      // ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ).paddingAll(40, 40, 40, 40))
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          child: Text(
+                            "You are not a part of any trips at this moment",
+                            style: GoogleFonts.robotoFlex(
+                                fontSize: 20, color: const Color(0xff4F504F)),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // Text(
+                        //   "this moment",
+                        //   style: GoogleFonts.robotoFlex(
+                        //       fontSize: 20, color: const Color(0xff4F504F)),
+                        // ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ).paddingAll(40, 40, 40, 40)),
+              )
             ],
           ),
         );

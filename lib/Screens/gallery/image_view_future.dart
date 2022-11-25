@@ -55,7 +55,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
     // TODO: implement initState
     super.initState();
     // _controller.addListener(_scrollListener);
-    PhotosHttp.getPhotoDetails(widget.id, widget.token!).then((value2) {
+    PhotosHttp.getPhotoDetails(widget.id, widget.token).then((value2) {
       // ImageDetails temp = value2;
       // print(value);
       imageDetails = value2;
@@ -66,7 +66,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
     commentNode.addListener(() {
       if (commentNode.hasFocus) {
         _controller.animateTo(_controller.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 1200),
+            duration: const Duration(milliseconds: 250),
             curve: Curves.fastOutSlowIn);
         print('..');
       }
@@ -98,6 +98,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: IconButton(
                 onPressed: () async {
+                  showToast(msg: "Downloading....");
                   imageDownload();
                 },
                 icon: const Icon(
@@ -423,9 +424,19 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                                   .toString(),
                                               value!)
                                           .then(
-                                        (value) => {
-                                          _messageController.clear(),
-                                          commentNode.unfocus()
+                                        (value) {
+                                          PhotosHttp.getPhotoDetails(
+                                                  widget.id, widget.token)
+                                              .then((value2) {
+                                            // ImageDetails temp = value2;
+                                            // print(value);
+                                            imageDetails = value2;
+                                            setState(() {
+                                              view = true;
+                                            });
+                                          });
+                                          _messageController.clear();
+                                          commentNode.unfocus();
                                         },
                                       );
                                     });
