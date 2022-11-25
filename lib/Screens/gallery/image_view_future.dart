@@ -286,8 +286,21 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                                         title: Text(
                                                             e.name.toString()),
                                                         onTap: () {
-                                                          Navigator.pop(
-                                                              context);
+                                                          // print(e.likedNumber);
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  BlocProvider(
+                                                                create: (context) =>
+                                                                    BikeCubit()
+                                                                      ..getProfile(
+                                                                          e.number!),
+                                                                child:
+                                                                    const ProfileHeader(),
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
                                                       );
                                                     },

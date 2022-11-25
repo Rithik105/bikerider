@@ -347,6 +347,10 @@ class UserHttp {
             'Authorization': 'BEARER $value'
           },
           body: jsonEncode({'groupId': groupId}));
+      print('Length' +
+          jsonDecode(response.body)["chatDetails"].length.toString());
+      print(jsonDecode(response.body)["chatDetails"]);
+
       return jsonDecode(response.body);
     }
   }
@@ -442,6 +446,7 @@ class UserHttp {
         },
         body: jsonEncode({"mobile": number}));
     if (response.statusCode == 200) {
+      print(response.body);
       return jsonDecode(response.body);
     } else {
       String value = await getToken(token);

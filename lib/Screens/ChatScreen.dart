@@ -2,23 +2,27 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_size_text_field/auto_size_text_field.dart';
+import 'package:bikerider/Providers/invite_provider.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Http/UserHttp.dart';
+import '../bloc/BikeCubit.dart';
 import '../custom/widgets/ShowToast.dart';
 import '../custom/widgets/bubble.dart';
+import 'MyProfileScreen.dart';
 
 class ChatScreen extends StatefulWidget {
   String groupId, number, token, groupName;
 
   List chatList = [];
   String adminNumber;
-
+  List<ContactDetails> riderDetails;
   ChatScreen({
     Key? key,
     required this.chatList,
@@ -27,6 +31,7 @@ class ChatScreen extends StatefulWidget {
     required this.token,
     required this.groupName,
     required this.adminNumber,
+    required this.riderDetails,
   }) : super(key: key);
 
   @override
@@ -47,6 +52,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    // widget.riderDetails
+    //     .add(ContactDetails(name: 'name', phoneNumber: widget.number));
     print(widget.chatList);
     // TODO: implement initState
     super.initState();
@@ -57,11 +64,12 @@ class _ChatScreenState extends State<ChatScreen> {
         });
         print('length<20');
       }
-      print('pixels' + chatListController.position.pixels.toString());
+      // print('pixels' + chatListController.position.pixels.toString());
       timerCount++;
       print(widget.groupId);
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
         if (widget.chatList.length != value["chatDetails"].length) {
+          print(value["chatDetails"].last);
           widget.chatList = value["chatDetails"];
           Future.delayed(Duration(milliseconds: 500)).then(
             (value) => chatListController.animateTo(
@@ -76,9 +84,10 @@ class _ChatScreenState extends State<ChatScreen> {
           print(once);
           Future.delayed(const Duration(milliseconds: 500)).then((value) {
             chatListController.animateTo(
-                chatListController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.fastOutSlowIn);
+              chatListController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.fastOutSlowIn,
+            );
             once = false;
             print(once);
             setState(() {});
@@ -173,15 +182,56 @@ class _ChatScreenState extends State<ChatScreen> {
           PopupMenuButton<int>(
             onSelected: (value) {
               print(value);
-              if (value == 0) {
+              // if (value == 0) {
+              //   //  group info
+              // }
+              if (value == 1) {
                 //  group info
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ...widget.riderDetails!.map(
+                              (e) {
+                                return ListTile(
+                                  // leading: CircleAvatar(
+                                  //   backgroundImage:
+                                  //   NetworkImage(e
+                                  //       .profilePic
+                                  //       .toString()),
+                                  // ),
+                                  title: Text(e.name.toString()),
+                                  subtitle: Text(e.phoneNumber.toString()),
+                                  onTap: () {
+                                    // print(e.likedNumber);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider(
+                                          create: (context) => BikeCubit()
+                                            ..getProfile(e.phoneNumber!),
+                                          child: const ProfileHeader(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    });
               }
               if (value == 2) {
                 //  Notifications
               }
               if (value == 3) {
                 if (widget.number == widget.adminNumber) {
-                  showToast(msg: 'Call ClearChat');
+                  // showToast(msg: 'Call ClearChat');
                   UserChatImageHttp.clearChats(
                       token: widget.token, groupId: widget.groupId);
                 } else {
