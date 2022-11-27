@@ -194,7 +194,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            ...widget.riderDetails!.map(
+                            ...widget.riderDetails.map(
                               (e) {
                                 return ListTile(
                                   // leading: CircleAvatar(
