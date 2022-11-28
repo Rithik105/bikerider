@@ -327,6 +327,7 @@ class UserHttp {
   }
 
   static Future getChats(String groupId, String token) async {
+    print('calling API');
     final http.Response response = await http.post(
         Uri.parse(
             'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
@@ -347,8 +348,7 @@ class UserHttp {
             'Authorization': 'BEARER $value'
           },
           body: jsonEncode({'groupId': groupId}));
-      print('Length' +
-          jsonDecode(response.body)["chatDetails"].length.toString());
+      print('Length' + jsonDecode(response.body).toString());
       print(jsonDecode(response.body)["chatDetails"]);
 
       return jsonDecode(response.body);

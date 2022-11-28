@@ -19,10 +19,12 @@ import 'MyProfileScreen.dart';
 
 class ChatScreen extends StatefulWidget {
   String groupId, number, token, groupName;
+  // String responseTripId;
 
   List chatList = [];
   String adminNumber;
   List<ContactDetails> riderDetails;
+
   ChatScreen({
     Key? key,
     required this.chatList,
@@ -32,6 +34,7 @@ class ChatScreen extends StatefulWidget {
     required this.groupName,
     required this.adminNumber,
     required this.riderDetails,
+    // required this.responseTripId,
   }) : super(key: key);
 
   @override
@@ -54,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // widget.riderDetails
     //     .add(ContactDetails(name: 'name', phoneNumber: widget.number));
-    print(widget.chatList);
+    // print(widget.chatList);
     // TODO: implement initState
     super.initState();
     timer1 = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -62,36 +65,45 @@ class _ChatScreenState extends State<ChatScreen> {
         setState(() {
           goDownButtonEnable = false;
         });
-        print('length<20');
+        // print('length<20');
       }
       // print('pixels' + chatListController.position.pixels.toString());
       timerCount++;
-      print(widget.groupId);
+      // print(widget.groupId);
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
-        if (widget.chatList.length != value["chatDetails"].length) {
-          print(value["chatDetails"].last);
-          widget.chatList = value["chatDetails"];
-          Future.delayed(Duration(milliseconds: 500)).then(
-            (value) => chatListController.animateTo(
+        // print('Inside Chats');
+        // print(value);
+        print('ID validation' + (value['tripId']).toString());
+        print('Length' + (value['chatDetails'].length).toString());
+        if (value['tripId'] == widget.groupId) {
+          print(value['chatDetails']);
+          if (widget.chatList.length != value["chatDetails"].length) {
+            // print(value["chatDetails"].last);
+            List temp = value["chatDetails"];
+            widget.chatList =
+                temp.map((e) => e['groupId'] == widget.groupId).toList();
+            Future.delayed(const Duration(milliseconds: 500)).then(
+              (value) => chatListController.animateTo(
+                  chatListController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.fastOutSlowIn),
+            );
+          }
+
+          setState(() {});
+          if (once) {
+            // print(once);
+            Future.delayed(const Duration(milliseconds: 500)).then((value) {
+              chatListController.animateTo(
                 chatListController.position.maxScrollExtent,
                 duration: const Duration(milliseconds: 100),
-                curve: Curves.fastOutSlowIn),
-          );
-        }
-
-        setState(() {});
-        if (once) {
-          print(once);
-          Future.delayed(const Duration(milliseconds: 500)).then((value) {
-            chatListController.animateTo(
-              chatListController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.fastOutSlowIn,
-            );
-            once = false;
-            print(once);
-            setState(() {});
-          });
+                curve: Curves.fastOutSlowIn,
+              );
+              once = false;
+              // print(once);
+              setState(() {});
+            });
+          }
         }
       });
     });
