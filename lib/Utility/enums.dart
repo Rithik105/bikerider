@@ -11,7 +11,8 @@ enum TextFieldType {
   custom,
   date,
   clock,
-  location
+  location,
+  tripName,
 }
 
 enum CircularButtonType { invite, milestone }

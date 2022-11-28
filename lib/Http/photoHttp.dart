@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../Screens/gallery/gallery_model.dart';
+
 class PhotosHttp {
   static Future getGallery(
       String tripId, String token, int page, int limit) async {
@@ -35,7 +37,7 @@ class PhotosHttp {
     return jsonDecode(response.body);
   }
 
-  static Future getPhotoDetails(String id, String token) async {
+  static Future<ImageDetails> getPhotoDetails(String id, String token) async {
     //String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
       body: jsonEncode({'_id': id}),
@@ -46,9 +48,9 @@ class PhotosHttp {
         'Authorization': 'BEARER $token',
       },
     );
-    print(response.body);
+    //print('getPhotoAPIr${jsonDecode(response.body)['distinctComment']}');
     // return response;
-    return jsonDecode(response.body);
+    return ImageDetails.fromJson(jsonDecode(response.body));
   }
 
   static Future addLike(String id, String token) async {

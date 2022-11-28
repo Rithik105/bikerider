@@ -17,6 +17,8 @@ class BikeInitialState extends BikeState {} //
 
 class BikeLoggedInState extends BikeState {} //
 
+class BikeNoTripResultState extends BikeState {} //
+
 class BikeLoggedOutState extends BikeState {} //
 
 class BikeFirstLoginState extends BikeState {} //
@@ -39,6 +41,12 @@ class BikeGalleryFetchedState extends BikeState {}
 
 class BikeFetchingState extends BikeState {}
 
+class BikeMineProfileEditState extends BikeState {
+  Map profile;
+
+  BikeMineProfileEditState({required this.profile}) {}
+}
+
 class BikeMineProfileFetchedState extends BikeState {
   Map profile;
   BikeMineProfileFetchedState({required this.profile});
@@ -46,14 +54,18 @@ class BikeMineProfileFetchedState extends BikeState {
 
 class BikeOtherProfileFetchedState extends BikeState {
   Map profile;
-  BikeOtherProfileFetchedState({required this.profile});
+  String number;
+  bool following;
+  BikeOtherProfileFetchedState(
+      {required this.profile, required this.number, required this.following});
 }
 
 class BikeEmptyTripState extends BikeState {}
 
 class BikeNonEmptyTripState extends BikeState {
   List<GetTripModel> getTripModel = [];
-  BikeNonEmptyTripState(this.getTripModel);
+  String myMobile;
+  BikeNonEmptyTripState(this.getTripModel, this.myMobile);
 }
 
 class BikeAccFetchedState extends BikeState {
@@ -83,7 +95,7 @@ class BikeCubit extends Cubit<BikeState> {
           print(value);
           if (value) {
             UserSecureStorage.getToken().then((value1) {
-              UserHttp.getToken(value1!).then((value2) {
+              UserHttp.getTokenStart(value1!).then((value2) {
                 if (value2["message"] == "refresh token expired") {
                   showToast(msg: "You have been logged out");
                   print("hiii");
@@ -139,15 +151,18 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTrips(value!).then((value1) {
-        if (value1.isEmpty) {
+        print('myTrips' + value1.toString());
+        if (value1!.isEmpty) {
           emit(BikeEmptyTripState());
         } else {
           List<GetTripModel> temp = [];
           value1.forEach((element) {
             temp.add(GetTripModel.fromJson(element));
           });
-          // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
-          emit(BikeNonEmptyTripState(temp));
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            print(value);
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
         }
       });
     });
@@ -157,7 +172,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getTripDetails(value!).then((value1) {
-        if (value1.isEmpty) {
+        if (value1!.isEmpty) {
           emit(BikeEmptyTripState());
         } else {
           List<GetTripModel> temp = [];
@@ -165,7 +180,47 @@ class BikeCubit extends Cubit<BikeState> {
             temp.add(GetTripModel.fromJson(element));
           });
           // value1.map((e) => temp.add(GetTripModel.fromJson(e)));
-          emit(BikeNonEmptyTripState(temp));
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
+        }
+      });
+    });
+  }
+
+  void searchTrip(String trip) {
+    emit(BikeFetchingState());
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.searchTrips(trip, value!).then((value1) {
+        if (value1!.isEmpty) {
+          emit(BikeNoTripResultState());
+        } else {
+          List<GetTripModel> temp = [];
+          value1.forEach((element) {
+            temp.add(GetTripModel.fromJson(element));
+          });
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
+        }
+      });
+    });
+  }
+
+  void searchTripDetails(String trip) {
+    emit(BikeFetchingState());
+    UserSecureStorage.getToken().then((value) {
+      UserHttp.searchTripsDetails(trip, value!).then((value1) {
+        if (value1!.isEmpty) {
+          emit(BikeNoTripResultState());
+        } else {
+          List<GetTripModel> temp = [];
+          value1.forEach((element) {
+            temp.add(GetTripModel.fromJson(element));
+          });
+          UserSecureStorage.getDetails(key: "mobile").then((value) {
+            emit(BikeNonEmptyTripState(temp, value!));
+          });
         }
       });
     });
@@ -176,7 +231,7 @@ class BikeCubit extends Cubit<BikeState> {
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
       UserHttp.getAccessories(item, value!).then((value2) {
-        if (value2.isEmpty) {
+        if (value2!.isEmpty) {
           emit(BikeAccEmptyFetchedState());
         } else {
           accessories = value2;
@@ -206,6 +261,7 @@ class BikeCubit extends Cubit<BikeState> {
   }
 
   void getProfile(String number) {
+    bool following = false;
     print("emitted");
     emit(BikeFetchingState());
     UserSecureStorage.getToken().then((value) {
@@ -214,10 +270,22 @@ class BikeCubit extends Cubit<BikeState> {
           print(value3);
           if (value3 == number) {
             emit(BikeMineProfileFetchedState(
-              profile: value2,
+              profile: value2!,
             ));
-          } else
-            emit(BikeOtherProfileFetchedState(profile: value2));
+          } else {
+            for (int i = 0;
+                i < value2!["userDetails"]["followers"].length;
+                i++) {
+              if (value2["userDetails"]["followers"][i]["followerPhone"] ==
+                  value3) {
+                following = true;
+                break;
+              } else
+                following = false;
+            }
+            emit(BikeOtherProfileFetchedState(
+                profile: value2, number: number, following: following));
+          }
         });
       });
     });

@@ -1,15 +1,11 @@
 import 'package:bikerider/Models/get_trip_model.dart';
-import 'package:bikerider/custom/constants.dart';
+import 'package:bikerider/Screens/gallery/galleryPreviewScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../custom/widgets/CustomCard.dart';
 import '../custom/widgets/ShowToast.dart';
-import '../custom/widgets/button.dart';
-import 'gallery/stagger.dart';
 import 'google_maps_preview_go.dart';
-import 'map_trip_start.dart';
-import 'milestone_card.dart';
 
 class TripSummaryComplete extends StatefulWidget {
   GetTripModel getTripModel;
@@ -26,15 +22,15 @@ class TripSummaryComplete extends StatefulWidget {
 
 class _TripSummaryCompleteState extends State<TripSummaryComplete> {
   double checkEmpty() {
-    if (widget.getTripModel.milestones.length == 0) {
-      if (widget.getTripModel.recommendations.length == 0) {
-        if (widget.getTripModel.riders.length == 0) {
+    if (widget.getTripModel.milestones.isEmpty) {
+      if (widget.getTripModel.recommendations.isEmpty) {
+        if (widget.getTripModel.riders.isEmpty) {
           return 70;
         } else
           return 90;
       } else
         return 105;
-    } else if (widget.getTripModel.recommendations.length == 0) {
+    } else if (widget.getTripModel.recommendations.isEmpty) {
       return 0;
     } else {
       return 0;
@@ -42,7 +38,7 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
   }
 
   String checkRecommendations() {
-    if (widget.getTripModel.recommendations.length == 0) {
+    if (widget.getTripModel.recommendations.isEmpty) {
       return "No Recommendations";
     } else {
       return "Recommendation";
@@ -134,119 +130,133 @@ class _TripSummaryCompleteState extends State<TripSummaryComplete> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 40,
-                    ),
+                    // const SizedBox(
+                    //   height: 40,
+                    // ),
 
-                    //If only one present
-                    widget.getTripModel.milestones.length == 1
-                        ? TimeLine(
-                            details: widget.getTripModel.milestones[0],
-                            first: true,
-                            last: true,
-                          )
-                        : Container(),
+                    // //If only one present
+                    // widget.getTripModel.milestones.length == 1
+                    //     ? TimeLine(
+                    //         details: widget.getTripModel.milestones[0],
+                    //         first: true,
+                    //         last: true,
+                    //       )
+                    //     : Container(),
 
-                    //If only two present
-                    widget.getTripModel.milestones.length == 2
-                        ? TimeLine(
-                            details: widget.getTripModel.milestones.first,
-                            first: true,
-                          )
-                        : Container(),
-                    widget.getTripModel.milestones.length == 2
-                        ? TimeLine(
-                            details: widget.getTripModel.milestones.last,
-                            last: true,
-                          )
-                        : Container(),
-                    widget.getTripModel.milestones.length >= 3
-                        ? TimeLine(
-                            details: widget.getTripModel.milestones.first,
-                            first: true,
-                          )
-                        : Container(),
-                    widget.getTripModel.milestones.length >= 3
-                        ? Column(
-                            children: [
-                              ...widget.getTripModel.milestones
-                                  .sublist(1,
-                                      widget.getTripModel.milestones.length - 1)
-                                  .map(
-                                    (e) => TimeLine(details: e),
-                                  ),
-                            ],
-                          )
-                        : Container(),
-                    widget.getTripModel.milestones.length >= 3
-                        ? TimeLine(
-                            details: widget.getTripModel.milestones.last,
-                            last: true,
-                          )
-                        : Container(),
-                    //Milestone card ends here
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 25),
-                      width: double.infinity,
-                      // color: Colors.red,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            checkRecommendations(),
-                            style: GoogleFonts.roboto(
-                              color: const Color(0xFF4F504F),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                ...widget.getTripModel.recommendations.map(
-                                  (e) => TextCircularButton(
-                                      label: e, disable: true, callBack: () {}),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                ...widget.getTripModel.riders.map(
-                                  (e) => Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 5,
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.grey,
-                                      child: Image.asset(
-                                        'assets/images/create_trip/rider.png',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // //If only two present
+                    // widget.getTripModel.milestones.length == 2
+                    //     ? TimeLine(
+                    //         details: widget.getTripModel.milestones.first,
+                    //         first: true,
+                    //       )
+                    //     : Container(),
+                    // widget.getTripModel.milestones.length == 2
+                    //     ? TimeLine(
+                    //         details: widget.getTripModel.milestones.last,
+                    //         last: true,
+                    //       )
+                    //     : Container(),
+                    // widget.getTripModel.milestones.length >= 3
+                    //     ? TimeLine(
+                    //         details: widget.getTripModel.milestones.first,
+                    //         first: true,
+                    //       )
+                    //     : Container(),
+                    // widget.getTripModel.milestones.length >= 3
+                    //     ? Column(
+                    //         children: [
+                    //           ...widget.getTripModel.milestones
+                    //               .sublist(1,
+                    //                   widget.getTripModel.milestones.length - 1)
+                    //               .map(
+                    //                 (e) => TimeLine(details: e),
+                    //               ),
+                    //         ],
+                    //       )
+                    //     : Container(),
+                    // widget.getTripModel.milestones.length >= 3
+                    //     ? TimeLine(
+                    //         details: widget.getTripModel.milestones.last,
+                    //         last: true,
+                    //       )
+                    //     : Container(),
+                    // //Milestone card ends here
+                    // Container(
+                    //   margin: const EdgeInsets.symmetric(horizontal: 25),
+                    //   width: double.infinity,
+                    //   // color: Colors.red,
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text(
+                    //         checkRecommendations(),
+                    //         style: GoogleFonts.roboto(
+                    //           color: const Color(0xFF4F504F),
+                    //           fontWeight: FontWeight.w500,
+                    //           fontSize: 20,
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 20,
+                    //       ),
+                    //       SingleChildScrollView(
+                    //         scrollDirection: Axis.horizontal,
+                    //         child: Row(
+                    //           children: [
+                    //             ...widget.getTripModel.recommendations.map(
+                    //               (e) => TextCircularButton(
+                    //                   label: e, disable: true, callBack: () {}),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 20,
+                    //       ),
+                    //       Container(
+                    //         height: 50,
+                    //         width: 50,
+                    //         color: Colors.amber,
+                    //       ),
+                    //       SingleChildScrollView(
+                    //         scrollDirection: Axis.horizontal,
+                    //         child: Row(
+                    //           children: [
+                    //             const SizedBox(
+                    //               width: 10,
+                    //             ),
+                    //             ...widget.getTripModel.riders.map(
+                    //               (e) => Container(
+                    //                 margin: const EdgeInsets.symmetric(
+                    //                   horizontal: 5,
+                    //                 ),
+                    //                 child: CircleAvatar(
+                    //                   backgroundColor: Colors.grey,
+                    //                   child: Image.asset(
+                    //                     'assets/images/create_trip/rider.png',
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
 
                     const SizedBox(
                       height: 20,
                     ),
+                    SingleChildScrollView(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: MediaQuery.of(context).size.height * 0.41,
+                        child: GalleryPreviewScreen(
+                          getTripModel: widget.getTripModel,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               );

@@ -180,7 +180,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           child: Container(
             child: Consumer<VisibilityProvider>(
@@ -288,7 +288,8 @@ class MyTextFormField extends StatelessWidget {
   double _padding = 15.0;
 
   MyTextFormField(
-      {required this.textController,
+      {super.key,
+      required this.textController,
       required this.callBack,
       required this.myHintText,
       required this.obscure});
@@ -303,10 +304,10 @@ class MyTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         errorStyle: GoogleFonts.roboto(color: Colors.orange),
         hintText: myHintText,
-        focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-        hintStyle: TextStyle(color: Color(0xff4F504F), fontSize: 16),
-        border: UnderlineInputBorder(),
+        focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey)),
+        hintStyle: const TextStyle(color: Color(0xff4F504F), fontSize: 16),
+        border: const UnderlineInputBorder(),
       ),
     ).paddingAll(10, 10, 10, 10);
   }
@@ -347,7 +348,7 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
   TimeOfDay? pickedTime;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       // height: 50,
       width: widget.width ?? 150,
       child: Container(
@@ -472,7 +473,8 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
                 ? TextInputType.number
                 : TextInputType.text,
             validator: (value) {
-              if (widget.textFieldType == TextFieldType.custom) {
+              if (widget.textFieldType == TextFieldType.custom ||
+                  widget.textFieldType == TextFieldType.tripName) {
                 return value!.isEmpty ? 'Enter a value' : null;
               }
 
@@ -555,7 +557,11 @@ class _CustomSmallTextFormFieldState extends State<CustomSmallTextFormField> {
 
               counterText: '',
             ),
-            maxLength: widget.textFieldType == TextFieldType.mobile ? 10 : null,
+            maxLength: widget.textFieldType == TextFieldType.mobile
+                ? 10
+                : widget.textFieldType == TextFieldType.tripName
+                    ? 30
+                    : null,
           ),
         ),
       ),

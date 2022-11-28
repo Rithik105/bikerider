@@ -1,9 +1,7 @@
+import 'package:bikerider/custom/widgets/button.dart';
 import 'package:flutter/Material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import 'package:bikerider/custom/widgets/button.dart';
 
 class TutorialScreen extends StatefulWidget {
   const TutorialScreen({super.key});
@@ -61,10 +59,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
               child: Column(
                 children: [
                   Center(
-                      child: Image.asset(
-                    "assets/images/tutorial/page1.png",
-                    height: 350,
-                  )),
+                    child: Image.asset(
+                      "assets/images/tutorial/page1.png",
+                      height: 350,
+                    ),
+                  ),
                   Text(
                     "Ride Free",
                     style: GoogleFonts.roboto(
@@ -75,16 +74,14 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    "Create a hassle free ride ",
-                    style: GoogleFonts.roboto(
-                        color: const Color(0XFF717171), fontSize: 17),
-                  ),
-                  Text(
-                    "anytime and anywhere ",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.roboto(
-                        color: const Color(0XFF717171), fontSize: 17),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    child: Text(
+                      "Create a hassle free ride anytime and anywhere ",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                          color: const Color(0XFF717171), fontSize: 17),
+                    ),
                   )
                 ],
               ),
@@ -92,10 +89,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
             Column(
               children: [
                 Center(
-                    child: Image.asset(
-                  "assets/images/tutorial/page2.png",
-                  height: 350,
-                )),
+                  child: Image.asset(
+                    "assets/images/tutorial/page2.png",
+                    height: 350,
+                  ),
+                ),
                 Text(
                   "Know your Bike",
                   style: GoogleFonts.roboto(
@@ -116,10 +114,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
             Column(
               children: [
                 Center(
-                    child: Image.asset(
-                  "assets/images/tutorial/page3.png",
-                  height: 350,
-                )),
+                  child: Image.asset(
+                    "assets/images/tutorial/page3.png",
+                    height: 350,
+                  ),
+                ),
                 Text(
                   "Your Cart",
                   style: GoogleFonts.roboto(
@@ -130,23 +129,21 @@ class _TutorialScreenState extends State<TutorialScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                Text(
-                  "Book bike online and shop ",
-                  style: GoogleFonts.roboto(
-                      color: const Color(0XFF717171), fontSize: 17),
-                ),
-                Text(
-                  "accessories",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.roboto(
-                      color: const Color(0XFF717171), fontSize: 17),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    "Book bike online and shop accessories",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                        color: const Color(0XFF717171), fontSize: 17),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 10),
                   child: LargeSubmitButton(
                     text: "LOGIN / REGISTER",
                     ontap: () {
-                      Navigator.pushNamed(context, "/OwnBikeScreen");
+                      Navigator.pushNamed(context, "/LoginScreen");
                     },
                     width: 320,
                   ),
@@ -157,7 +154,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         ),
       ),
       bottomSheet: SizedBox(
-        height: 80,
+        height: MediaQuery.of(context).size.height * 0.1,
         child: Center(
           child: SmoothPageIndicator(
             controller: _pageController,

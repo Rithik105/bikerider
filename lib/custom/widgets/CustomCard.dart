@@ -15,20 +15,32 @@ import '../../Utility/enums.dart';
 
 class CustomCard extends StatefulWidget {
   String startDate, id, tripName;
+  String? mobile, tripStatus, myMobile;
   String? url;
   Function ontap;
-  CustomCard(
-      {required this.startDate,
-      required this.tripName,
-      required this.ontap,
-      required this.id,
-      required this.url});
+  CustomCard({
+    required this.startDate,
+    required this.tripName,
+    required this.ontap,
+    required this.id,
+    required this.url,
+    this.mobile,
+    this.tripStatus,
+    this.myMobile,
+  });
 
   @override
   State<CustomCard> createState() => _CustomCardState();
 }
 
 class _CustomCardState extends State<CustomCard> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.myMobile.toString() + '+' + widget.mobile.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,64 +66,89 @@ class _CustomCardState extends State<CustomCard> {
           ), //BoxShadow
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.tripName,
-                  style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  DateFormat('dd MMM')
-                      .format(DateTime.parse(widget.startDate))
-                      .toString(),
-                  style: GoogleFonts.roboto(color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white, width: 1)),
-                  child: const Text(
-                    "Upcoming",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              UserHttp.deleteTrip(widget.id).then((value) {
-                showToast(msg: "Trip Successfully Deleted");
-                BlocProvider.of<BikeCubit>(context).getTrips();
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              height: 45,
-              child: Image.asset(
-                "assets/images/homePage/cancel.png",
-                color: Colors.white,
+            height: 155,
+            width: double.maxFinite,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Colors.black, Colors.transparent],
               ),
             ),
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text(
+                        widget.tripName,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      DateFormat('dd MMM')
+                          .format(DateTime.parse(widget.startDate))
+                          .toString(),
+                      style: GoogleFonts.roboto(color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white, width: 1)),
+                      child: Text(
+                        widget.tripStatus.toString()[0].toUpperCase() +
+                            widget.tripStatus.toString().substring(1),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              widget.mobile == widget.myMobile!
+                  ? GestureDetector(
+                      onTap: () {
+                        UserHttp.deleteTrip(widget.id).then((value) {
+                          showToast(msg: "Trip Successfully Deleted");
+                          BlocProvider.of<BikeCubit>(context).getTrips();
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        height: 45,
+                        child: Image.asset(
+                          "assets/images/homePage/cancel.png",
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
         ],
       ),
     );
@@ -372,7 +409,7 @@ class TripSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 15),
       width: MediaQuery.of(context).size.width - 20,
-      height: 210,
+      // height: 210,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -398,12 +435,19 @@ class TripSummaryCard extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Text(
-            CreateTripModal.tripName!,
-            style: GoogleFonts.roboto(
-                color: const Color(0x99000000),
-                fontSize: 27,
-                fontWeight: FontWeight.w600),
+          Container(
+            width: MediaQuery.of(context).size.width - 60,
+            child: Text(
+              CreateTripModal.tripName!,
+              style: GoogleFonts.roboto(
+                  color: const Color(0x99000000),
+                  fontSize: 27,
+                  fontWeight: FontWeight.w600),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              softWrap: true,
+              textAlign: TextAlign.center,
+            ),
           ),
           // Text(
           //   "Scramble Goa",
@@ -496,7 +540,10 @@ class TripSummaryCard extends StatelessWidget {
               //   ),
               // )
             ],
-          )
+          ),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
@@ -512,7 +559,6 @@ class TripSummaryGoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 15),
       width: MediaQuery.of(context).size.width - 20,
-      height: 210,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -538,12 +584,19 @@ class TripSummaryGoCard extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Text(
-            getTripModel.tripName!,
-            style: GoogleFonts.roboto(
+          Container(
+            width: MediaQuery.of(context).size.width - 60,
+            child: Text(
+              getTripModel.tripName!,
+              style: GoogleFonts.roboto(
                 color: const Color(0x99000000),
                 fontSize: 27,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.w600,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
           ),
           // Text(
           //   "Scramble Goa",
@@ -636,7 +689,10 @@ class TripSummaryGoCard extends StatelessWidget {
               //   ),
               // )
             ],
-          )
+          ),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );

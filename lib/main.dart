@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'package:bikerider/Screens/maps_provider.dart';
-
-import 'package:bikerider/Providers/invite_provider.dart';
 import 'package:bikerider/Providers/Data.dart';
 import 'package:bikerider/Providers/VisibiltyProvider.dart';
-
+import 'package:bikerider/Providers/invite_provider.dart';
+import 'package:bikerider/Providers/maps_provider.dart';
 import 'package:bikerider/Utility/routes.dart';
-
 import 'package:bikerider/bloc/BikeCubit.dart';
 
 void main() {

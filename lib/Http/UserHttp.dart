@@ -10,7 +10,7 @@ import '../Models/UserModel.dart';
 import '../Utility/Secure_storeage.dart';
 
 class UserHttp {
-  static Future registerUser(User user) async {
+  static Future registerUser(User user, bool ownbike) async {
     final http.Response response = await http.post(
         Uri.parse("https://riding-application.herokuapp.com/api/v1/register"),
         headers: {
@@ -21,7 +21,7 @@ class UserHttp {
           "email": user.email,
           "mobile": user.mobile,
           "password": user.password,
-          "haveBike": "true"
+          "haveBike": ownbike
         }));
     return jsonDecode(response.body);
   }
@@ -93,6 +93,28 @@ class UserHttp {
     return jsonDecode(secret.body);
   }
 
+  static Future getTokenStart(String token) async {
+    final http.Response secret = await http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    );
+    http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    ).then((value) {
+      UserSecureStorage.setToken(jsonDecode(secret.body)['access_token']);
+    });
+    return (jsonDecode(secret.body));
+  }
+
   static Future getToken(String token) async {
     final http.Response secret = await http.post(
       Uri.parse(
@@ -102,7 +124,17 @@ class UserHttp {
         'Authorization': 'BEARER $token'
       },
     );
-    return jsonDecode(secret.body);
+    http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+    ).then((value) {
+      UserSecureStorage.setToken(jsonDecode(secret.body)['access_token']);
+    });
+    return (jsonDecode(secret.body)['access_token']);
   }
 
   static Future createTrip(String createTripModal) async {
@@ -115,9 +147,20 @@ class UserHttp {
             'Authorization': 'BEARER $value'
           },
           body: createTripModal);
-      print("tried to upload");
-      print(response.body);
-      return jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        String value1 = await getToken(value!);
+        final http.Response response = await http.post(
+            Uri.parse(
+                "https://riding-application.herokuapp.com/api/v1/trip/createTrip"),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'BEARER $value1'
+            },
+            body: createTripModal);
+        return jsonDecode(response.body);
+      }
     });
   }
 
@@ -131,32 +174,132 @@ class UserHttp {
             'Authorization': 'BEARER $value'
           },
           body: jsonEncode({'_id': id}));
-      print(value);
-      print(jsonDecode(response.body));
-      return jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        String value1 = await getToken(value!);
+        final http.Response response = await http.post(
+            Uri.parse(
+                'https://riding-application.herokuapp.com/api/v1/trip/deleteTrip'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'BEARER $value1'
+            },
+            body: jsonEncode({'_id': id}));
+        return jsonDecode(response.body);
+      }
     });
   }
 
-  static Future<List> getTrips(String token) async {
+  static Future<List?> getTrips(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
 
-    return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String newToken = await getToken(token);
+      final http.Response response = await http.get(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
+          headers: {'Authorization': 'BEARER $newToken'});
+      return jsonDecode(response.body);
+    }
   }
 
-  static Future<List> getTripDetails(String token) async {
+  static Future<List?> searchTrips(String trip, String token) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"text": trip}));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value1 = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value1'
+          },
+          body: jsonEncode({"text": trip}));
+      print(jsonDecode(response.body));
+      return jsonDecode(response.body);
+    }
+  }
+
+  static Future<List?> searchTripsDetails(String trip, String token) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"text": trip}));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"text": trip}));
+      return jsonDecode(response.body);
+    }
+  }
+
+  static Future followUser(String number, String token) async {
+    final http.Response response = await http.post(
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"wantToFollow": number}));
+    if (response.statusCode == 200) {
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"wantToFollow": number}));
+    }
+  }
+
+  static Future<List?> getTripDetails(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/trip/getTripDetails"),
         headers: {'Authorization': 'BEARER $token'});
-
-    print(" hello world ${jsonDecode(response.body)}");
-    return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.get(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/getTripDetails"),
+          headers: {'Authorization': 'BEARER $value'});
+      return jsonDecode(response.body);
+    }
   }
 
-  static Future sendChat(String groupId, String token, String message) async {
+  static Future sendChat(String groupId, String token, String message,
+      {bool isImage = false}) async {
     final http.Response response = await http.post(
         Uri.parse(
             'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
@@ -164,8 +307,23 @@ class UserHttp {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
-        body: jsonEncode({'chat': message, 'groupId': groupId}));
-    return jsonDecode(response.body);
+        body: jsonEncode(
+            {'chat': message, 'groupId': groupId, 'isImage': isImage}));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode(
+              {'chat': message, 'groupId': groupId, 'isImage': isImage}));
+      return jsonDecode(response.body);
+    }
   }
 
   static Future getChats(String groupId, String token) async {
@@ -177,11 +335,23 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'groupId': groupId}));
-    print(" chat ${jsonDecode(response.body)}");
-    return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({'groupId': groupId}));
+      return jsonDecode(response.body);
+    }
   }
 
-  static Future<Map> getAccessories(String item, String token) async {
+  static Future<Map?> getAccessories(String item, String token) async {
     final http.Response response = await http.post(
         Uri.parse(
             "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
@@ -190,10 +360,23 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'text': item}));
-    return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({'text': item}));
+      return jsonDecode(response.body);
+    }
   }
 
-  static Future<Map> userLogOut(String token) async {
+  static Future<Map?> userLogOut(String token) async {
     final http.Response response = await http.post(
       Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
       headers: {
@@ -201,7 +384,19 @@ class UserHttp {
         'Authorization': 'BEARER $token'
       },
     );
-    return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+        Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $value'
+        },
+      );
+      return jsonDecode(response.body);
+    }
   }
 
   static Future<List> getToolKit(String item) async {
@@ -224,11 +419,21 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({"_id": id, "likes": like}));
-    print(id);
-    print(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/product/addLike"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"_id": id, "likes": like}));
+    }
   }
 
-  static Future<Map> getProfile(String token, String number) async {
+  static Future<Map?> getProfile(String token, String number) async {
     final http.Response response = await http.post(
         Uri.parse("https://riding-application.herokuapp.com/api/v1/getProfile"),
         headers: {
@@ -236,28 +441,42 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({"mobile": number}));
-    print(jsonDecode(response.body));
-    return jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      String value = await getToken(token);
+      final http.Response response = await http.post(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/getProfile"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'BEARER $value'
+          },
+          body: jsonEncode({"mobile": number}));
+      return jsonDecode(response.body);
+    }
   }
 
-  static Future<TimeLineModel> getTimeline() async {
-    final token = await UserSecureStorage.getToken();
-    // print('Token  ' + token.toString());
-    final response = await http.get(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
-      headers: {'Authorization': 'BEARER $token'},
-    );
-
-    print("${jsonDecode(response.body)}");
-    print(
-      'T  ' +
-          TimeLineModel.fromJson(jsonDecode(response.body))
-              .tripList
-              .length
-              .toString(),
-    );
-    return TimeLineModel.fromJson(jsonDecode(response.body));
+  static Future<TimeLineModel?> getTimeline() async {
+    UserSecureStorage.getToken().then((value) async {
+      final response = await http.get(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+        headers: {'Authorization': 'BEARER $value'},
+      );
+      if (response.statusCode == 200) {
+        return TimeLineModel.fromJson(jsonDecode(response.body));
+      } else {
+        String value2 = await getToken(value!);
+        final response = await http.get(
+          Uri.parse(
+              "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+          headers: {'Authorization': 'BEARER $value2'},
+        );
+        return TimeLineModel.fromJson(jsonDecode(response.body));
+      }
+    });
+    return TimeLineModel.fromJson([]);
   }
 }
 
@@ -271,7 +490,7 @@ class UserImageHttp {
           filename: basename(file.path)),
     );
     print(request.files.first.filename.toString());
-    var res = request.send().then((value) {
+    request.send().then((value) {
       print("this is executed");
       value.stream.transform(utf8.decoder).listen((value) {
         print(value);
@@ -298,6 +517,26 @@ class UserImageHttp {
 }
 
 class UserChatImageHttp {
+  static Future clearChats(
+      {required String groupId, required String token}) async {
+    print('token' + token);
+    print('groupId' + groupId);
+    final http.Response response = await http.post(
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/chat/clearChat"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'BEARER $token'
+      },
+      body: jsonEncode({"groupId": groupId}),
+    );
+    print(token);
+    print(groupId);
+    print(response.toString());
+    print('---------------------------------');
+    print('000000000' + jsonDecode(response.body).toString());
+  }
+
   static Future submitSubscription(
       {required File file,
       required String token,
@@ -310,10 +549,17 @@ class UserChatImageHttp {
     );
     request.fields.addAll({"id": groupId});
     print(request.files.first.filename.toString());
-    var res = request.send().then((value) {
+    request.send().then((value) {
       print("this is executed");
       value.stream.transform(utf8.decoder).listen((value) {
-        print(value);
+        print('value' + value.toString());
+        if (jsonDecode(value)['message'] == 'Image upload successfull !') {
+          UserHttp.sendChat(groupId, token, jsonDecode(value)['url'],
+                  isImage: true)
+              .then((value1) {
+            print(value1);
+          });
+        }
       });
       print("hi");
     });
@@ -333,5 +579,56 @@ class UserChatImageHttp {
     };
     request.headers.addAll(headers);
     return request;
+  }
+}
+
+class UserProfileEditHttp {
+  static Future editImage({required File file, required String token}) async {
+    var request = await registerSubscription(token);
+    request.files.add(
+      http.MultipartFile(
+          'image', file.readAsBytes().asStream(), file.lengthSync(),
+          filename: basename(file.path)),
+    );
+    print(request.files.first.filename.toString());
+    var res = request.send().then((value) {
+      print("this is executed");
+      value.stream.transform(utf8.decoder).listen((value) {
+        print(value);
+      });
+      print("hi");
+    });
+  }
+
+  static Future<http.MultipartRequest> registerSubscription(
+      String token) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+          "https://riding-application.herokuapp.com/api/v1/editProfileImage"),
+    );
+    Map<String, String> headers = {
+      "Content-type":
+          "multipart/form-data; boundary=<calculated when request is sent>",
+      "Authorization": "BEARER $token",
+    };
+    request.headers.addAll(headers);
+    return request;
+  }
+
+  static Future editInfo(
+      {required String name,
+      required String aboutUser,
+      required String token}) async {
+    final http.Response response = await http.post(
+        Uri.parse(
+            "https://riding-application.herokuapp.com/api/v1/editProfile"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'BEARER $token'
+        },
+        body: jsonEncode({"aboutUser": aboutUser, "userName": name}));
+
+    print(jsonDecode(response.body));
   }
 }

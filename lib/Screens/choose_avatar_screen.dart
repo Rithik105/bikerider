@@ -60,6 +60,14 @@ class ChooseAvatarScreen extends StatelessWidget {
               ),
               onTap: () async {
                 await getImageFileFromAssets("images/user.png").then((value) {
+                  UserSecureStorage.getToken().then((value1) {
+                    UserImageHttp.submitSubscription(
+                            token: value1!, file: value)
+                        .then((value3) {
+                      Navigator.pushNamed(context, "/GetStartedScreen",
+                          arguments: {"storeImage": value});
+                    });
+                  });
                   Navigator.pushNamed(context, "/GetStartedScreen",
                       arguments: {"storeImage": value});
                 });
@@ -73,30 +81,58 @@ class ChooseAvatarScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  child: Image.asset(
                     "assets/images/chooseavatar/default_profile.png",
                     scale: 2.4,
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Hey $name !!",
-                    style:
-                        const TextStyle(fontSize: 25, color: Color(0xff4F504F)),
-                  ),
-                  const Text("to make it more cool selct",
-                      style: TextStyle(fontSize: 18, color: Color(0xff4F504F))),
-                  const Text("your avatar.",
-                      style: TextStyle(fontSize: 18, color: Color(0xff4F504F))),
-                ],
-              )),
+                  onTap: () {
+                    pickImage(ImageSource.camera).then((storeImage) {
+                      if (storeImage == null) {
+                        getImageFileFromAssets("images/user.png").then((value) {
+                          UserSecureStorage.getToken().then((value1) {
+                            UserImageHttp.submitSubscription(
+                                    token: value1!, file: value)
+                                .then((value3) {
+                              Navigator.pushNamed(context, "/GetStartedScreen",
+                                  arguments: {"storeImage": value});
+                            });
+                          });
+                        });
+                      } else {
+                        UserSecureStorage.getToken().then((value) {
+                          UserImageHttp.submitSubscription(
+                                  token: value!, file: storeImage)
+                              .then((value) {
+                            Navigator.pushNamed(context, "/GetStartedScreen",
+                                arguments: {"storeImage": storeImage});
+                          });
+                        });
+                      }
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  "Hey $name !!",
+                  style:
+                      const TextStyle(fontSize: 25, color: Color(0xff4F504F)),
+                ),
+                const Text("to make it more cool selct",
+                    style: TextStyle(fontSize: 18, color: Color(0xff4F504F))),
+                const Text("your avatar.",
+                    style: TextStyle(fontSize: 18, color: Color(0xff4F504F))),
+              ],
+            ),
+          ),
           Positioned(
               bottom: 0,
               child: SizedBox(

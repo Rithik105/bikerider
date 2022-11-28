@@ -23,7 +23,7 @@ class ServiceRecordsCard extends StatefulWidget {
 }
 
 class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
-  List<ProductInvoiceModel> invoiceList = [];
+
   IconData? _selectedIcon;
   //double _userRating = widget.serviceRecordList.dealerRating!.toDouble();
   bool _isVertical = false;
@@ -31,30 +31,39 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        BookServiceHttp.getInvoiceDetails(widget.serviceRecordList.id!).then(
-          (value) {
-            invoiceList = [];
-
-            for (var e in value) {
-              print("value of e is ${e}");
-              invoiceList.add(
-                ProductInvoiceModel.fromJson(e),
-              );
-            }
-            //   serviceRecordList.add(value);
-            print("invoice list is${invoiceList}");
-            setState(() {});
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ServiceDetails(
-                    serviceRecordList: widget.serviceRecordList,
-                    callBack: widget.callBack,
-                    invoiceModelList: invoiceList),
-              ),
-            );
-          },
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ServiceDetails(
+                serviceRecordList: widget.serviceRecordList,
+                callBack: widget.callBack,
+               ),
+          ),
         );
+        // BookServiceHttp.getInvoiceDetails(widget.serviceRecordList.id!).then(
+        //   (value) {
+        //     invoiceList = [];
+        //
+        //     for (var e in value) {
+        //       print("value of e is ${e}");
+        //       invoiceList.add(
+        //         ProductInvoiceModel.fromJson(e),
+        //       );
+        //     }
+        //     //   serviceRecordList.add(value);
+        //     print("invoice list is${invoiceList}");
+        //     setState(() {});
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => ServiceDetails(
+        //             serviceRecordList: widget.serviceRecordList,
+        //             callBack: widget.callBack,
+        //             invoiceModelList: invoiceList),
+        //       ),
+        //     );
+        //   },
+        // );
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 10),
@@ -170,22 +179,31 @@ class _ServiceRecordsCardState extends State<ServiceRecordsCard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        widget.serviceRecordList.serviceType!,
-                        style: kServiceRecordCardStarTextStyle,
-                      ),
-                      RatingBarIndicator(
-                        rating:
-                            widget.serviceRecordList.dealerRating!.toDouble(),
-                        itemBuilder: (context, index) => Icon(
-                          _selectedIcon ?? Icons.star,
-                          color: Color(0xffF3DA3B),
+                      SizedBox(
+                        width:MediaQuery.of(context).size.width*0.4,
+                        child: Text(
+
+                          widget.serviceRecordList.serviceType!,
+                          style: kServiceRecordCardStarTextStyle,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        itemCount: 5,
-                        itemSize: 22.0,
-                        unratedColor: Color(0xffd3d3d3),
-                        direction:
-                            _isVertical ? Axis.vertical : Axis.horizontal,
+                      ),
+                      SizedBox(
+                        width:MediaQuery.of(context).size.width*0.4,
+                        child: RatingBarIndicator(
+                          rating:
+                              widget.serviceRecordList.dealerRating!.toDouble(),
+                          itemBuilder: (context, index) => Icon(
+                            _selectedIcon ?? Icons.star,
+                            color: Color(0xffF3DA3B),
+                          ),
+                          itemCount: 5,
+                          itemSize: 22.0,
+                          unratedColor: Color(0xffd3d3d3),
+                          direction:
+                              _isVertical ? Axis.vertical : Axis.horizontal,
+                        ),
                       ),
                     ],
                   ),

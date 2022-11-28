@@ -5,13 +5,10 @@ import 'package:bikerider/Screens/ServiceRecods/service_records.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../Http/AddBikeHttp.dart';
-import '../Models/service_records_model.dart';
-import 'manual/manual_model.dart';
-import 'manual/select_vehicle.dart';
 
+import '../Http/AddBikeHttp.dart';
 import '../Http/BookService.dart';
-import 'BookService/BookServiceScreen.dart';
+import '../Models/service_records_model.dart';
 import 'manual/manual_model.dart';
 import 'manual/select_vehicle.dart';
 import 'manual/services.dart';
@@ -89,26 +86,35 @@ class _GarageCardState extends State<GarageCard> {
     print("ascending");
     print(sortedDates);
     if (sortedDates.isEmpty) {
-      print('No seervice booked');
-      diffInDays = "No service booked";
-    }
-    DateTime temp = DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 18);
-    print('EndDate: $temp');
-    Duration diff = DateTime.parse(sortedDates[0]).difference(temp);
-    print(diff.inHours);
-    // print(diff);
-    if (diff.inHours < 6) {
-      print('Today is the');
-      diffInDays = "Today is your";
-    } else if (diff.inDays == 0) {
-      print('Tommorow');
-      diffInDays = "Tommorow is your";
+      print('No service booked');
+      diffInDays = "No services booked";
+      setState(() {});
+      return;
     } else {
-      print(diff.inDays);
-      diffInDays = diff.inDays.toString() + " Days";
+      DateTime temp = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 18);
+      print('EndDate: $temp');
+      Duration diff = DateTime.parse(sortedDates[0]).difference(temp);
+      print(diff.inHours);
+      // print(diff);
+      if (diff.inHours < 6) {
+        print('Today is the');
+        diffInDays = "Today is your";
+      } else if (diff.inDays == 0) {
+        print('Tommorow');
+        diffInDays = "Tommorow is your";
+      } else {
+        print(diff.inDays);
+        diffInDays = diff.inDays.toString() + " Days";
+      }
+      setState(() {});
     }
-    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -132,7 +138,7 @@ class _GarageCardState extends State<GarageCard> {
               ),
               // diffInDays!>0? Text("service"):
               Text(
-                "Next Service due",
+                sortedDates.isEmpty ? '' : "Next Service due",
                 style: GoogleFonts.roboto(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -150,19 +156,17 @@ class _GarageCardState extends State<GarageCard> {
                   ),
                 ),
               ),
-
               Column(
                 children: [
                   IgnorePointer(
                     ignoring: DisableSelection[0],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(0);
                         BookServiceHttp.prefillDetails().then(
                           (value) {
                             enableAll(0);
-
                             if (value.prefill.isEmpty) {
                               showToast(msg: 'Please add Bike details');
                               print('Please add your bike');
@@ -176,7 +180,9 @@ class _GarageCardState extends State<GarageCard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AddBike(),
+                                      builder: (context) => AddBike(
+                                          // bikeList: bikeList,
+                                          ),
                                     ),
                                   );
                                 },
@@ -250,7 +256,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[1],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(1);
                         BookServiceHttp.prefillDetails().then(
@@ -270,7 +276,9 @@ class _GarageCardState extends State<GarageCard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AddBike(),
+                                      builder: (context) => AddBike(
+                                          // bikeList: bikeList,
+                                          ),
                                     ),
                                   );
                                 },
@@ -342,7 +350,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[2],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(2);
                         GetOwnerDetails.getOwner().then(
@@ -358,18 +366,31 @@ class _GarageCardState extends State<GarageCard> {
                                       bikes.add(BikeDetailsModel.fromJson(e));
                                     },
                                   );
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => SelectBike(
-                                          bikeCategories: bikes,
-                                          personalDetails: personalDetails!),
-                                    ),
-                                  );
+                                  if (bikes.isEmpty) {
+                                    showToast(
+                                        msg: "Please add your bike details");
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddBike(),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => SelectBike(
+                                            bikeCategories: bikes,
+                                            personalDetails: personalDetails!),
+                                      ),
+                                    );
+                                  }
+
                                   enableAll(2);
                                 },
                               );
                               enableAll(2);
                             } catch (e) {
+                              print(e);
                               showToast(msg: 'No bike found');
                               enableAll(2);
                             }
@@ -431,7 +452,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[3],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         disableAll(3);
                         print('test');
@@ -494,7 +515,7 @@ class _GarageCardState extends State<GarageCard> {
                   IgnorePointer(
                     ignoring: DisableSelection[4],
                     child: InkWell(
-                      splashColor: Colors.white,
+                      // splashColor: Colors.white,
                       onTap: () {
                         print('test');
                         Navigator.pushNamed(context, "/AccessoriesScreen");

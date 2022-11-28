@@ -1,9 +1,19 @@
+import 'dart:io';
+
 import 'package:bikerider/Models/timeLineModel.dart';
+import 'package:bikerider/Screens/follower_list.dart';
+import 'package:bikerider/Screens/following_list.dart';
 import 'package:bikerider/Screens/milestone_card.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../Http/UserHttp.dart';
 import '../bloc/BikeCubit.dart';
@@ -19,11 +29,27 @@ class ProfileHeader extends StatefulWidget {
 }
 
 class _ProfileHeaderState extends State<ProfileHeader> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // getTimeline().then((value) => print('ProfileHeader GetTimeLine:$value'));
+  TextEditingController _editingController1 = TextEditingController();
+  TextEditingController _editingController2 = TextEditingController();
+  File? storeImage;
+  bool newImage = false;
+  bool _clicked = false;
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: source, preferredCameraDevice: CameraDevice.front);
+      if (image == null)
+        return;
+      else {
+        final tempImage = File(image.path);
+
+        this.storeImage = tempImage;
+        return tempImage;
+      }
+    } on PlatformException catch (e) {
+      print("failed to pick image : $e");
+    }
+    ;
   }
 
   @override
@@ -180,23 +206,53 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600)),
                                     const SizedBox(height: 15),
-                                    Container(
-                                      width: 100,
-                                      height: 30,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 6, vertical: 3),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                              color: Colors.white, width: 1)),
-                                      child: Center(
-                                        child: Text(
-                                          "Follow",
-                                          style: GoogleFonts.roboto(
-                                              color: const Color(0xffffffff),
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500),
+                                    IgnorePointer(
+                                      ignoring: _clicked,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _clicked = true;
+
+                                          setState(() {});
+                                          showToast(
+                                              msg: state.following
+                                                  ? "Unfollowing..."
+                                                  : "Following..");
+                                          UserSecureStorage.getToken()
+                                              .then((value) {
+                                            UserHttp.followUser(
+                                                    state.number, value!)
+                                                .then((value) {
+                                              _clicked = false;
+                                              setState(() {});
+                                              BlocProvider.of<BikeCubit>(
+                                                      context)
+                                                  .getProfile(state.number);
+                                            });
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 100,
+                                          height: 30,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 6, vertical: 3),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 1)),
+                                          child: Center(
+                                            child: Text(
+                                              state.following
+                                                  ? "Following"
+                                                  : "Follow",
+                                              style: GoogleFonts.roboto(
+                                                  color:
+                                                      const Color(0xffffffff),
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -240,9 +296,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                       child: CircleAvatar(
                                         radius: 70,
                                         backgroundColor: Colors.transparent,
-                                        backgroundImage: NetworkImage(
-                                            state.profile["userDetails"]
-                                                ["profileImage"]),
+                                        backgroundImage: NetworkImage(state
+                                                    .profile["userDetails"]
+                                                ["profileImage"] ??
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7-d5qr9WzS926jiHDPlYrCL01Eb0M8C8c4w&usqp=CAU"),
                                       ),
                                     ),
                                     const SizedBox(
@@ -265,6 +322,120 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             color: const Color(0xffffffff),
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600)),
+                                    const SizedBox(height: 15),
+                                    // Container(
+                                    //   width: 100,
+                                    //   height: 30,
+                                    //   padding: const EdgeInsets.symmetric(
+                                    //       horizontal: 6, vertical: 3),
+                                    //   decoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.circular(15),
+                                    //       border: Border.all(
+                                    //           color: Colors.white, width: 1)),
+                                    //   child: Center(
+                                    //     child: Text(
+                                    //       "Follow",
+                                    //       style: GoogleFonts.roboto(
+                                    //           color: const Color(0xffffffff),
+                                    //           fontSize: 17,
+                                    //           fontWeight: FontWeight.w500),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (state is BikeMineProfileEditState) {
+                            _editingController1.text =
+                                state.profile["userDetails"]["userName"];
+                            _editingController2.text =
+                                state.profile["userDetails"]["aboutUser"];
+
+                            return Container(
+                              height: 420,
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  alignment: Alignment.bottomRight,
+                                  image: AssetImage(
+                                      'assets/images/homePage/rider.png'),
+                                  scale: 1.9,
+                                  opacity: 0.1,
+                                ),
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color(0xffED7E2C),
+                                    Color(0xffF7B557),
+                                  ],
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 60),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 75,
+                                      backgroundColor: const Color.fromRGBO(
+                                          233, 176, 129, 1),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          pickImage(ImageSource.gallery)
+                                              .then((value) {
+                                            if (value == null) {
+                                              newImage = false;
+                                              setState(() {});
+                                            } else {
+                                              newImage = true;
+                                              storeImage = value;
+                                              setState(() {});
+                                            }
+                                          });
+                                        },
+                                        child: CircleAvatar(
+                                            radius: 70,
+                                            backgroundColor: Colors.transparent,
+                                            backgroundImage: storeImage == null
+                                                ? NetworkImage((state.profile[
+                                                            "userDetails"]
+                                                        ["profileImage"] ??
+                                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7-d5qr9WzS926jiHDPlYrCL01Eb0M8C8c4w&usqp=CAU"))
+                                                : FileImage(storeImage!)
+                                                    as ImageProvider),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: TextField(
+                                          controller: _editingController1,
+                                          style: GoogleFonts.roboto(
+                                              color: const Color(0xffffffff),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600)),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: TextField(
+                                          controller: _editingController2,
+                                          style: GoogleFonts.roboto(
+                                              color: const Color(0xffffffff),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600)),
+                                    ),
                                     const SizedBox(height: 15),
                                     // Container(
                                     //   width: 100,
@@ -388,9 +559,56 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         return Positioned(
                           right: 25,
                           top: 30,
-                          child: Image.asset(
-                            "assets/images/homePage/edit_pencil.png",
-                            scale: 2.2,
+                          child: GestureDetector(
+                            onTap: () {
+                              BlocProvider.of<BikeCubit>(context).emit(
+                                  BikeMineProfileEditState(
+                                      profile: state.profile));
+                            },
+                            child: Image.asset(
+                              "assets/images/homePage/edit_pencil.png",
+                              scale: 2.2,
+                            ),
+                          ),
+                        );
+                      } else if (state is BikeMineProfileEditState) {
+                        return Positioned(
+                          right: 25,
+                          top: 30,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              if (newImage) {
+                                UserSecureStorage.getToken().then((value) {
+                                  UserProfileEditHttp.editImage(
+                                          file: storeImage!, token: value!)
+                                      .then((value2) {
+                                    UserProfileEditHttp.editInfo(
+                                            name: _editingController1.text,
+                                            aboutUser: _editingController2.text,
+                                            token: value)
+                                        .then((value3) {
+                                      BlocProvider.of<BikeCubit>(context)
+                                          .getMyProfile();
+                                    });
+                                  });
+                                });
+                              } else {
+                                UserSecureStorage.getToken().then((value) {
+                                  UserProfileEditHttp.editInfo(
+                                          name: _editingController1.text,
+                                          aboutUser: _editingController2.text,
+                                          token: value!)
+                                      .then((value) {
+                                    BlocProvider.of<BikeCubit>(context)
+                                        .getMyProfile();
+                                  });
+                                });
+                              }
+                            },
                           ),
                         );
                       } else {
@@ -401,6 +619,51 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   BlocBuilder<BikeCubit, BikeState>(
                     builder: (context, state) {
                       if (state is BikeMineProfileFetchedState) {
+                        return Positioned(
+                          top: 380,
+                          left: 10,
+                          child: Container(
+                            child: Followers(
+                              rides: Text(
+                                state.profile["tripCount"].toString(),
+                                style: kProfileNumberText,
+                              ),
+                              followers: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return FollowerList(
+                                        followerList:
+                                            state.profile["userDetails"]
+                                                ["followers"]);
+                                  }));
+                                },
+                                child: Text(
+                                    state.profile['userDetails']
+                                            ["followersCount"]
+                                        .toString(),
+                                    style: kProfileNumberText),
+                              ),
+                              following: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return FollowingList(
+                                        followingList:
+                                            state.profile["userDetails"]
+                                                ["following"]);
+                                  }));
+                                },
+                                child: Text(
+                                  state.profile['userDetails']["followingCount"]
+                                      .toString(),
+                                  style: kProfileNumberText,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (state is BikeMineProfileEditState) {
                         return Positioned(
                           top: 380,
                           left: 10,

@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'package:bikerider/Http/photoHttp.dart';
 import 'package:bikerider/Models/get_trip_model.dart';
+import 'package:bikerider/Screens/gallery/image_view_future.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'Image_view.dart';
-import 'gallery_model.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class GalleryPreviewScreen extends StatefulWidget {
   GalleryPreviewScreen({Key? key, required this.getTripModel})
@@ -85,61 +81,40 @@ class _GalleryPreviewScreenState extends State<GalleryPreviewScreen> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _isFirstLoadRun
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: MasonryGridView.builder(
-                    itemCount: _posts.length,
-                    controller: _controller,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    gridDelegate:
-                        SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+    if (_isFirstLoadRun) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return MasonryGridView.builder(
+        itemCount: _posts.length,
+        controller: _controller,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: GestureDetector(
+              onTap: () {
+                UserSecureStorage.getToken().then((value) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageViewFuture(
+                          id: _posts[index]["_id"], token: value!),
                     ),
-                    itemBuilder: (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            UserSecureStorage.getToken().then((value) {
-                              PhotosHttp.getPhotoDetails(
-                                      _posts[index]["_id"], value!)
-                                  .then((value) {
-                                ImageDetails temp =
-                                    ImageDetails.fromJson(value);
-                                print(value);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ImageView(imageDetails: temp),
-                                  ),
-                                );
-                              });
-                            });
-                          },
-                          child: Image.network("${_posts[index]["imageUrl"]}"),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                if (_isMoreRunning == true)
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                if (_hasNextPage == false) Container(),
-              ],
+                  );
+                  // });
+                });
+              },
+              child: Image.network("${_posts[index]["imageUrl"]}"),
             ),
-    );
+          );
+        },
+      );
+    }
   }
 }
