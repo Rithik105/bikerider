@@ -1,8 +1,9 @@
 import 'package:bikerider/Screens/manual/services.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
-import 'manual_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'manual_model.dart';
 import 'owners_manual.dart';
 
 class EditDetails extends StatefulWidget {
@@ -88,6 +89,7 @@ class _EditDetailsState extends State<EditDetails> {
                           ),
                           GestureDetector(
                             onTap: () {
+                              showToast(msg: "saving...");
                               UpdateOwnerDetails.updateOwner(
                                   widget.person.toJson());
                               Navigator.pop(context);
@@ -107,7 +109,7 @@ class _EditDetailsState extends State<EditDetails> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextField(

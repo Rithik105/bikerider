@@ -289,13 +289,14 @@ class UserHttp {
   static Future sendChat(String groupId, String token, String message,
       {bool isImage = false}) async {
     final http.Response response = await http.post(
-        Uri.parse('hhttps://ride-app-node.vercel.app/api/v1/chat/createChat'),
+        Uri.parse('https://ride-app-node.vercel.app/api/v1/chat/createChat'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode(
             {'chat': message, 'groupId': groupId, 'isImage': isImage}));
+    print(response.body);
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -313,7 +314,7 @@ class UserHttp {
   }
 
   static Future getChats(String groupId, String token) async {
-    print('calling API');
+    print('calling API $groupId token $token');
     final http.Response response = await http.post(
         Uri.parse(
             'https://ride-app-node.vercel.app/api/v1/chat/getChatDetails'),
@@ -322,6 +323,7 @@ class UserHttp {
           'Authorization': 'BEARER $token'
         },
         body: jsonEncode({'groupId': groupId}));
+    // print("hello boys ${response.body}");
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -334,8 +336,8 @@ class UserHttp {
             'Authorization': 'BEARER $value'
           },
           body: jsonEncode({'groupId': groupId}));
-      print('Length' + jsonDecode(response.body).toString());
-      print(jsonDecode(response.body)["chatDetails"]);
+      // print('Length' + jsonDecode(response.body).toString());
+      print(jsonDecode(response.body));
 
       return jsonDecode(response.body);
     }
@@ -421,17 +423,20 @@ class UserHttp {
   }
 
   static Future<Map?> getProfile(String token, String number) async {
+    print("this is $token");
     final http.Response response = await http.post(
         Uri.parse("https://ride-app-node.vercel.app/api/v1/getProfile"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
         },
-        body: jsonEncode({"mobile": number}));
+        body: json.encode({"mobile": number}));
     if (response.statusCode == 200) {
-      print(response.body);
+      print("hi if");
+      print(" this is repsonse ${response.body}");
       return jsonDecode(response.body);
     } else {
+      print("hi else");
       String value = await getToken(token);
       final http.Response response = await http.post(
           Uri.parse("https://ride-app-node.vercel.app/api/v1/getProfile"),
@@ -445,23 +450,25 @@ class UserHttp {
   }
 
   static Future<TimeLineModel?> getTimeline() async {
-    UserSecureStorage.getToken().then((value) async {
+    String? token = await UserSecureStorage.getToken();
+    final response = await http.get(
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/timeline"),
+      headers: {'Authorization': 'BEARER $token'},
+    );
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      print('------------');
+      return TimeLineModel.fromJson(jsonDecode(response.body));
+    } else {
+      String value2 = await getToken(token!);
       final response = await http.get(
         Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/timeline"),
-        headers: {'Authorization': 'BEARER $value'},
+        headers: {'Authorization': 'BEARER $value2'},
       );
-      if (response.statusCode == 200) {
-        return TimeLineModel.fromJson(jsonDecode(response.body));
-      } else {
-        String value2 = await getToken(value!);
-        final response = await http.get(
-          Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/timeline"),
-          headers: {'Authorization': 'BEARER $value2'},
-        );
-        return TimeLineModel.fromJson(jsonDecode(response.body));
-      }
-    });
-    return TimeLineModel.fromJson([]);
+      return TimeLineModel.fromJson(jsonDecode(response.body));
+    }
+
+    // return TimeLineModel.fromJson(jsonDecode(response.body));
   }
 }
 

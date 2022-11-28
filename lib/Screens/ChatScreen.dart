@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
   int timerCount = 0;
   File? storeImage;
   FocusNode focusNode = FocusNode();
-  bool goDownButtonEnable = true;
+  bool goDownButtonEnable = false;
   bool once = true;
 
   @override
@@ -73,10 +73,13 @@ class _ChatScreenState extends State<ChatScreen> {
       UserHttp.getChats(widget.groupId, widget.token).then((value) {
         // print('Inside Chats');
         // print(value);
-        print('ID validation' + (value['tripId']).toString());
+        // print('ID validation' + (value['tripId']).toString());
         print('Length' + (value['chatDetails'].length).toString());
         if (value['tripId'] == widget.groupId) {
-          print(value['chatDetails']);
+          // print(value['chatDetails']);
+          // for (var e in widget.chatList) {
+          //   print(e['chat']);
+          // }
           if (widget.chatList.length != value["chatDetails"].length) {
             // print(value["chatDetails"].last);
             List temp = value["chatDetails"];
@@ -90,6 +93,11 @@ class _ChatScreenState extends State<ChatScreen> {
             //     temp.map((e) => e['groupId'] == widget.groupId).toList();
             widget.chatList =
                 temp.where((e) => e['groupId'] == widget.groupId).toList();
+            // for (var e in widget.chatList) {
+            //   print(e['time']);
+            // }
+            setState(() {});
+
             Future.delayed(const Duration(milliseconds: 500)).then(
               (value) => chatListController.animateTo(
                   chatListController.position.maxScrollExtent,
@@ -98,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
             );
           }
 
-          setState(() {});
+          // setState(() {});
           if (once) {
             // print(once);
             Future.delayed(const Duration(milliseconds: 500)).then((value) {
@@ -113,6 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
             });
           }
         }
+        // setState(() {});
       });
     });
 
