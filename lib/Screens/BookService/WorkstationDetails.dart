@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/Material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
 import '../../Models/book_service_model.dart';
 import '../../Models/workstation_model.dart';
 import '../../custom/widgets/button.dart';
@@ -57,8 +57,8 @@ class _DealerDetailsState extends State<DealerDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RatingBarIndicator(
-                        rating:
-                            widget.dealerDetailsList.dealerRating!.ceilToDouble(),
+                        rating: widget.dealerDetailsList.dealerRating!
+                            .ceilToDouble(),
                         itemBuilder: (context, index) => Icon(
                           _selectedIcon ?? Icons.star,
                           color: Color(0xffF3DA3B),
@@ -190,11 +190,20 @@ class _DealerDetailsState extends State<DealerDetails> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          ConfirmBookingDetails(dealerPhone: widget.dealerDetailsList.dealerPhoneNumber!,),
+                                          ConfirmBookingDetails(
+                                        dealerPhone: widget.dealerDetailsList
+                                            .dealerPhoneNumber!,
+                                      ),
                                     ),
                                   );
-                                  BookServiceModel.slotDate=DateTime(BookServiceModel.slotDate!.year,BookServiceModel.slotDate!.month,BookServiceModel.slotDate!.day,pickedTime.hour,pickedTime.minute);
-                                  print('Formated booking date: ${BookServiceModel.slotDate}');
+                                  BookServiceModel.slotDate = DateTime(
+                                      BookServiceModel.slotDate!.year,
+                                      BookServiceModel.slotDate!.month,
+                                      BookServiceModel.slotDate!.day,
+                                      pickedTime.hour,
+                                      pickedTime.minute);
+                                  print(
+                                      'Formated booking date: ${BookServiceModel.slotDate}');
                                 }
                               } else {}
                             }),

@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -113,223 +110,107 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                         borderSide: BorderSide(color: Colors.grey)),
                     labelStyle: GoogleFonts.robotoFlex(
                         color: const Color(0xff9F9F9F), fontSize: 18),
-                    // suffixIcon: GestureDetector(
-                    //   onTap: () {
-                    //     isEdit = true;
-                    //     print("gokcfb");
-                    //     mobileNumberController.text != widget.prefill.mobile
-                    //         ? BookServiceHttp.updatePhoneNumber(
-                    //                 mobileNumberController.text)
-                    //             .then((value) {})
-                    //         : null;
-                    //     setState(() {});
-                    //   },
-                    //   child: Icon(
-                    //     Icons.edit,
-                    //     color: Color(0xffA6A4A3),
-                    //   ),
-                    // ),
                   ),
-                  // onChanged: (value) {
-                  //callWarning();
-                  //  myError;
-                  //  mobileNumberController.text=value;
-
-                  // mobileNumberController.text != widget.prefill.mobile &&
-                  //         value.length == 10
-                  //     ? showDialog<String>(
-                  //         context: context,
-                  //         builder: (BuildContext context) => AlertDialog(
-                  //           content: Text(
-                  //             'Are you sure to change the mobile number?',
-                  //             style: TextStyle(color: Colors.grey.shade700),
-                  //           ),
-                  //           actions: <Widget>[
-                  //             TextButton(
-                  //               onPressed: () {
-                  //                 BookServiceHttp.updatePhoneNumber(
-                  //                         mobileNumberController.text)
-                  //                     .then((value) {
-                  //                   print(value);
-                  //                   print("call warning");
-                  //                   visibility = false;
-                  //                   attempts = value["attempts_left"];
-                  //                   isEdit = false;
-
-                  //                   showToast(
-                  //                       msg:
-                  //                           "Phone number changed successfully");
-
-                  //                   setState(() {});
-                  //                 });
-
-                  //                 Navigator.pop(context);
-                  //               },
-                  //               child: const Text('Yes',
-                  //                   style: TextStyle(
-                  //                       color: Colors.orangeAccent,
-                  //                       fontSize: 21)),
-                  //             ),
-                  //             TextButton(
-                  //               onPressed: () {
-                  //                 mobileNumberController.text =
-                  //                     widget.prefill.mobile!;
-                  //                 Navigator.pop(context);
-                  //               },
-                  //               child: const Text(
-                  //                 'No',
-                  //                 style: TextStyle(
-                  //                     color: Colors.orangeAccent, fontSize: 21),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       )
-                  //     : null;
-                  // setState(() {});
-                  // },
                 ),
               ),
               GestureDetector(
                 onTap: () {
                   attempts! > 0 ? visibility = true : visibility = false;
                   if ((widget.prefill.attemptsLeft)! > 0 && (attempts!) > 0) {
-                    print(isEdit);
-                    isEdit = true;
-                    setState(() {});
-                    print(isEdit);
-                    mobileNumberController.text != widget.prefill.mobile &&
-                            mobileNumberController.text.length == 10
-                        ? showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              content: Text(
-                                'Are you sure to change the mobile number?',
-                                style: TextStyle(color: Colors.grey.shade700),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    BookServiceHttp.updatePhoneNumber(
-                                            mobileNumberController.text)
-                                        .then((value) {
-                                      if (value["message"] ==
-                                          "Mobile Number updated Successfully!") {
-                                        UserSecureStorage.setToken(
-                                            value["accessToken"]);
-                                        visibility = false;
-                                        attempts = value["attempts_left"];
-                                        isEdit = false;
-                                        UserSecureStorage.setDetails(
-                                            key: "mobile",
-                                            value: mobileNumberController.text);
+                    // print(isEdit);
+                    // isEdit = true;
+                    // setState(() {});
+                    // print(isEdit);
+                    if (isEdit) {
+                      if (mobileNumberController.text !=
+                              widget.prefill.mobile &&
+                          mobileNumberController.text.length == 10) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                              'Are you sure to change the mobile number?',
+                              style: TextStyle(color: Colors.grey.shade700),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  BookServiceHttp.updatePhoneNumber(
+                                          mobileNumberController.text)
+                                      .then((value) {
+                                    if (value["message"] ==
+                                        "Mobile Number updated Successfully!") {
+                                      UserSecureStorage.setToken(
+                                          value["accessToken"]);
+                                      visibility = false;
+                                      attempts = value["attempts_left"];
+                                      isEdit = false;
+                                      UserSecureStorage.setDetails(
+                                          key: "mobile",
+                                          value: mobileNumberController.text);
 
-                                        showToast(
-                                            msg:
-                                                "Phone number changed successfully");
+                                      showToast(
+                                          msg:
+                                              "Phone number changed successfully");
 
-                                        setState(() {});
-                                      } else {
-                                        showToast(
-                                            msg: "Phone number already exists");
-                                      }
-                                    });
+                                      setState(() {});
+                                    } else {
+                                      showToast(
+                                          msg: "Phone number already exists");
+                                    }
+                                  });
 
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Yes',
-                                      style: TextStyle(
-                                          color: Colors.orangeAccent,
-                                          fontSize: 21)),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    mobileNumberController.text =
-                                        widget.prefill.mobile!;
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'No',
-                                    style: TextStyle(
-                                        color: Colors.orangeAccent,
-                                        fontSize: 21),
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Yes',
+                                  style: GoogleFonts.robotoFlex(
+                                    color: Colors.orangeAccent,
+                                    fontSize: 21,
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        : null;
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  mobileNumberController.text =
+                                      widget.prefill.mobile!;
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'No',
+                                  style: GoogleFonts.robotoFlex(
+                                    color: Colors.orangeAccent,
+                                    fontSize: 21,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      isEdit = false;
+                      visibility = false;
+                      setState(() {});
+                    } else
+                    // if (!isEdit)
+                    {
+                      isEdit = true;
+                      visibility = true;
+                      setState(() {});
+                    }
                   } else {
                     isEdit = false;
+                    visibility = false;
                     print("less than zero");
                     showToast(
                         msg:
                             "You have exceeded the attempts to change the number");
                     // mobileNumberController.text = "";
                   }
-
-                  // attempts <= 0 ? isEdit = false : isEdit = true;
-                  // attempts <= 0 ?null:mobileNumberController.text = "";
-                  // if (isEdit) {
-                  //   isEdit = false;
-                  // mobileNumberController.text != widget.prefill.mobile &&
-                  //         mobileNumberController.text.length == 10
-                  //     ? showDialog<String>(
-                  //         context: context,
-                  //         builder: (BuildContext context) => AlertDialog(
-                  //           content: Text(
-                  //             'Are you sure to change the mobile number?',
-                  //             style: TextStyle(color: Colors.grey.shade700),
-                  //           ),
-                  //           actions: <Widget>[
-                  //             TextButton(
-                  //               onPressed: () {
-                  //                 BookServiceHttp.updatePhoneNumber(
-                  //                         mobileNumberController.text)
-                  //                     .then((value) {
-                  //                   print(value);
-                  //                   print("call warning");
-                  //                   visibility = false;
-                  //                   attempts = value["attempts_left"];
-                  //                   isEdit = false;
-
-                  //                   showToast(
-                  //                       msg:
-                  //                           "Phone number changed successfully");
-
-                  //                   setState(() {});
-                  //                 });
-
-                  //                 Navigator.pop(context);
-                  //               },
-                  //               child: const Text('Yes',
-                  //                   style: TextStyle(
-                  //                       color: Colors.orangeAccent,
-                  //                       fontSize: 21)),
-                  //             ),
-                  //             TextButton(
-                  //               onPressed: () {
-                  //                 mobileNumberController.text =
-                  //                     widget.prefill.mobile!;
-                  //                 Navigator.pop(context);
-                  //               },
-                  //               child: const Text(
-                  //                 'No',
-                  //                 style: TextStyle(
-                  //                     color: Colors.orangeAccent,
-                  //                     fontSize: 21),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       )
-                  //     : null;
-                  // }
-                  // setState(() {});
                 },
                 child: Icon(
                   isEdit ? Icons.done : Icons.edit,
-                  color: Color(0xffA6A4A3),
+                  color: const Color(0xffA6A4A3),
                 ),
               ),
             ]),
