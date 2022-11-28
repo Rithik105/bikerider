@@ -80,8 +80,16 @@ class _ChatScreenState extends State<ChatScreen> {
           if (widget.chatList.length != value["chatDetails"].length) {
             // print(value["chatDetails"].last);
             List temp = value["chatDetails"];
+            // print('sorted' +
+            //     temp
+            //         .map((e) => e )
+            //         .toList()
+            //         .toString());
+            temp.where((e) => e['groupId'] == widget.groupId);
+            // widget.chatList =
+            //     temp.map((e) => e['groupId'] == widget.groupId).toList();
             widget.chatList =
-                temp.map((e) => e['groupId'] == widget.groupId).toList();
+                temp.where((e) => e['groupId'] == widget.groupId).toList();
             Future.delayed(const Duration(milliseconds: 500)).then(
               (value) => chatListController.animateTo(
                   chatListController.position.maxScrollExtent,
