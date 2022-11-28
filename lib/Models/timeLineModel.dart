@@ -1,4 +1,4 @@
-import 'ActivityModel.dart';
+import 'activityModel.dart';
 // import 'activityModel.dart';
 
 class TimeLineModel {
