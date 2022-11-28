@@ -777,17 +777,20 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                       (e) {
                                         ActivityModel temp = e.value;
                                         print(e.value.id);
-                                        if (e.key == 0) {
+                                        if (e.value.isLast) {
+                                          print(e.value.isLast);
                                           return ProfileTimeline(
                                             center: true,
-                                            first: true,
+                                            first: data!.tripList.length == 1
+                                                ? true
+                                                : false,
+                                            last: true,
                                             data: temp,
                                           );
-                                        } else if (e.value.isLast) {
+                                        } else if (e.key == 0) {
                                           return ProfileTimeline(
                                             center: true,
                                             first: true,
-                                            last: false,
                                             data: temp,
                                           );
                                         } else {
