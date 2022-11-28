@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import "package:http/http.dart" as http;
+
 import '../Models/book_service_model.dart';
 import '../Models/prefill_model.dart';
 import '../Utility/Secure_storeage.dart';
@@ -9,7 +11,7 @@ class BookServiceHttp {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/dealer/searchDealers"),
+            "https://ride-app-node.vercel.app/api/v1/dealer/searchDealers"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -23,7 +25,7 @@ class BookServiceHttp {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.get(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/service/prefilledService"),
+            "https://ride-app-node.vercel.app/api/v1/service/prefilledService"),
         headers: {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
@@ -91,7 +93,7 @@ class BookServiceHttp {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/service/bookService"),
+            "https://ride-app-node.vercel.app/api/v1/service/bookService"),
         headers: {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
@@ -115,7 +117,7 @@ class BookServiceHttp {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/service/getServiceDetails"),
+            "https://ride-app-node.vercel.app/api/v1/service/getServiceDetails"),
         headers: {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
@@ -130,8 +132,7 @@ class BookServiceHttp {
   static Future getInvoiceDetails(String id) async {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/service/getInvoice"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/service/getInvoice"),
         headers: {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'
@@ -145,7 +146,7 @@ class BookServiceHttp {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.get(
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/service/getAllService"),
+          "https://ride-app-node.vercel.app/api/v1/service/getAllService"),
       headers: {
         'Authorization': 'BEARER $token',
         'Content-Type': 'application/json'
@@ -159,7 +160,7 @@ class BookServiceHttp {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/service/updateMobileNumber"),
+            "https://ride-app-node.vercel.app/api/v1/service/updateMobileNumber"),
         headers: {
           'Authorization': 'BEARER $token',
           'Content-Type': 'application/json'

@@ -12,7 +12,7 @@ import '../Utility/Secure_storeage.dart';
 class UserHttp {
   static Future registerUser(User user, bool ownbike) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/register"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/register"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -28,7 +28,7 @@ class UserHttp {
 
   static Future loginUserEmail(User user) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/loginEmail"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/loginEmail"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -39,7 +39,7 @@ class UserHttp {
 
   static Future loginUserNumber(User user) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/loginPhone"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/loginPhone"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,8 +50,7 @@ class UserHttp {
 
   static Future changePassword(String mobile, String password) async {
     final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/forgotPassword"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/forgotPassword"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -61,7 +60,7 @@ class UserHttp {
 
   static Future sendOtp(String number) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/sendOtp"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/sendOtp"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -74,7 +73,7 @@ class UserHttp {
 
   static Future verifyOtp(String pin) async {
     final http.Response secret = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/verifyOtp"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/verifyOtp"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -84,8 +83,7 @@ class UserHttp {
 
   static Future getNumber(String token) async {
     final http.Response secret = await http.get(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/getMyNumber"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/getMyNumber"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -95,16 +93,14 @@ class UserHttp {
 
   static Future getTokenStart(String token) async {
     final http.Response secret = await http.post(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/getAccessToken"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
       },
     );
     http.post(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/getAccessToken"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -117,16 +113,14 @@ class UserHttp {
 
   static Future getToken(String token) async {
     final http.Response secret = await http.post(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/getAccessToken"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
       },
     );
     http.post(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/getAccessToken"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/getAccessToken"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -140,8 +134,7 @@ class UserHttp {
   static Future createTrip(String createTripModal) async {
     UserSecureStorage.getToken().then((value) async {
       final http.Response response = await http.post(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/trip/createTrip"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/createTrip"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -153,7 +146,7 @@ class UserHttp {
         String value1 = await getToken(value!);
         final http.Response response = await http.post(
             Uri.parse(
-                "https://riding-application.herokuapp.com/api/v1/trip/createTrip"),
+                "https://ride-app-node.vercel.app/api/v1/trip/createTrip"),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'BEARER $value1'
@@ -167,8 +160,7 @@ class UserHttp {
   static Future<void> deleteTrip(String id) async {
     UserSecureStorage.getToken().then((value) async {
       final http.Response response = await http.post(
-          Uri.parse(
-              'https://riding-application.herokuapp.com/api/v1/trip/deleteTrip'),
+          Uri.parse('https://ride-app-node.vercel.app/api/v1/trip/deleteTrip'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -180,7 +172,7 @@ class UserHttp {
         String value1 = await getToken(value!);
         final http.Response response = await http.post(
             Uri.parse(
-                'https://riding-application.herokuapp.com/api/v1/trip/deleteTrip'),
+                'https://ride-app-node.vercel.app/api/v1/trip/deleteTrip'),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'BEARER $value1'
@@ -193,8 +185,7 @@ class UserHttp {
 
   static Future<List?> getTrips(String token) async {
     final http.Response response = await http.get(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/getTrip"),
         headers: {'Authorization': 'BEARER $token'});
 
     if (response.statusCode == 200) {
@@ -202,8 +193,7 @@ class UserHttp {
     } else {
       String newToken = await getToken(token);
       final http.Response response = await http.get(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/trip/getTrip"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/getTrip"),
           headers: {'Authorization': 'BEARER $newToken'});
       return jsonDecode(response.body);
     }
@@ -211,8 +201,7 @@ class UserHttp {
 
   static Future<List?> searchTrips(String trip, String token) async {
     final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/searchTrip"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -223,8 +212,7 @@ class UserHttp {
     } else {
       String value1 = await getToken(token);
       final http.Response response = await http.post(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/trip/searchTrip"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/searchTrip"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value1'
@@ -238,7 +226,7 @@ class UserHttp {
   static Future<List?> searchTripsDetails(String trip, String token) async {
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
+            "https://ride-app-node.vercel.app/api/v1/trip/searchAllTrips"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -250,7 +238,7 @@ class UserHttp {
       String value = await getToken(token);
       final http.Response response = await http.post(
           Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/trip/searchAllTrips"),
+              "https://ride-app-node.vercel.app/api/v1/trip/searchAllTrips"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -262,7 +250,7 @@ class UserHttp {
 
   static Future followUser(String number, String token) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/follow"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -272,7 +260,7 @@ class UserHttp {
     } else {
       String value = await getToken(token);
       final http.Response response = await http.post(
-          Uri.parse("https://riding-application.herokuapp.com/api/v1/follow"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/follow"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -284,7 +272,7 @@ class UserHttp {
   static Future<List?> getTripDetails(String token) async {
     final http.Response response = await http.get(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/trip/getTripDetails"),
+            "https://ride-app-node.vercel.app/api/v1/trip/getTripDetails"),
         headers: {'Authorization': 'BEARER $token'});
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -292,7 +280,7 @@ class UserHttp {
       String value = await getToken(token);
       final http.Response response = await http.get(
           Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/trip/getTripDetails"),
+              "https://ride-app-node.vercel.app/api/v1/trip/getTripDetails"),
           headers: {'Authorization': 'BEARER $value'});
       return jsonDecode(response.body);
     }
@@ -301,8 +289,7 @@ class UserHttp {
   static Future sendChat(String groupId, String token, String message,
       {bool isImage = false}) async {
     final http.Response response = await http.post(
-        Uri.parse(
-            'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
+        Uri.parse('hhttps://ride-app-node.vercel.app/api/v1/chat/createChat'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -314,8 +301,7 @@ class UserHttp {
     } else {
       String value = await getToken(token);
       final http.Response response = await http.post(
-          Uri.parse(
-              'https://riding-application.herokuapp.com/api/v1/chat/createChat'),
+          Uri.parse('https://ride-app-node.vercel.app/api/v1/chat/createChat'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -330,7 +316,7 @@ class UserHttp {
     print('calling API');
     final http.Response response = await http.post(
         Uri.parse(
-            'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
+            'https://ride-app-node.vercel.app/api/v1/chat/getChatDetails'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -342,7 +328,7 @@ class UserHttp {
       String value = await getToken(token);
       final http.Response response = await http.post(
           Uri.parse(
-              'https://riding-application.herokuapp.com/api/v1/chat/getChatDetails'),
+              'https://ride-app-node.vercel.app/api/v1/chat/getChatDetails'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -358,7 +344,7 @@ class UserHttp {
   static Future<Map?> getAccessories(String item, String token) async {
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
+            "https://ride-app-node.vercel.app/api/v1/product/searchProducts"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -370,7 +356,7 @@ class UserHttp {
       String value = await getToken(token);
       final http.Response response = await http.post(
           Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/product/searchProducts"),
+              "https://ride-app-node.vercel.app/api/v1/product/searchProducts"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -382,7 +368,7 @@ class UserHttp {
 
   static Future<Map?> userLogOut(String token) async {
     final http.Response response = await http.post(
-      Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/logout"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -393,7 +379,7 @@ class UserHttp {
     } else {
       String value = await getToken(token);
       final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/logout"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/logout"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $value'
@@ -405,8 +391,7 @@ class UserHttp {
 
   static Future<List> getToolKit(String item) async {
     final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/tool/viewToolKit"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/tool/viewToolKit"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -416,8 +401,7 @@ class UserHttp {
 
   static Future accLike(String id, bool like, String token) async {
     final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/product/addLike"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/product/addLike"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -427,8 +411,7 @@ class UserHttp {
     } else {
       String value = await getToken(token);
       final http.Response response = await http.post(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/product/addLike"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/product/addLike"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -439,7 +422,7 @@ class UserHttp {
 
   static Future<Map?> getProfile(String token, String number) async {
     final http.Response response = await http.post(
-        Uri.parse("https://riding-application.herokuapp.com/api/v1/getProfile"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/getProfile"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'
@@ -451,8 +434,7 @@ class UserHttp {
     } else {
       String value = await getToken(token);
       final http.Response response = await http.post(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/getProfile"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/getProfile"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'BEARER $value'
@@ -465,8 +447,7 @@ class UserHttp {
   static Future<TimeLineModel?> getTimeline() async {
     UserSecureStorage.getToken().then((value) async {
       final response = await http.get(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/timeline"),
         headers: {'Authorization': 'BEARER $value'},
       );
       if (response.statusCode == 200) {
@@ -474,8 +455,7 @@ class UserHttp {
       } else {
         String value2 = await getToken(value!);
         final response = await http.get(
-          Uri.parse(
-              "https://riding-application.herokuapp.com/api/v1/trip/timeline"),
+          Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/timeline"),
           headers: {'Authorization': 'BEARER $value2'},
         );
         return TimeLineModel.fromJson(jsonDecode(response.body));
@@ -508,8 +488,7 @@ class UserImageHttp {
       String token) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/profileImageUpload"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/profileImageUpload"),
     );
     Map<String, String> headers = {
       "Content-type":
@@ -527,8 +506,7 @@ class UserChatImageHttp {
     print('token' + token);
     print('groupId' + groupId);
     final http.Response response = await http.post(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/clearChat"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/chat/clearChat"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -574,8 +552,7 @@ class UserChatImageHttp {
       String token) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/uploadChatImage"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/chat/uploadChatImage"),
     );
     Map<String, String> headers = {
       "Content-type":
@@ -609,8 +586,7 @@ class UserProfileEditHttp {
       String token) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/editProfileImage"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/editProfileImage"),
     );
     Map<String, String> headers = {
       "Content-type":
@@ -626,8 +602,7 @@ class UserProfileEditHttp {
       required String aboutUser,
       required String token}) async {
     final http.Response response = await http.post(
-        Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/editProfile"),
+        Uri.parse("https://ride-app-node.vercel.app/api/v1/editProfile"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'

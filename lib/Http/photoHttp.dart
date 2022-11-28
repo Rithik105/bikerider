@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 import '../Screens/gallery/gallery_model.dart';
@@ -10,7 +11,7 @@ class PhotosHttp {
     final http.Response response = await http.post(
       body: jsonEncode({'groupId': tripId}),
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/getImagePreview?page=$page&limit=$limit"),
+          "https://ride-app-node.vercel.app/api/v1/chat/getImagePreview?page=$page&limit=$limit"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',
@@ -25,8 +26,7 @@ class PhotosHttp {
     //String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
       body: jsonEncode({'tripId': '6373141675818e2c99e5776'}),
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/getImagePreview"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/chat/getImagePreview"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',
@@ -42,7 +42,7 @@ class PhotosHttp {
     final http.Response response = await http.post(
       body: jsonEncode({'_id': id}),
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/getParticularPhoto"),
+          "https://ride-app-node.vercel.app/api/v1/chat/getParticularPhoto"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',
@@ -57,8 +57,7 @@ class PhotosHttp {
     //String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
       body: jsonEncode({'id': id}),
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/addLikes"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/chat/addLikes"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',
@@ -73,8 +72,7 @@ class PhotosHttp {
     //String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
       body: jsonEncode({'id': id, "comments": comment}),
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/chat/addComments"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/chat/addComments"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token',

@@ -172,8 +172,7 @@ sendStatus(LatLng point, String token, String id) async {
   print(point);
   print(token);
   final http.Response response = await http.patch(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/trip/currentLocation"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/currentLocation"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -206,7 +205,7 @@ endTrip(String token, String id) async {
   print(token);
   final http.Response response = await http.patch(
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/trip/updateTripStatus"),
+          "https://ride-app-node.vercel.app/api/v1/trip/updateTripStatus"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
