@@ -744,6 +744,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               BlocBuilder<BikeCubit, BikeState>(
                 builder: (context, state) {
                   if (state is BikeMineProfileFetchedState) {
+                    print('BikeMineProfileFetchedState');
                     return FutureBuilder(
                       // future: getMyActivities(),
                       future: UserHttp.getTimeline(),
@@ -771,6 +772,13 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                         return ProfileTimeline(
                                           center: true,
                                           first: true,
+                                          data: e.value,
+                                        );
+                                      } else if (e.value.isLast) {
+                                        return ProfileTimeline(
+                                          center: true,
+                                          first: true,
+                                          last: false,
                                           data: e.value,
                                         );
                                       } else {

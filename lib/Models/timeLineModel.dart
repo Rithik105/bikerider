@@ -1,4 +1,5 @@
 import 'ActivityModel.dart';
+// import 'activityModel.dart';
 
 class TimeLineModel {
   List<ActivityModel> tripList = [];
@@ -16,6 +17,7 @@ class TimeLineModel {
     // tripList.asMap().forEach((key, value) {
     //   print('value:${value.id}');
     // });
+    tripList.last.isLast = true;
   }
   @override
   String toString() {
