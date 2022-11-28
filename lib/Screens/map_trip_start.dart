@@ -829,6 +829,7 @@ class _MapStartState extends State<MapStart> {
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return ChatScreen(
+                                      riderDetails:widget.getTripModel.riders,
                                       token: value,
                                       chatList: value2["chatDetails"],
                                       number: value1["mobile"],
