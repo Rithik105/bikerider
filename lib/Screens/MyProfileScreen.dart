@@ -744,7 +744,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               BlocBuilder<BikeCubit, BikeState>(
                 builder: (context, state) {
                   if (state is BikeMineProfileFetchedState) {
-                    print('BikeMineProfileFetchedState');
                     return FutureBuilder(
                       // future: getMyActivities(),
                       future: UserHttp.getTimeline(),
@@ -760,11 +759,40 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             ConnectionState.done) {
                           print("snap data ${snapshot.data}");
                           TimeLineModel? data = snapshot.data;
+// <<<<<<< phaneesh_1
                           if (data == null || data.tripList.isEmpty) {
                             print(" data is $data");
                             return Container(
                               child: Center(
                                 child: Text('No Timeline Exist'),
+// =======
+//                           print('length ${data}');
+//                           return Container(
+//                             child: SingleChildScrollView(
+//                               child: Column(
+//                                 children: [
+//                                   ...data!.tripList.asMap().entries.map(
+//                                     (e) {
+//                                       print(e.value.id);
+//                                       if (e.key == 0) {
+//                                         return ProfileTimeline(
+//                                           center: true,
+//                                           first: true,
+//                                           data: e.value,
+//                                         );
+//                                       } else {
+//                                         return Container(
+//                                           child: ProfileTimeline(
+//                                             first: false,
+//                                             data: e.value,
+//                                             center: false,
+//                                           ),
+//                                         );
+//                                       }
+//                                     },
+//                                   ).toList(),
+//                                 ],
+// >>>>>>> vishwa_1
                               ),
                             );
                           } else {
