@@ -17,6 +17,7 @@ class TimeLineModel {
     // tripList.asMap().forEach((key, value) {
     //   print('value:${value.id}');
     // });
+    print(tripList);
     tripList.last.isLast = true;
   }
   @override

@@ -5,6 +5,7 @@ import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/Material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../Models/add_bike_model.dart';
 import '../../custom/constants.dart';
 import '../../custom/widgets/button.dart';
@@ -614,6 +615,7 @@ class _AddBikeState extends State<AddBike> {
                               ).toJson(),
                             );
                             showToast(msg: "Bike details added successfully");
+                            Navigator.pop(context);
                             Navigator.pop(context);
                             // Navigator.pop(context);
                             // Navigator.pop(context);

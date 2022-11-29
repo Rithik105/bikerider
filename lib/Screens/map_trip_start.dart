@@ -611,8 +611,6 @@ class _MapStartState extends State<MapStart> {
                             ),
                             child: const Text('Yes'),
                             onPressed: () {
-
-
                               UserSecureStorage.getDetails(key: 'mobile')
                                   .then((value) {
                                 if (value == widget.getTripModel.mobile) {
@@ -816,32 +814,43 @@ class _MapStartState extends State<MapStart> {
                   showToast(msg: 'loading chats');
                   UserSecureStorage.getToken().then(
                     (value) {
+                      print('getToken$value');
                       UserHttp.getNumber(value!).then(
                         (value1) {
+                          print('getNumber$value1');
+
                           UserHttp.getChats(widget.getTripModel.id!, value)
                               .then(
                             (value2) {
                               setState(() {
                                 chatDisable = false;
                               });
+                              print('chat response:' + value2.toString());
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return ChatScreen(
-                                      riderDetails:widget.getTripModel.riders,
+                                      riderDetails: widget.getTripModel.riders,
                                       token: value,
                                       chatList: value2["chatDetails"],
                                       number: value1["mobile"],
                                       groupId: widget.getTripModel.id!,
                                       groupName: widget.getTripModel.tripName!,
                                       adminNumber: widget.getTripModel.mobile!,
+                                      // responseTripId: value2['tripId'],
                                     );
                                   },
                                 ),
                               );
                             },
-                          );
+                          ).onError((error, stackTrace) {
+                            print(error);
+                            showToast(
+                                msg:
+                                    'Something is error with network, try later.');
+                            chatDisable = false;
+                          });
                         },
                       );
                     },
