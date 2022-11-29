@@ -99,10 +99,7 @@ class TimeLine extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).orientation ==
-                            Orientation.portrait
-                        ? 40
-                        : 30,
+                    height: 40,
                     width: MediaQuery.of(context).size.width * 0.75,
                     // width: double.infinity,
                     // width: MediaQuery.of(context).size.width*0.8,
