@@ -172,8 +172,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  mobileNumberController.text =
-                                      widget.prefill.mobile!;
+                                  setState(() {
+                                    mobileNumberController.text =
+                                        widget.prefill.mobile!;
+                                  });
                                   Navigator.pop(context);
                                 },
                                 child: Text(

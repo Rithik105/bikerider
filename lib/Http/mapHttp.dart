@@ -25,7 +25,14 @@ Future<Tuple> getDirections(
   details.distance =
       '${json['routes'][0]['summary']['lengthInMeters'] ~/ 1000}km';
   details.points = json['routes'][0]['legs'][0]['points'];
+  num time = json['routes'][0]['summary']['travelTimeInSeconds'];
+  print(convertToTime(time));
+  details.duration = convertToTime(time);
   return details;
+}
+
+convertToTime(num timeInSec) {
+  return '${timeInSec ~/ 3600}h ${((timeInSec / 3600) % 1 * 60).toInt()}min';
 }
 
 Future<LocationDetails> getLocationDetails(String placeName) async {

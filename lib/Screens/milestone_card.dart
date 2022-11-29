@@ -99,7 +99,10 @@ class TimeLine extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                    height: 30,
+                    height: MediaQuery.of(context).orientation ==
+                            Orientation.portrait
+                        ? 40
+                        : 30,
                     width: MediaQuery.of(context).size.width * 0.75,
                     // width: double.infinity,
                     // width: MediaQuery.of(context).size.width*0.8,
@@ -144,34 +147,65 @@ class TimeLine extends StatelessWidget {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.75,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              SizedBox(
-                                width: 70,
+                              Container(
+                                // color: Colors.blue,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: Text(
                                   details.from!.place,
                                   style: GoogleFonts.roboto(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     color:
                                         const Color.fromRGBO(58, 57, 57, 0.87),
                                   ),
+                                  textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
+                                  softWrap: true,
+                                  maxLines: 2,
                                 ),
                               ),
-                              Container(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      details.milDistance ??
-                                          details.distance!.distance,
-                                      style: GoogleFonts.roboto(
-                                          color: const Color(0xff979797),
-                                          fontSize: 15),
+                                    Container(
+                                      // color: Colors.red,
+                                      width: double.maxFinite,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            details.milDistance ??
+                                                details.distance!.distance,
+                                            style: GoogleFonts.roboto(
+                                              color: const Color(0xff979797),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            ' - ',
+                                            style: GoogleFonts.roboto(
+                                              color: const Color(0xff979797),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            details.milDuration ??
+                                                details.distance!.duration,
+                                            style: GoogleFonts.roboto(
+                                              color: const Color(0xff979797),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     Container(
-                                      width: 120,
+                                      // width: MediaQuery.of(context).size.width *
+                                      //     0.22,
+                                      width: double.maxFinite,
                                       height: 1,
                                       color: const Color(0xff979797),
                                     ),
@@ -181,17 +215,20 @@ class TimeLine extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                width: 70,
+                              Container(
+                                // color: Colors.red,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: Text(
                                   details.to!.place,
                                   style: GoogleFonts.roboto(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     color:
                                         const Color.fromRGBO(58, 57, 57, 0.87),
                                   ),
+                                  textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
+                                  softWrap: true,
+                                  maxLines: 2,
                                 ),
                               ),
                             ],
