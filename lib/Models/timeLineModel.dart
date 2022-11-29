@@ -1,5 +1,5 @@
-import 'ActivityModel.dart';
-// import 'activityModel.dart';
+// import 'ActivityModel.dart';
+import 'activityModel.dart';
 
 class TimeLineModel {
   List<ActivityModel> tripList = [];

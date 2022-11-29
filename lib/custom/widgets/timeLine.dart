@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../Models/ActivityModel.dart';
+import '../../Models/activityModel.dart';
 
 class ProfileTimeline extends StatelessWidget {
   ProfileTimeline({
