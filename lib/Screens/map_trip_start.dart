@@ -845,6 +845,7 @@ class _MapStartState extends State<MapStart> {
                               );
                             },
                           ).onError((error, stackTrace) {
+                            print(error);
                             showToast(
                                 msg:
                                     'Something is error with network, try later.');

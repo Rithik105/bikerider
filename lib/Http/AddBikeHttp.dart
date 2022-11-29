@@ -25,7 +25,7 @@ class AddBikeHttp {
     print(token);
     final http.Response response = await http.post(
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/service/reviewService"),
+          "https://ride-app-node.vercel.app/api/v1/service/reviewService"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -42,8 +42,7 @@ class AddBikeHttp {
     String? token = await UserSecureStorage.getToken();
 
     final http.Response response = await http.get(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/bike/getVehicleType"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/bike/getVehicleType"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'

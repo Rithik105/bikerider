@@ -223,11 +223,12 @@ class _GarageCardState extends State<GarageCard> {
                                   ),
                                   Text(
                                     "Book a Service",
-                                    style: GoogleFonts.roboto(
-                                        color: const Color(0xff515251),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 1),
+                                    style: GoogleFonts.robotoFlex(
+                                      color: const Color(0xff515251),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -319,10 +320,11 @@ class _GarageCardState extends State<GarageCard> {
                                 Text(
                                   "Service Records",
                                   style: GoogleFonts.robotoFlex(
-                                      color: Color(0xff515251),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1),
+                                    color: Color(0xff515251),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 1,
+                                  ),
                                 )
                               ],
                             ),
