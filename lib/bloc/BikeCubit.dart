@@ -52,6 +52,10 @@ class BikeMineProfileFetchedState extends BikeState {
   BikeMineProfileFetchedState({required this.profile});
 }
 
+class BikeEmptyProfileFetchedState extends BikeState {
+  BikeEmptyProfileFetchedState();
+}
+
 class BikeOtherProfileFetchedState extends BikeState {
   Map profile;
   String number;
@@ -267,8 +271,12 @@ class BikeCubit extends Cubit<BikeState> {
     UserSecureStorage.getToken().then((value) {
       UserSecureStorage.getDetails(key: "mobile").then((value3) {
         UserHttp.getProfile(value!, number).then((value2) {
-          print(value3);
-          if (value3 == number) {
+          print(value2);
+          if (value2!["userDetails"] == null) {
+            print('---------------------------');
+            emit(BikeEmptyProfileFetchedState());
+            showToast(msg: "User Not Registered");
+          } else if (value3 == number) {
             emit(BikeMineProfileFetchedState(
               profile: value2!,
             ));

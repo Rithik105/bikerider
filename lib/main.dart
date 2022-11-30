@@ -17,7 +17,7 @@ void main() {
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.orange,
+      statusBarColor: Colors.black,
     ),
   );
 }

@@ -66,6 +66,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     children: [
                       BlocBuilder<BikeCubit, BikeState>(
                         builder: (context, state) {
+                          if (state is BikeEmptyProfileFetchedState) {
+                            Future.delayed(const Duration(milliseconds: 0))
+                                .then((value) => {Navigator.pop(context)});
+                          }
                           if (state is BikeFetchingState) {
                             return Container(
                               height: 420,
@@ -638,11 +642,17 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 0);
                                   }));
                                 },
-                                child: Text(
-                                    state.profile['userDetails']
-                                            ["followersCount"]
-                                        .toString(),
-                                    style: kProfileNumberText),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 35,
+                                  child: Center(
+                                    child: Text(
+                                        state.profile['userDetails']
+                                                ["followersCount"]
+                                            .toString(),
+                                        style: kProfileNumberText),
+                                  ),
+                                ),
                               ),
                               following: GestureDetector(
                                 onTap: () {
@@ -654,10 +664,18 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 ["following"]);
                                   }));
                                 },
-                                child: Text(
-                                  state.profile['userDetails']["followingCount"]
-                                      .toString(),
-                                  style: kProfileNumberText,
+                                child: Container(
+                                  color: Colors.transparent,
+                                  // color: Colors.red,
+                                  width: 25,
+                                  child: Center(
+                                    child: Text(
+                                      state.profile['userDetails']
+                                              ["followingCount"]
+                                          .toString(),
+                                      style: kProfileNumberText,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
