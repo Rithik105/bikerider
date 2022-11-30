@@ -801,7 +801,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               child: SingleChildScrollView(
                                 child: Column(
                                   children: [
-                                    ...data!.tripList.asMap().entries.map(
+                                    ...data.tripList.asMap().entries.map(
                                       (e) {
                                         ActivityModel temp = e.value;
                                         print(e.value.id);
@@ -809,7 +809,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                           print(e.value.isLast);
                                           return ProfileTimeline(
                                             center: true,
-                                            first: data!.tripList.length == 1
+                                            first: data.tripList.length == 1
                                                 ? true
                                                 : false,
                                             last: true,
@@ -843,8 +843,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         );
                       },
                     );
-                  } else
+                  } else {
                     return Container();
+                  }
                 },
               ),
             ],

@@ -52,12 +52,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       .then((value) {
                     savePDF("sai", value);
                     showToast(msg: "Pdf downloaded successfully");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => GarageCard(),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => GarageCard(),
+                    //   ),
+                    // );
+                    // Navigator.popUntil(
+                    //     context, ModalRoute.withName('/HomeScreen'));
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   });
                 },
                 child: Image.asset(
