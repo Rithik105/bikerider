@@ -99,6 +99,7 @@ class TimeLine extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
+                    // color: red,
                     height: 40,
                     width: MediaQuery.of(context).size.width * 0.75,
                     // width: double.infinity,

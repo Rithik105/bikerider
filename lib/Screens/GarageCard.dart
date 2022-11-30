@@ -168,7 +168,7 @@ class _GarageCardState extends State<GarageCard> {
                           (value) {
                             enableAll(0);
                             if (value.prefill.isEmpty) {
-                              showToast(msg: 'Please add Bike details');
+                              showToast(msg: 'Please add a Bike');
                               print('Please add your bike');
                               AddBikeHttp.addBikeList().then(
                                 (value) {
@@ -177,14 +177,14 @@ class _GarageCardState extends State<GarageCard> {
                                     bikeList.add(BikeListModel.fromJson(e));
                                   }
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AddBike(
-                                          // bikeList: bikeList,
-                                          ),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => AddBike(
+                                  //         // bikeList: bikeList,
+                                  //         ),
+                                  //   ),
+                                  // );
                                 },
                               );
                             } else {
@@ -265,8 +265,8 @@ class _GarageCardState extends State<GarageCard> {
                             enableAll(1);
                             print(value.prefill);
                             if (value.prefill.isEmpty) {
-                              showToast(msg: "Add a bike");
-                              print('Please add your bike');
+                              showToast(msg: "Please add a Bike");
+                              print('Please add a Bike');
                               AddBikeHttp.addBikeList().then(
                                 (value) {
                                   bikeList.clear();
@@ -274,14 +274,14 @@ class _GarageCardState extends State<GarageCard> {
                                     bikeList.add(BikeListModel.fromJson(e));
                                   }
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AddBike(
-                                          // bikeList: bikeList,
-                                          ),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => AddBike(
+                                  //         // bikeList: bikeList,
+                                  //         ),
+                                  //   ),
+                                  // );
                                 },
                               );
                             } else {
