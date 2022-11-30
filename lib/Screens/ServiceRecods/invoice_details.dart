@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:bikerider/Screens/GarageCard.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../Models/invoice_model.dart';
@@ -38,6 +39,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.orange,
+            statusBarIconBrightness:
+                Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          ),
           actions: [
             Container(
               margin: const EdgeInsets.only(right: 20),
