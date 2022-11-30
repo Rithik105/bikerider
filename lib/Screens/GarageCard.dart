@@ -103,9 +103,11 @@ class _GarageCardState extends State<GarageCard> {
       } else if (diff.inDays == 0) {
         print('Tommorow');
         diffInDays = "Tommorow is your";
+      }else if(diff.inDays == 1){
+        diffInDays = "${diff.inDays} Day";
       } else {
         print(diff.inDays);
-        diffInDays = diff.inDays.toString() + " Days";
+        diffInDays = "${diff.inDays} Days";
       }
       setState(() {});
     }
