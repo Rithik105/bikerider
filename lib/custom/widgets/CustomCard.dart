@@ -493,7 +493,7 @@ class TripSummaryCard extends StatelessWidget {
             height: 15,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
                 width: 90,
@@ -504,7 +504,9 @@ class TripSummaryCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                   overflow: TextOverflow.ellipsis,
-                  softWrap: false,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
               ),
               // Text(
@@ -529,7 +531,9 @@ class TripSummaryCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                   overflow: TextOverflow.ellipsis,
-                  softWrap: false,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
               )
               // Text(
@@ -642,10 +646,10 @@ class TripSummaryGoCard extends StatelessWidget {
             height: 15,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
-                width: 90,
+                width: MediaQuery.of(context).size.width * 0.25,
                 child: Text(
                   getTripModel.source!.place,
                   style: GoogleFonts.roboto(
@@ -653,7 +657,9 @@ class TripSummaryGoCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                   overflow: TextOverflow.ellipsis,
-                  softWrap: false,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
               ),
               // Text(
@@ -670,7 +676,7 @@ class TripSummaryGoCard extends StatelessWidget {
                 color: const Color(0x2f000000),
               ),
               SizedBox(
-                width: 90,
+                width: MediaQuery.of(context).size.width * 0.25,
                 child: Text(
                   getTripModel.destination!.place,
                   style: GoogleFonts.roboto(
@@ -678,7 +684,9 @@ class TripSummaryGoCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                   overflow: TextOverflow.ellipsis,
-                  softWrap: false,
+                  softWrap: true,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
               )
               // Text(

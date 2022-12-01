@@ -28,7 +28,7 @@ class ServiceDetails extends StatefulWidget {
 }
 
 class _ServiceDetailsState extends State<ServiceDetails> {
-  bool loading=true;
+  bool loading = true;
   List<ProductInvoiceModel> invoiceList = [];
   IconData? _selectedIcon;
   double _rating = -1;
@@ -51,9 +51,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         print("invoice list is${invoiceList}");
         setState(() {
           invoiceList;
-          loading=false;
+          loading = false;
         });
-
       },
     );
   }
@@ -189,7 +188,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                           const EdgeInsets.only(left: 20, right: 20, top: 30),
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                          Radius.circular(10),
                         ),
                         color: Colors.white,
                         boxShadow: [

@@ -31,6 +31,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
   ImageDetails? imageDetails;
   bool view = false;
   bool _isDisabled = false;
+  bool sendEnable = true;
   final ScrollController _controller = ScrollController();
 
   void imageDownload() async {
@@ -286,8 +287,21 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                                         title: Text(
                                                             e.name.toString()),
                                                         onTap: () {
-                                                          Navigator.pop(
-                                                              context);
+                                                          // print(e.likedNumber);
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  BlocProvider(
+                                                                create: (context) =>
+                                                                    BikeCubit()
+                                                                      ..getProfile(
+                                                                          e.number!),
+                                                                child:
+                                                                    const ProfileHeader(),
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
                                                       );
                                                     },
@@ -298,6 +312,7 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                           });
                                     },
                                     child: Container(
+                                      // color: ,
                                       height: 20,
                                       width: 20,
                                       alignment: Alignment.center,
@@ -412,48 +427,65 @@ class _ImageViewFutureState extends State<ImageViewFuture> {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (_messageController.text.isNotEmpty) {
-                                    UserSecureStorage.getToken().then((value) {
-                                      PhotosHttp.addComment(
-                                              imageDetails!.photos!.imageId
-                                                  .toString(),
-                                              _messageController.text
-                                                  .toString(),
-                                              value!)
-                                          .then(
+                            IgnorePointer(
+                              ignoring: !sendEnable,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print('sending message');
+                                  setState(() {
+                                    if (_messageController.text.isNotEmpty) {
+                                      String temp = _messageController.text;
+                                      _messageController.clear();
+                                      commentNode.unfocus();
+                                      setState(() {
+                                        sendEnable = false;
+                                      });
+                                      UserSecureStorage.getToken().then(
                                         (value) {
-                                          PhotosHttp.getPhotoDetails(
-                                                  widget.id, widget.token)
-                                              .then((value2) {
-                                            // ImageDetails temp = value2;
-                                            // print(value);
-                                            imageDetails = value2;
-                                            setState(() {
-                                              view = true;
-                                            });
-                                          });
-                                          _messageController.clear();
-                                          commentNode.unfocus();
+                                          PhotosHttp.addComment(
+                                                  imageDetails!.photos!.imageId
+                                                      .toString(),
+                                                  temp.toString(),
+                                                  value!)
+                                              .then(
+                                            (value) {
+                                              sendEnable = true;
+                                              PhotosHttp.getPhotoDetails(
+                                                      widget.id, widget.token)
+                                                  .then((value2) {
+                                                // ImageDetails temp = value2;
+                                                // print(value);
+                                                imageDetails = value2;
+                                                setState(() {
+                                                  view = true;
+                                                });
+                                              });
+                                              _messageController.clear();
+                                              commentNode.unfocus();
+                                            },
+                                          );
                                         },
-                                      );
-                                    });
-                                    // _controller.position.
-                                  }
-                                });
-                              },
-                              child: const CircleAvatar(
-                                backgroundColor: Color(
-                                  0xffED7F2C,
-                                ),
-                                radius: 22,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.send,
-                                    color: Colors.white,
-                                    size: 32,
+                                      ).onError((error, stackTrace) {
+                                        showToast(msg: 'Internal Server Error');
+                                        setState(() {
+                                          sendEnable = true;
+                                        });
+                                      });
+                                      // _controller.position.
+                                    }
+                                  });
+                                },
+                                child: const CircleAvatar(
+                                  backgroundColor: Color(
+                                    0xffED7F2C,
+                                  ),
+                                  radius: 22,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.send,
+                                      color: Colors.white,
+                                      size: 32,
+                                    ),
                                   ),
                                 ),
                               ),

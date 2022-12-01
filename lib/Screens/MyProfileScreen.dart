@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:bikerider/Models/activityModel.dart';
 import 'package:bikerider/Models/timeLineModel.dart';
 import 'package:bikerider/Screens/follower_list.dart';
 import 'package:bikerider/Screens/following_list.dart';
-import 'package:bikerider/Screens/milestone_card.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../Http/UserHttp.dart';
+// import '../Models/activityModel.dart';
 import '../bloc/BikeCubit.dart';
 import '../custom/widgets/Follower.dart';
 import '../custom/widgets/timeLine.dart';
@@ -67,6 +66,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     children: [
                       BlocBuilder<BikeCubit, BikeState>(
                         builder: (context, state) {
+                          if (state is BikeEmptyProfileFetchedState) {
+                            Future.delayed(const Duration(milliseconds: 0))
+                                .then((value) => {Navigator.pop(context)});
+                          }
                           if (state is BikeFetchingState) {
                             return Container(
                               height: 420,
@@ -635,14 +638,21 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                     return FollowerList(
                                         followerList:
                                             state.profile["userDetails"]
-                                                ["followers"]);
+                                                    ["followers"] ??
+                                                0);
                                   }));
                                 },
-                                child: Text(
-                                    state.profile['userDetails']
-                                            ["followersCount"]
-                                        .toString(),
-                                    style: kProfileNumberText),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 35,
+                                  child: Center(
+                                    child: Text(
+                                        state.profile['userDetails']
+                                                ["followersCount"]
+                                            .toString(),
+                                        style: kProfileNumberText),
+                                  ),
+                                ),
                               ),
                               following: GestureDetector(
                                 onTap: () {
@@ -654,10 +664,18 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 ["following"]);
                                   }));
                                 },
-                                child: Text(
-                                  state.profile['userDetails']["followingCount"]
-                                      .toString(),
-                                  style: kProfileNumberText,
+                                child: Container(
+                                  color: Colors.transparent,
+                                  // color: Colors.red,
+                                  width: 25,
+                                  child: Center(
+                                    child: Text(
+                                      state.profile['userDetails']
+                                              ["followingCount"]
+                                          .toString(),
+                                      style: kProfileNumberText,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -757,45 +775,95 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           );
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
-                          // print(snapshot.data);
+                          print("snap data ${snapshot.data}");
                           TimeLineModel? data = snapshot.data;
-                          print('length ${data}');
-                          return Container(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  ...data!.tripList.asMap().entries.map(
-                                    (e) {
-                                      print(e.value.id);
-                                      if (e.key == 0) {
-                                        return ProfileTimeline(
-                                          center: true,
-                                          first: true,
-                                          data: e.value,
-                                        );
-                                      } else {
-                                        return Container(
-                                          child: ProfileTimeline(
-                                            first: false,
-                                            data: e.value,
-                                            center: false,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ).toList(),
-                                ],
+// <<<<<<< phaneesh_1
+                          if (data == null || data.tripList.isEmpty) {
+                            print(" data is $data");
+                            return Container(
+                              child: Center(
+                                child: Text('No Timeline Exist'),
+// =======
+//                           print('length ${data}');
+//                           return Container(
+//                             child: SingleChildScrollView(
+//                               child: Column(
+//                                 children: [
+//                                   ...data!.tripList.asMap().entries.map(
+//                                     (e) {
+//                                       print(e.value.id);
+//                                       if (e.key == 0) {
+//                                         return ProfileTimeline(
+//                                           center: true,
+//                                           first: true,
+//                                           data: e.value,
+//                                         );
+//                                       } else {
+//                                         return Container(
+//                                           child: ProfileTimeline(
+//                                             first: false,
+//                                             data: e.value,
+//                                             center: false,
+//                                           ),
+//                                         );
+//                                       }
+//                                     },
+//                                   ).toList(),
+//                                 ],
+// >>>>>>> vishwa_1
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            print('length ${data}');
+                            return Container(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    ...data.tripList.asMap().entries.map(
+                                      (e) {
+                                        ActivityModel temp = e.value;
+                                        print(e.value.id);
+                                        if (e.value.isLast) {
+                                          print(e.value.isLast);
+                                          return ProfileTimeline(
+                                            center: true,
+                                            first: data.tripList.length == 1
+                                                ? true
+                                                : false,
+                                            last: true,
+                                            data: temp,
+                                          );
+                                        } else if (e.key == 0) {
+                                          return ProfileTimeline(
+                                            center: true,
+                                            first: true,
+                                            data: temp,
+                                          );
+                                        } else {
+                                          return Container(
+                                            child: ProfileTimeline(
+                                              first: false,
+                                              data: temp,
+                                              center: false,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ).toList(),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
                         }
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       },
                     );
-                  } else
+                  } else {
                     return Container();
+                  }
                 },
               ),
             ],

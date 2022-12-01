@@ -12,6 +12,7 @@ class MilestoneModal {
   // String? distance;
   Tuple? distance;
   String? milDistance;
+  String? milDuration;
   // late double lat;
   // late double lon;
   final TextEditingController fromController = TextEditingController();
@@ -30,7 +31,8 @@ class MilestoneModal {
       'id': milestoneId,
       'source': from?.toJson(),
       'destination': to?.toJson(),
-      'distance': distance?.distance
+      'distance': distance?.distance,
+      'duration': distance?.duration,
     };
   }
 
@@ -46,6 +48,7 @@ class MilestoneModal {
     // to = json['destination'];
     // distance!.distance = json['distance'];
     milDistance = json['distance'];
+    milDuration = json['duration'];
   }
   @override
   String toString() {

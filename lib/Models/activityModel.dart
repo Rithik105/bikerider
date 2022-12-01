@@ -4,16 +4,17 @@ class ActivityModel {
   String? tripName;
   DateTime? startDate;
   DateTime? endDate;
-
+  bool isLast;
   ActivityModel({
     required this.id,
     required this.tripName,
     required this.startDate,
     required this.endDate,
     required this.url,
+    this.isLast = false,
   });
 
-  ActivityModel.fromJson(Map json, {int Id = 0}) {
+  ActivityModel.fromJson(Map json, {int Id = 0, this.isLast = false}) {
     id = Id;
     tripName = json['tripName'];
     startDate = DateTime.parse(json['startDate']);

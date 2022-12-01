@@ -1,17 +1,15 @@
+import 'package:bikerider/Http/UserHttp.dart';
+import 'package:bikerider/Models/UserModel.dart';
+import 'package:bikerider/Utility/Secure_storeage.dart';
+import 'package:bikerider/bloc/BikeCubit.dart';
+import 'package:bikerider/custom/widgets/ShowToast.dart';
+import 'package:bikerider/custom/widgets/padding.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:bikerider/custom/widgets/padding.dart';
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Models/UserModel.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:bikerider/bloc/BikeCubit.dart';
 
 // ignore: must_be_immutable
 class OtpRegisterScreen extends StatefulWidget {
@@ -49,7 +47,7 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leadingWidth: 80,
+        // leadingWidth: 80,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: const Color(0xff575656),
@@ -106,7 +104,7 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
                   UserHttp.verifyOtp(pin).then((value) {
-                    if (value["message"] == false) {
+                    if (value["message"] == true) {
                       showToast(msg: "OTP Verified");
                       UserHttp.registerUser(
                               User(

@@ -25,7 +25,14 @@ Future<Tuple> getDirections(
   details.distance =
       '${json['routes'][0]['summary']['lengthInMeters'] ~/ 1000}km';
   details.points = json['routes'][0]['legs'][0]['points'];
+  num time = json['routes'][0]['summary']['travelTimeInSeconds'];
+  print(convertToTime(time));
+  details.duration = convertToTime(time);
   return details;
+}
+
+convertToTime(num timeInSec) {
+  return '${timeInSec ~/ 3600}h ${((timeInSec / 3600) % 1 * 60).toInt()}min';
 }
 
 Future<LocationDetails> getLocationDetails(String placeName) async {
@@ -172,8 +179,7 @@ sendStatus(LatLng point, String token, String id) async {
   print(point);
   print(token);
   final http.Response response = await http.patch(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/trip/currentLocation"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/trip/currentLocation"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -206,7 +212,7 @@ endTrip(String token, String id) async {
   print(token);
   final http.Response response = await http.patch(
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/trip/updateTripStatus"),
+          "https://ride-app-node.vercel.app/api/v1/trip/updateTripStatus"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'

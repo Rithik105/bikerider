@@ -103,9 +103,11 @@ class _GarageCardState extends State<GarageCard> {
       } else if (diff.inDays == 0) {
         print('Tommorow');
         diffInDays = "Tommorow is your";
+      }else if(diff.inDays == 1){
+        diffInDays = "${diff.inDays} Day";
       } else {
         print(diff.inDays);
-        diffInDays = diff.inDays.toString() + " Days";
+        diffInDays = "${diff.inDays} Days";
       }
       setState(() {});
     }
@@ -168,7 +170,7 @@ class _GarageCardState extends State<GarageCard> {
                           (value) {
                             enableAll(0);
                             if (value.prefill.isEmpty) {
-                              showToast(msg: 'Please add Bike details');
+                              showToast(msg: 'Please add a Bike');
                               print('Please add your bike');
                               AddBikeHttp.addBikeList().then(
                                 (value) {
@@ -177,14 +179,14 @@ class _GarageCardState extends State<GarageCard> {
                                     bikeList.add(BikeListModel.fromJson(e));
                                   }
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AddBike(
-                                          // bikeList: bikeList,
-                                          ),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => AddBike(
+                                  //         // bikeList: bikeList,
+                                  //         ),
+                                  //   ),
+                                  // );
                                 },
                               );
                             } else {
@@ -221,11 +223,12 @@ class _GarageCardState extends State<GarageCard> {
                                   ),
                                   Text(
                                     "Book a Service",
-                                    style: GoogleFonts.roboto(
-                                        color: const Color(0xff515251),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 1),
+                                    style: GoogleFonts.robotoFlex(
+                                      color: const Color(0xff515251),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -264,8 +267,8 @@ class _GarageCardState extends State<GarageCard> {
                             enableAll(1);
                             print(value.prefill);
                             if (value.prefill.isEmpty) {
-                              showToast(msg: "Add a bike");
-                              print('Please add your bike');
+                              showToast(msg: "Please add a Bike");
+                              print('Please add a Bike');
                               AddBikeHttp.addBikeList().then(
                                 (value) {
                                   bikeList.clear();
@@ -273,14 +276,14 @@ class _GarageCardState extends State<GarageCard> {
                                     bikeList.add(BikeListModel.fromJson(e));
                                   }
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AddBike(
-                                          // bikeList: bikeList,
-                                          ),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => AddBike(
+                                  //         // bikeList: bikeList,
+                                  //         ),
+                                  //   ),
+                                  // );
                                 },
                               );
                             } else {
@@ -317,10 +320,11 @@ class _GarageCardState extends State<GarageCard> {
                                 Text(
                                   "Service Records",
                                   style: GoogleFonts.robotoFlex(
-                                      color: Color(0xff515251),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1),
+                                    color: Color(0xff515251),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 1,
+                                  ),
                                 )
                               ],
                             ),
