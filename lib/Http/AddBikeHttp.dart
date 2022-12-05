@@ -8,7 +8,7 @@ class AddBikeHttp {
   static Future addBikeDetails(AddBikeModel) async {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
-      Uri.parse("https://riding-application.herokuapp.com/api/v1/bike/addBike"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/bike/addBike"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
