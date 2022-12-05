@@ -105,7 +105,7 @@ class _OtpRegisterScreenState extends State<OtpRegisterScreen> {
                 onCompleted: (pin) {
                   UserHttp.verifyOtp(pin).then((value) {
                     print(value.toString() + 'OTP Validation');
-                    if (value["message"] == true) {
+                    if (value["message"] == false) {
                       showToast(msg: "OTP Verified");
                       UserHttp.registerUser(
                               User(

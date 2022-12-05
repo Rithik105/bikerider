@@ -91,7 +91,7 @@ class _OtpForgotScreenState extends State<OtpForgotScreen> {
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
                   UserHttp.verifyOtp(pin).then((value) {
-                    if (value["message"] == true) {
+                    if (value["message"] == false) {
                       showToast(msg: "OTP Verified");
                       Navigator.pushNamed(context, "/ForgotScreen",
                           arguments: {"mobile": widget.mobile.text});
