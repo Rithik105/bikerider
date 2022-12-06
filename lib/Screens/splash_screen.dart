@@ -1,17 +1,10 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, duplicate_ignore
-
-import 'dart:async';
-
-import 'package:bikerider/Http/UserHttp.dart';
-import 'package:bikerider/Screens/home_screen.dart';
-import 'package:bikerider/Utility/Secure_storeage.dart';
-import 'package:bikerider/custom/widgets/ShowToast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bikerider/Screens/home_screen.dart';
 import 'package:bikerider/Screens/login_screen.dart';
 import 'package:bikerider/Screens/tutorial_screen.dart';
 import 'package:bikerider/bloc/BikeCubit.dart';
