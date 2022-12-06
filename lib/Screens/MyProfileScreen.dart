@@ -6,7 +6,7 @@ import 'package:bikerider/Screens/follower_list.dart';
 import 'package:bikerider/Screens/following_list.dart';
 import 'package:bikerider/Utility/Secure_storeage.dart';
 import 'package:bikerider/custom/widgets/ShowToast.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

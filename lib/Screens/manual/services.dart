@@ -7,8 +7,7 @@ class GetBikeDetails {
   static Future getBikes() async {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.get(
-      Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/bike/getBikeDetails"),
+      Uri.parse("https://ride-app-node.vercel.app/api/v1/bike/getBikeDetails"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -25,7 +24,7 @@ class GetOwnerDetails {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.get(
       Uri.parse(
-          "https://riding-application.herokuapp.com/api/v1/owner/getOwnerDetails"),
+          "https://ride-app-node.vercel.app/api/v1/owner/getOwnerDetails"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'BEARER $token'
@@ -42,7 +41,7 @@ class UpdateOwnerDetails {
     String? token = await UserSecureStorage.getToken();
     final http.Response response = await http.post(
         Uri.parse(
-            "https://riding-application.herokuapp.com/api/v1/owner/addOwnerDetails"),
+            "https://ride-app-node.vercel.app/api/v1/owner/addOwnerDetails"),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'BEARER $token'

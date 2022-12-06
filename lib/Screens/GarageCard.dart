@@ -103,7 +103,7 @@ class _GarageCardState extends State<GarageCard> {
       } else if (diff.inDays == 0) {
         print('Tommorow');
         diffInDays = "Tommorow is your";
-      }else if(diff.inDays == 1){
+      } else if (diff.inDays == 1) {
         diffInDays = "${diff.inDays} Day";
       } else {
         print(diff.inDays);
@@ -373,12 +373,12 @@ class _GarageCardState extends State<GarageCard> {
                                   if (bikes.isEmpty) {
                                     showToast(
                                         msg: "Please add your bike details");
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AddBike(),
-                                      ),
-                                    );
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => AddBike(),
+                                    //   ),
+                                    // );
                                   } else {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
